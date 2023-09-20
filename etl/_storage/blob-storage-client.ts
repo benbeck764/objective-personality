@@ -5,10 +5,16 @@ import {
   BlockBlobUploadResponse,
 } from '@azure/storage-blob';
 
+export type BlobUploadResponse = {
+  storageAccountName: string;
+  storageAccountUrl: string;
+  containerName: string;
+  fileName: string;
+  url: string;
+};
+
 class BlobStorageClient {
   protected readonly blobClient: BlobServiceClient;
-  public readonly themeContainer: string;
-  public readonly themeFolder: string;
 
   constructor() {
     this.blobClient = BlobServiceClient.fromConnectionString(
@@ -16,55 +22,55 @@ class BlobStorageClient {
     );
   }
 
-  public async uploadJsonBlob(
-    json: string,
-    filename: string,
-    container: string
-  ): Promise<BlockBlobUploadResponse> {
+  public async uploadFile(options: {
+    file: Blob | Buffer | ArrayBuffer | ArrayBufferView;
+    container: string;
+    filename: string;
+    blobOptions?: BlockBlobUploadOptions;
+  }): Promise<BlobUploadResponse> {
+    const { file, container, filename, blobOptions } = options;
+
     const containerClient = this.blobClient.getContainerClient(container);
-    const content = json;
-    const uploadOptions: BlockBlobUploadOptions = {
-      blobHTTPHeaders: { blobContentType: 'application/json' },
+    await containerClient.createIfNotExists();
+    const blockBlobClient = containerClient.getBlockBlobClient(filename);
+
+    const uploadResponse = await blockBlobClient.uploadData(file, blobOptions);
+    return {
+      storageAccountName: this.blobClient.accountName,
+      storageAccountUrl: this.blobClient.url,
+      containerName: containerClient.containerName,
+      fileName: blockBlobClient.name,
+      url: uploadResponse?._response?.request?.url,
     };
-    const blockBlobClient = containerClient.getBlockBlobClient(filename);
-    const res = await blockBlobClient.upload(
-      content,
-      Buffer.byteLength(content),
-      uploadOptions
-    );
-    return res;
   }
 
-  public async getJsonBlobs(
-    filenames: string[],
-    container: string
-  ): Promise<string[]> {
+  public async deleteBlobsByFilename(
+    container: string,
+    filenames: string[]
+  ): Promise<void> {
     const containerClient = this.blobClient.getContainerClient(container);
-    const blockBlobClients = filenames.map((filename: string) =>
-      containerClient.getBlockBlobClient(filename)
-    );
-
-    const downloaded = await Promise.all(
-      blockBlobClients.map(async (blockBlobClient: BlockBlobClient) => {
-        try {
-          return await blockBlobClient.downloadToBuffer();
-        } catch {
-          return null;
-        }
-      })
-    );
-
-    const mapped = downloaded
-      .filter((b: Buffer) => b)
-      .map((b: Buffer) => b.toString());
-
-    return mapped;
+    for (const filename of filenames) {
+      try {
+        await containerClient.deleteBlob(filename, {
+          deleteSnapshots: 'include',
+        });
+      } catch {
+        continue;
+      }
+    }
   }
 
-  public async deleteBlob(filename: string, container: string): Promise<void> {
+  public async deleteBlobsByUrl(
+    container: string,
+    fileUrls: string[]
+  ): Promise<void> {
     const containerClient = this.blobClient.getContainerClient(container);
-    const blockBlobClient = containerClient.getBlockBlobClient(filename);
-    await blockBlobClient.delete();
+    for (const fileUrl of fileUrls) {
+      const fileName = fileUrl.replace(`${containerClient.url}/`, '');
+      await containerClient.deleteBlob(fileName, {
+        deleteSnapshots: 'include',
+      });
+    }
   }
 }
 

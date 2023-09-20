@@ -1,5 +1,16 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import * as cheerio from 'cheerio';
+import 'dotenv/config';
+import TableStorageClient from './_storage/table-storage-client';
+import {
+  AirTableToOPSPersonMap,
+  OPSTypedPerson,
+  OPSTypedPersonTableRow,
+  mapOpsTypedPersonToOpsTypedPersonTableRow,
+  nameof,
+} from './models/OPSTypedPerson';
+import BlobStorageClient from './_storage/blob-storage-client';
+import axios from 'axios';
 
 (async () => {
   const airtableUrl =
@@ -7,6 +18,10 @@ import * as cheerio from 'cheerio';
   let browser: Browser;
   let page: Page;
   let cardIds: string[] = [];
+  const tableStorageService = new TableStorageClient<OPSTypedPersonTableRow>(
+    'OPSTypedPeople'
+  );
+  const blobStorageService = new BlobStorageClient();
 
   //#region Page Scraping
 
@@ -21,7 +36,7 @@ import * as cheerio from 'cheerio';
             const card = element.firstChild.firstChild as HTMLElement;
             const id = card.attributes.getNamedItem('data-rowid').value;
 
-            await transferData(id);
+            await transferCardId(id);
           }
         }
       }
@@ -66,17 +81,26 @@ import * as cheerio from 'cheerio';
     }
   };
 
-  const transferData = async (id: string) => {
+  const transferCardId = async (id: string) => {
     cardIds.push(id);
   };
 
-  const parseCard = (pageContent: string) => {
+  const createOpsTypedPersonRecord = async (
+    contentId: string,
+    pageContent: string
+  ): Promise<void> => {
     const $ = cheerio.load(pageContent);
     const cellPairs = $('.detailView').find('.labelCellPair');
 
-    cellPairs.each((i: number, el: cheerio.Element) => {
-      const pair = $(el);
-      // [TODO]: Skip 'Relationships' and 'Biological Twins'
+    let person: Partial<OPSTypedPerson> = {
+      Id: contentId,
+      rowKey: contentId,
+      partitionKey: 'OPSTypedPerson',
+    };
+
+    cellPairs.each((_, cellPair: cheerio.Element) => {
+      let value: any;
+      const pair = $(cellPair);
       const label = pair.find('.fieldLabel')?.text();
 
       const links = pair.find('.cellContainer').find('a');
@@ -84,61 +108,98 @@ import * as cheerio from 'cheerio';
         .find('.cellContainer')
         .find('div[role=checkbox]');
       const image = pair.find('.cellContainer').find('img');
+      const date = pair.find('.cellContainer').find('.date');
+      const time = pair.find('.cellContainer').find('.time');
 
       if (links.length) {
         // Parse Textbox Links
-        links.each((i2: number, el2: cheerio.Element) => {
-          const link = $(el2);
+        const linksArray: { href: string; value: string }[] = [];
+        links.each((_, linkElement: cheerio.Element) => {
+          const link = $(linkElement);
           const href = link.attr('href');
           const value = link.text();
-          console.log(`${value}: ${href}`);
+          linksArray.push({ href, value });
         });
+        value = linksArray;
       } else if (checkboxDiv.length) {
         // Parse Checkboxes
-        const checked = checkboxDiv.attr('aria-checked') === 'true';
-        console.log(`${label}: ${checked}`);
+        value = checkboxDiv.attr('aria-checked') === 'true';
       } else if (image.length) {
         // Parse Image
-        const src = image.attr('src');
-        console.log(`${label}: ${src}`);
+        value = image.attr('src');
+      } else if (date.length && time.length) {
+        // Parse Date/Time
+        const dateValue = date.text();
+        let timeValue = time.find(':last')?.text();
+        timeValue = timeValue.replace('am', ' AM');
+        timeValue = timeValue.replace('pm', ' PM');
+        value = new Date(`${dateValue} ${timeValue}`);
       } else {
         // Parse value
-        const value = pair.find('.cellContainer').find(':last')?.text();
-        console.log(`${label}: ${value}`);
+        value = pair.find('.cellContainer').find(':last')?.text();
       }
+
+      const mappedValue = AirTableToOPSPersonMap[label];
+      person[mappedValue] = value;
     });
+
+    // Upload Image
+    const imageUrl = person.PictureUrl;
+    if (imageUrl) {
+      const response = await axios.get<ArrayBuffer>(imageUrl, {
+        responseType: 'arraybuffer',
+      });
+      const imageData = response.data;
+      const fileName = `${contentId}.png`;
+
+      const fileUploadResponse = await blobStorageService.uploadFile({
+        file: imageData,
+        filename: fileName,
+        container: 'images',
+      });
+
+      person.PictureUrl = fileUploadResponse.url;
+    }
+
+    const tableRow = mapOpsTypedPersonToOpsTypedPersonTableRow(person);
+    await tableStorageService.upsertEntity(tableRow);
   };
 
   //#endregion
 
   const init = async (): Promise<void> => {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: [`--window-size=1920,1080`],
-      defaultViewport: {
-        width: 1920,
-        height: 1080,
-      },
-    });
+    try {
+      browser = await puppeteer.launch({
+        headless: false,
+        args: [`--window-size=1920,1080`],
+        defaultViewport: {
+          width: 1920,
+          height: 1080,
+        },
+      });
 
-    page = await browser.newPage();
+      page = await browser.newPage();
 
-    await page.goto(airtableUrl, { waitUntil: 'networkidle2' });
-    await page.setViewport({ width: 1920, height: 1080 });
-    await page.waitForSelector('#view', { timeout: 5_000 });
+      await page.goto(airtableUrl, { waitUntil: 'networkidle2' });
+      await page.setViewport({ width: 1920, height: 1080 });
+      await page.waitForSelector('#view', { timeout: 5_000 });
 
-    // await page.exposeFunction('transferData', transferData);
-    // await page.evaluate(observeMutation);
-    // await scrollToBottom(page);
+      await page.exposeFunction('transferCardId', transferCardId);
+      await page.evaluate(observeMutation);
+      await scrollToBottom(page);
 
-    const ids = ['rec3bHgppeU0ySjCV', 'recvIP8tRj4fKJnLF', 'recK8fMoC8X4EZ7FO'];
-    for (const id of ids) {
-      await page.goto(`${airtableUrl}/${id}`, { waitUntil: 'networkidle2' });
-      const content = await page.content();
-      parseCard(content);
+      for (const id of cardIds) {
+        await page.goto(`${airtableUrl}/${id}`, {
+          waitUntil: 'networkidle2',
+        });
+        const content = await page.content();
+        await createOpsTypedPersonRecord(id, content);
+      }
+
+      await browser.close();
+    } catch (ex) {
+      console.error(ex);
     }
-
-    await browser.close();
   };
 
   await init();
