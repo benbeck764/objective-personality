@@ -1,6 +1,6 @@
 {
   "name": "objective-personality-etl",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "ETL for Objective Personality DB",
   "license": "UNLICENSED",
   "engines": {
