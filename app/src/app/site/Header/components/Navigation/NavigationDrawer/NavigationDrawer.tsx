@@ -1,7 +1,7 @@
 'use client';
 import { FC, Fragment, useState } from 'react';
 import { Box, Stack, Theme, Typography } from '@mui/material';
-import { Menu as MenuIcon, Logout as LogoutIcon } from '@mui/icons-material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import {
   NavMenuConfig,
   NavMenuOptions,
@@ -22,7 +22,6 @@ interface NavigationDrawerProps {
     navigationAction,
     navigationRoute,
   }: NavMenuOptions) => void;
-  onLogout: () => void;
 }
 
 export const NavigationDrawer: FC<NavigationDrawerProps> = (
@@ -201,31 +200,6 @@ export const NavigationDrawer: FC<NavigationDrawerProps> = (
               </Fragment>
             )
           )}
-        </Box>
-        <Box
-          sx={{
-            height: 62,
-            borderTop: '1px solid #e5e5e5',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            px: 2,
-          }}
-          onClick={props.onLogout}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'space-between',
-              mb: 1,
-            }}
-          >
-            <Typography variant="h4" color="primary">
-              Logout
-            </Typography>
-            <LogoutIcon fontSize="medium" color="primary" />
-          </Box>
         </Box>
       </Stack>
     </AppDrawer>

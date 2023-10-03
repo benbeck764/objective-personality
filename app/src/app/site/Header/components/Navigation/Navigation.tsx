@@ -48,7 +48,6 @@ export const Navigation: FC<NavigationProps> = (props: NavigationProps) => {
       <NavigationDrawer
         navigationConfig={navigationConfiguration}
         onClickOption={handleClickOption}
-        onLogout={() => props.onLogout?.()}
       />
     );
   }

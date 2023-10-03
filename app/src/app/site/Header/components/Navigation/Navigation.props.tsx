@@ -1,6 +1,5 @@
 export type NavigationProps = {
   variant: NavigationVariant;
-  onLogout?: () => void;
 };
 
 export type NavigationVariant = 'bar' | 'drawer';
