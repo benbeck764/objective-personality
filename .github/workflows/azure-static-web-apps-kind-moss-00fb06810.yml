@@ -15,9 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
+      # Creates an .npmrc using an NPM token stored as a Github secret
+      - name: NPM Auth Token
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN 
+          @benbeck764:registry=https://npm.pkg.github.com" > .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

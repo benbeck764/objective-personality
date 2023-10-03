@@ -1,22 +1,20 @@
 import {
   TypographyVariants,
   Breakpoint,
-  BreakpointsOptions,
   PaletteOptions,
   ThemeOptions,
+  BreakpointsOptions,
 } from '@mui/material';
-import createBreakpoints from '@mui/system/createTheme/createBreakpoints';
 
-const breakpointValues: { [key in Breakpoint]: number } = {
-  xs: 0, // mobile (small)
-  sm: 375, // mobile (medium)
-  md: 414, // iPads & tablets
-  lg: 768, // small screens
-  xl: 1184, // desktop+
+const breakPointsOptions: BreakpointsOptions = {
+  values: {
+    xs: 0,
+    sm: 330,
+    md: 414,
+    lg: 768,
+    xl: 1200,
+  },
 };
-
-const breakPointsOptions: BreakpointsOptions = { values: breakpointValues };
-const breakPoints = createBreakpoints(breakPointsOptions);
 
 const lineHeights: { [key in keyof TypographyVariants]: number } = {
   h1: 32,
@@ -31,24 +29,11 @@ const lineHeights: { [key in keyof TypographyVariants]: number } = {
   paragraphLarge: 18,
   paragraphSmall: 16,
   paragraphSmallBold: 14,
-  paragraphSmallLink: 16,
+  paragraphExtraSmall: 14,
+  paragraphExtraSmallBold: 16,
 
-  numberedList: 18,
-  body1: 18,
-  body2: 18,
-  subtitle1: 16,
-  subtitle2: 14,
   button: 18,
 
-  mobileParagraph: 20,
-  mobileParagraphBold: 20,
-  mobileParagraphExtraSmall: 14,
-  mobileParagraphSmall: 18,
-  mobileParagraphSmallBold: 18,
-  mobileParagraphExtraSmallBold: 14,
-  mobileLabel: 22,
-
-  iconExtraSmall: 15,
   iconSmall: 18,
   iconMedium: 20,
   iconLarge: 29,
@@ -64,6 +49,10 @@ const lineHeights: { [key in keyof TypographyVariants]: number } = {
   fontWeightBold: -1,
   htmlFontSize: -1,
   pxToRem: -1,
+  body1: -1,
+  body2: -1,
+  subtitle1: -1,
+  subtitle2: -1,
 };
 
 const paragraph = {
@@ -108,52 +97,17 @@ const paragraphSmallBold = {
   letterSpacing: 0,
 };
 
-const paragraphSmallLink = {
+const paragraphExtraSmall = {
   fontSize: 12,
   fontWeight: 400,
-  lineHeight: lineHeights.paragraphSmallLink + 'px',
+  lineHeight: lineHeights.paragraphExtraSmall + 'px',
   letterSpacing: 0,
 };
 
-const mobileParagraph = {
-  fontSize: 16,
-  fontWeight: 400,
-  lineHeight: lineHeights.mobileParagraph + 'px',
-  letterSpacing: 0,
-};
-
-const mobileParagraphBold = {
-  fontSize: 16,
-  fontWeight: 700,
-  lineHeight: lineHeights.mobileParagraphBold + 'px',
-  letterSpacing: 0,
-};
-
-const mobileParagraphSmall = {
-  fontSize: 14,
-  fontWeight: 400,
-  lineHeight: lineHeights.mobileParagraphSmall + 'px',
-  letterSpacing: 0,
-};
-
-const mobileParagraphSmallBold = {
-  fontSize: 14,
-  fontWeight: 700,
-  lineHeight: lineHeights.mobileParagraphSmallBold + 'px',
-  letterSpacing: 0,
-};
-
-const mobileParagraphExtraSmall = {
-  fontSize: 11,
-  lineHeight: `${lineHeights.mobileParagraphExtraSmall}px`,
-  fontWeight: 400,
-  letterSpacing: 0,
-};
-
-const mobileParagraphExtraSmallBold = {
+const paragraphExtraSmallBold = {
   fontSize: 11,
   fontWeight: 700,
-  lineHeight: lineHeights.mobileParagraphExtraSmallBold + 'px',
+  lineHeight: lineHeights.paragraphExtraSmallBold + 'px',
   letterSpacing: 0,
 };
 
@@ -166,14 +120,6 @@ const headerHeights = {
   md: 48,
   lg: 48,
   xl: 48,
-};
-
-const footerHeights = {
-  xs: 100,
-  sm: 100,
-  md: 100,
-  lg: 64,
-  xl: 53,
 };
 
 const pageWidths: { [key in Breakpoint]: number } = {
@@ -194,19 +140,12 @@ const contentWidths: { [key in Breakpoint]: number } = {
 
 export function getThemeBase(palette: PaletteOptions): ThemeOptions {
   return {
-    custom: {
-      headerHeights: {
-        ...headerHeights,
-      },
-      footerHeights: {
-        ...footerHeights,
-      },
-      pageContentMargin: pageContentMargin,
-      pageWidths: pageWidths,
-      contentWidths: contentWidths,
-      lineHeights,
-      spacing,
+    headerHeights: {
+      ...headerHeights,
     },
+    pageContentMargin: pageContentMargin,
+    pageWidths: pageWidths,
+    contentWidths: contentWidths,
     spacing,
     palette: palette,
     typography: {
@@ -251,15 +190,9 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
       },
       paragraph: {
         ...paragraph,
-        [breakPoints.down('lg')]: {
-          ...mobileParagraph,
-        },
       },
       paragraphBold: {
         ...paragraphBold,
-        [breakPoints.down('lg')]: {
-          ...mobileParagraphBold,
-        },
       },
       paragraphLink: {
         ...paragraphLink,
@@ -269,52 +202,15 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
       },
       paragraphSmall: {
         ...paragraphSmall,
-        [breakPoints.down('lg')]: {
-          ...mobileParagraphSmall,
-        },
       },
       paragraphSmallBold: {
         ...paragraphSmallBold,
-        [breakPoints.down('lg')]: {
-          ...mobileParagraphSmallBold,
-        },
       },
-      paragraphSmallLink: {
-        ...paragraphSmallLink,
+      paragraphExtraSmall: {
+        ...paragraphExtraSmall,
       },
-      numberedList: {
-        fontSize: 14,
-        fontWeight: 400,
-        lineHeight: lineHeights.numberedList + 'px',
-        letterSpacing: 0,
-      },
-      mobileParagraph: {
-        ...mobileParagraph,
-      },
-      mobileParagraphBold: {
-        ...mobileParagraphBold,
-      },
-      mobileParagraphExtraSmall: {
-        ...mobileParagraphExtraSmall,
-      },
-      mobileParagraphExtraSmallBold: {
-        ...mobileParagraphExtraSmallBold,
-      },
-      mobileParagraphSmall: {
-        ...mobileParagraphSmall,
-      },
-      mobileParagraphSmallBold: {
-        ...mobileParagraphSmallBold,
-      },
-      mobileLabel: {
-        fontSize: 18,
-        fontWeight: 700,
-        lineHeight: lineHeights.mobileLabel + 'px',
-        letterSpacing: 0,
-      },
-      iconExtraSmall: {
-        fontSize: 10,
-        lineHeight: lineHeights.iconExtraSmall + 'px',
+      paragraphExtraSmallBold: {
+        ...paragraphExtraSmallBold,
       },
       iconSmall: {
         fontSize: 14,
@@ -327,19 +223,6 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
       iconLarge: {
         fontSize: 26,
         lineHeight: lineHeights.iconLarge + 'px',
-      },
-
-      body1: {
-        ...paragraph,
-      },
-      body2: {
-        ...paragraphBold,
-      },
-      subtitle1: {
-        ...paragraphSmall,
-      },
-      subtitle2: {
-        ...paragraphSmallBold,
       },
       button: {
         ...paragraphBold,
