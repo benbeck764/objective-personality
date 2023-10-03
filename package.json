@@ -12,8 +12,7 @@
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
   "scripts": {
     "start:app": "cd app && yarn dev",
-    "start:api": "cd api && yarn watch",
-    "start:proxy": "swa start http://localhost:3000 --api-location ./api --verbose",
-    "start": "swa start http://localhost:3000 --run 'cd app && yarn dev' --api ./api --verbose"
+    "start:api": "cd api && yarn start",
+    "start:proxy": "swa start http://localhost:3000 --api-devserver-url http://localhost:7071 --verbose"
   }
 }
