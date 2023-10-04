@@ -5,16 +5,13 @@ import ThemeRegistry from '@/theme/ThemeRegistry';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// Handle SEO & <head> here
 export const metadata: Metadata = {
   title: 'Objective Personality',
   description: 'OP Next.js test app',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -24,4 +21,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

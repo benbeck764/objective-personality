@@ -30,9 +30,9 @@ export const Navigation: FC<NavigationProps> = (props: NavigationProps) => {
 
   navigationConfiguration = [
     {
-      label: 'Home',
+      label: 'Search',
       variant: NavigationOptionVariant.Button,
-      navigationRoute: AppRoutes[RouteName.Home].path,
+      navigationRoute: AppRoutes[RouteName.Search].path,
     },
   ];
 

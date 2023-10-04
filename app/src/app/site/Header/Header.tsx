@@ -44,8 +44,8 @@ export const Header: FC = () => {
                       whiteSpace="nowrap"
                       sx={{ color: (theme) => theme.palette.common.white }}
                       onClick={() => {
-                        if (pathname !== AppRoutes[RouteName.Home].path) {
-                          router.push(AppRoutes[RouteName.Home].path);
+                        if (pathname !== AppRoutes[RouteName.Site].path) {
+                          router.push(AppRoutes[RouteName.Site].path);
                         }
                       }}
                     >

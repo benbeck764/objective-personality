@@ -9,8 +9,8 @@ import { HttpStatus } from '../_services/common/http-status';
 import { HttpResponseBuilder } from '../_services/common/http-response';
 
 export async function searchTypedPeople(
-  request: HttpRequest,
-  context: InvocationContext
+  _request: HttpRequest,
+  _context: InvocationContext
 ): Promise<HttpResponseInit> {
   try {
     const service = await TypedPersonService.getInstance();

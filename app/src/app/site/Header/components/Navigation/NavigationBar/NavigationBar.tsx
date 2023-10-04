@@ -34,7 +34,7 @@ export const NavigationBar: FC<NavigationBarProps> = (
   return (
     <Grid container wrap="nowrap" pt={0.5} spacing={1}>
       {props.navigationConfig.map((config: NavMenuConfig, index: number) => (
-        <Grid key={index} item sx={{ mr: 2 }}>
+        <Grid key={index} item sx={{ mr: 2, pt: '4px !important' }}>
           {config.variant === NavigationOptionVariant.Menu ? (
             <AppMenu
               mode="menu"
@@ -52,7 +52,7 @@ export const NavigationBar: FC<NavigationBarProps> = (
                 },
                 disabled: config.disabled,
                 children: (
-                  <Typography variant="paragraphBold">
+                  <Typography variant="paragraphLarge" sx={{ fontWeight: 700 }}>
                     {config.label}
                   </Typography>
                 ),
@@ -136,7 +136,10 @@ export const NavigationBar: FC<NavigationBarProps> = (
                     {...buttonProps}
                     disabled={config.disabled}
                   >
-                    <Typography variant="paragraphBold">
+                    <Typography
+                      variant="paragraphLarge"
+                      sx={{ fontWeight: 700 }}
+                    >
                       {config.label}
                     </Typography>
                   </StyledNavigationButton>
@@ -147,7 +150,7 @@ export const NavigationBar: FC<NavigationBarProps> = (
                   disabled={config.disabled}
                   onClick={() => props.onClickOption(config)}
                 >
-                  <Typography variant="paragraphBold">
+                  <Typography variant="paragraphLarge" sx={{ fontWeight: 700 }}>
                     {config.label}
                   </Typography>
                 </StyledNavigationButton>
