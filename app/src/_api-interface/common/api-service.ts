@@ -1,10 +1,10 @@
-import { ApiResponse } from '../models/api-shared.models';
+import { ApiResponse } from './api-shared.models';
 
 abstract class ApiService {
   protected readonly baseUrl: string;
 
   protected constructor() {
-    this.baseUrl = process.env.API_BASE_URL || '';
+    this.baseUrl = process.env.API_BASE_URL || '/api';
   }
 
   protected async get<T>(

@@ -1,7 +1,7 @@
 import ApiService from '../common/api-service';
 import { endpoints } from '../common/endpoints';
-import { ServiceResult } from '../models/api-shared.models';
-import { OPSTypedPerson } from '../models/ops-typed-people.models';
+import { ServiceResult } from '../common/api-shared.models';
+import { OPSTypedPerson } from '../../_models/ops-typed-people.models';
 
 class OpsTypedPeopleService extends ApiService {
   private static classInstance: OpsTypedPeopleService;

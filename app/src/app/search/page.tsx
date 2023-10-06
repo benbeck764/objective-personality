@@ -1,4 +1,4 @@
-import OpsTypedPeopleService from '@/api-interface/services/ops-typed-people.service';
+import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
 
 const Search = async () => {
   const service = OpsTypedPeopleService.getInstance();
