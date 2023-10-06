@@ -1,10 +1,6 @@
-import {
-  TypographyVariants,
-  Breakpoint,
-  PaletteOptions,
-  ThemeOptions,
-  BreakpointsOptions,
-} from '@mui/material';
+import { Breakpoint, BreakpointsOptions } from '@mui/material/styles';
+import { PaletteOptions } from '@mui/material/styles/createPalette';
+import { ThemeOptions } from '@mui/material/styles/createTheme';
 
 const breakPointsOptions: BreakpointsOptions = {
   values: {
@@ -14,101 +10,6 @@ const breakPointsOptions: BreakpointsOptions = {
     lg: 768,
     xl: 1200,
   },
-};
-
-const lineHeights: { [key in keyof TypographyVariants]: number } = {
-  h1: 32,
-  h2: 24,
-  h3: 30,
-  h4: 24,
-  h5: 18,
-  h6: 16,
-  paragraph: 18,
-  paragraphBold: 18,
-  paragraphLink: 18,
-  paragraphLarge: 18,
-  paragraphSmall: 16,
-  paragraphSmallBold: 14,
-  paragraphExtraSmall: 14,
-  paragraphExtraSmallBold: 16,
-
-  button: 18,
-
-  iconSmall: 18,
-  iconMedium: 20,
-  iconLarge: 29,
-
-  // undefined:
-  caption: -1,
-  overline: -1,
-  fontFamily: -1,
-  fontSize: -1,
-  fontWeightLight: -1,
-  fontWeightRegular: -1,
-  fontWeightMedium: -1,
-  fontWeightBold: -1,
-  htmlFontSize: -1,
-  pxToRem: -1,
-  body1: -1,
-  body2: -1,
-  subtitle1: -1,
-  subtitle2: -1,
-};
-
-const paragraph = {
-  fontSize: 14,
-  fontWeight: 400,
-  lineHeight: lineHeights.paragraph + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphBold = {
-  fontSize: 14,
-  fontWeight: 700,
-  lineHeight: lineHeights.paragraphBold + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphLink = {
-  fontSize: 14,
-  fontWeight: 700,
-  lineHeight: lineHeights.paragraphLink + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphSmall = {
-  fontSize: 12,
-  fontWeight: 400,
-  lineHeight: lineHeights.paragraphSmall + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphLarge = {
-  fontSize: 16,
-  fontWeight: 400,
-  lineHeight: lineHeights.paragraphLarge + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphSmallBold = {
-  fontSize: 11,
-  fontWeight: 700,
-  lineHeight: lineHeights.paragraphSmallBold + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphExtraSmall = {
-  fontSize: 12,
-  fontWeight: 400,
-  lineHeight: lineHeights.paragraphExtraSmall + 'px',
-  letterSpacing: 0,
-};
-
-const paragraphExtraSmallBold = {
-  fontSize: 11,
-  fontWeight: 700,
-  lineHeight: lineHeights.paragraphExtraSmallBold + 'px',
-  letterSpacing: 0,
 };
 
 const spacing = 8;
@@ -149,83 +50,116 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
     spacing,
     palette: palette,
     typography: {
-      fontFamily: 'Tahoma',
+      fontFamily: 'Poppins, -apple-system, system-ui, sans-serif',
       fontWeightLight: 400,
       fontSize: 14,
       h1: {
-        fontSize: 26,
-        fontWeight: 700,
-        lineHeight: lineHeights.h1 + 'px',
-        letterSpacing: -0.5,
+        fontSize: 'clamp(56px, 10vw, 96px)',
+        fontWeight: 600,
+        lineHeight: 1.1,
+        letterSpacing: -1,
+        wordSpacing: '-0.05em',
       },
       h2: {
-        fontSize: 22,
-        fontWeight: 700,
-        lineHeight: lineHeights.h2 + 'px',
-        letterSpacing: 0,
+        fontSize: 'clamp(46px, 8vw, 72px)',
+        fontWeight: 600,
+        lineHeight: 1.1,
+        letterSpacing: -0.5,
+        wordSpacing: '-0.025em',
       },
       h3: {
-        fontSize: 26,
-        fontWeight: 700,
-        lineHeight: lineHeights.h3 + 'px',
+        fontSize: 'clamp(30px, 7vw, 56px)',
+        fontWeight: 600,
+        lineHeight: 1.1,
         letterSpacing: -0.5,
+        wordSpacing: '-0.025em',
       },
       h4: {
-        fontSize: 18,
+        fontSize: 'clamp(24px, 7vw, 36px)',
         fontWeight: 700,
-        lineHeight: lineHeights.h4 + 'px',
-        letterSpacing: 0,
+        lineHeight: 1.1,
+        letterSpacing: -0.5,
+        wordSpacing: '-0.025em',
       },
       h5: {
-        fontSize: 16,
+        fontSize: 'clamp(18px, 6.6vw, 24px)',
         fontWeight: 700,
-        lineHeight: lineHeights.h5 + 'px',
-        letterSpacing: 0.5,
+        lineHeight: 1.1,
+        letterSpacing: -0.5,
+        wordSpacing: '-0.025em',
       },
       h6: {
-        fontSize: 14,
+        fontSize: 'clamp(14px, 6vw, 18px)',
         fontWeight: 600,
-        lineHeight: lineHeights.h6 + 'px',
-        letterSpacing: 0,
+        lineHeight: 1.1,
+        letterSpacing: -0.5,
+        wordSpacing: '-0.025em',
       },
       paragraph: {
-        ...paragraph,
+        fontSize: 14,
+        fontWeight: 400,
+        lineHeight: 1.1,
+        letterSpacing: -0.5,
       },
       paragraphBold: {
-        ...paragraphBold,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: 1,
+        letterSpacing: -0.25,
       },
       paragraphLink: {
-        ...paragraphLink,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: 1,
+        letterSpacing: -0.25,
       },
       paragraphLarge: {
-        ...paragraphLarge,
+        fontSize: 18,
+        fontWeight: 400,
+        lineHeight: 1.2,
+        letterSpacing: -0.75,
       },
       paragraphSmall: {
-        ...paragraphSmall,
+        fontSize: 12,
+        fontWeight: 400,
+        lineHeight: 1,
+        letterSpacing: -0.5,
       },
       paragraphSmallBold: {
-        ...paragraphSmallBold,
+        fontSize: 12,
+        fontWeight: 700,
+        lineHeight: 1,
+        letterSpacing: -0.25,
       },
       paragraphExtraSmall: {
-        ...paragraphExtraSmall,
+        fontSize: 11,
+        fontWeight: 400,
+        lineHeight: 1,
+        letterSpacing: -0.5,
       },
       paragraphExtraSmallBold: {
-        ...paragraphExtraSmallBold,
+        fontSize: 11,
+        fontWeight: 700,
+        lineHeight: 1,
+        letterSpacing: -0.25,
       },
       iconSmall: {
         fontSize: 14,
-        lineHeight: lineHeights.iconSmall + 'px',
+        lineHeight: 1.3,
       },
       iconMedium: {
         fontSize: 20,
-        lineHeight: lineHeights.iconMedium + 'px',
+        lineHeight: 1,
       },
       iconLarge: {
         fontSize: 26,
-        lineHeight: lineHeights.iconLarge + 'px',
+        lineHeight: 1.1,
       },
       button: {
-        ...paragraphBold,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: 1,
+        letterSpacing: -0.25,
         textTransform: 'none',
       },
     },

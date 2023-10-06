@@ -13,7 +13,7 @@ export const getMUITheme = (themeBaseOptions: ThemeOptions): ThemeOptions => {
               width: '14px',
             },
             '*::-webkit-scrollbar-thumb': {
-              backgroundColor: themeBase.palette.coolGrey[700],
+              backgroundColor: themeBase.palette.coolGrey[300],
               borderRadius: '10px',
               border: '4px solid rgba(0,0,0,0)',
               backgroundClip: 'padding-box',

@@ -1,5 +1,7 @@
 'use client';
-import { styled, Theme, Box, Grid } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import { Theme, styled } from '@mui/material/styles';
 
 export const StyledPageContainer = styled(Grid)(
   ({ theme }: { theme: Theme }) => ({

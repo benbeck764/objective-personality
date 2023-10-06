@@ -46,10 +46,6 @@ export const getPalette = (): PaletteOptions => {
       light: '#58B7ED',
       dark: '#C1C7CD',
     },
-    tertiary: {
-      main: '#FFFFFF',
-      dark: paletteBase.coolGrey?.[100],
-    },
     action: {
       disabled: '#C1C7CD',
       focus: '#000000',

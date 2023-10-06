@@ -1,4 +1,5 @@
-import { styled, Theme, Box } from '@mui/material';
+import Box from '@mui/material/Box';
+import { Theme, styled } from '@mui/material/styles';
 
 export const StyledHeaderContainer = styled(Box)(
   ({ theme }: { theme: Theme }) => ({

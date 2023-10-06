@@ -1,7 +1,8 @@
-import { Breakpoint, Theme, createTheme } from '@mui/material';
+import { Breakpoint } from '@mui/material/styles';
 import { getThemeBase } from './base.theme';
 import { getMUITheme } from './mui.theme';
 import { getPalette } from './pallete';
+import createTheme, { Theme } from '@mui/material/styles/createTheme';
 
 declare module '@mui/material/styles' {
   interface Theme {
