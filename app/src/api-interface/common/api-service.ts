@@ -11,20 +11,15 @@ abstract class ApiService {
     url: string,
     params?: string | string[][] | Record<string, string> | URLSearchParams
   ): Promise<ApiResponse<T>> {
-    const response = await fetch(
-      `${this.baseUrl}/${url}?${new URLSearchParams(params)}`,
-      {
-        method: 'GET',
-      }
-    );
+    const response = await fetch(`${url}?${new URLSearchParams(params)}`, {
+      method: 'GET',
+    });
 
     return response.json() as Promise<ApiResponse<T>>;
   }
 
   protected async post<T>(url: string, body?: any): Promise<ApiResponse<T>> {
-    console.log(`test: ${this.baseUrl}/${url}`);
-
-    const response = await fetch(`${this.baseUrl}/${url}`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +33,7 @@ abstract class ApiService {
   }
 
   protected async put<T>(url: string, body?: unknown): Promise<ApiResponse<T>> {
-    const response = await fetch(`${this.baseUrl}/${url}`, {
+    const response = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +48,7 @@ abstract class ApiService {
     url: string,
     body?: unknown
   ): Promise<ApiResponse<T>> {
-    const response = await fetch(`${this.baseUrl}/${url}`, {
+    const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

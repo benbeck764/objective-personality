@@ -4,7 +4,6 @@ const Search = async () => {
   const service = OpsTypedPeopleService.getInstance();
 
   const data = (await service.searchOPSTypedPeople()).resultObject;
-  console.log(data);
 
   return (
     <>

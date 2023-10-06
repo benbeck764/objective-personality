@@ -26,7 +26,7 @@ class TypedPersonService extends ServiceBase {
           mapOpsTypedPersonTableRowToOpsTypedPerson(entity)
       );
 
-      return { status: HttpStatus.OK, data: dtos };
+      return { status: HttpStatus.OK, data: dtos.slice(0, 100) };
     } catch (err: any) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
