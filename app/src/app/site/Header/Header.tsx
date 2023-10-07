@@ -5,10 +5,13 @@ import { StyledHeaderContainer } from './Header.styles';
 import { AppRoutes, RouteName } from '../../../routing/common/routes';
 import { Navigation } from './components/Navigation/Navigation';
 import { useRouter, usePathname } from 'next/navigation';
-import { AppButton, useBreakpoint } from '@benbeck764/react-components';
+import {
+  AppButton,
+  //useBreakpoint
+} from '@benbeck764/react-components';
 
 export const Header: FC = () => {
-  const { breakpoint } = useBreakpoint();
+  //const { breakpoint } = useBreakpoint();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -19,7 +22,8 @@ export const Header: FC = () => {
           <Toolbar
             variant="dense"
             sx={{
-              px: breakpoint === 'xl' ? 3 : `8px !important`,
+              //px: breakpoint === 'xl' ? 3 : `8px !important`,
+              px: 3,
             }}
           >
             <Grid container>
@@ -31,16 +35,16 @@ export const Header: FC = () => {
                 justifyContent="flex-start"
               >
                 <Stack direction="row" alignItems="center" gap={2}>
-                  {breakpoint !== 'xl' && (
+                  {/* {breakpoint !== 'xl' && (
                     <Box>
                       <Navigation variant="drawer" />
                     </Box>
-                  )}
+                  )} */}
 
                   <AppButton>
                     <Typography
                       align="center"
-                      variant="h4"
+                      variant="h5"
                       whiteSpace="nowrap"
                       sx={{ color: (theme) => theme.palette.common.white }}
                       onClick={() => {
@@ -53,11 +57,14 @@ export const Header: FC = () => {
                     </Typography>
                   </AppButton>
 
-                  {breakpoint === 'xl' && (
+                  {/* {breakpoint === 'xl' && (
                     <Box ml={4}>
                       <Navigation variant="bar" />
                     </Box>
-                  )}
+                  )} */}
+                  <Box ml={4}>
+                    <Navigation variant="bar" />
+                  </Box>
                 </Stack>
               </Grid>
               <Grid

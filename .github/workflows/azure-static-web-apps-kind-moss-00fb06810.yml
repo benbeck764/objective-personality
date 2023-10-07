@@ -38,6 +38,10 @@ jobs:
           api_location: '/api' # Api source code path - optional
           output_location: '' # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+        env:
+          API_BASE_URL: ${{ vars.API_BASE_URL }}
+          STORAGE_CONNECTION_STRING: ${{ vars.STORAGE_CONNECTION_STRING }}
+          STORAGE_OPS_TYPED_PEOPLE_TABLE: ${{ vars.STORAGE_OPS_TYPED_PEOPLE_TABLE }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

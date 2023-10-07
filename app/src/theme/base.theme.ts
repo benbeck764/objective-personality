@@ -1,6 +1,14 @@
 import { Breakpoint, BreakpointsOptions } from '@mui/material/styles';
 import { PaletteOptions } from '@mui/material/styles/createPalette';
 import { ThemeOptions } from '@mui/material/styles/createTheme';
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  weight: '400',
+  style: ['normal'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 const breakPointsOptions: BreakpointsOptions = {
   values: {
@@ -50,9 +58,8 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
     spacing,
     palette: palette,
     typography: {
-      fontFamily: 'Poppins, -apple-system, system-ui, sans-serif',
-      fontWeightLight: 400,
-      fontSize: 14,
+      fontFamily: poppins.style.fontFamily,
+      fontWeightLight: poppins.style.fontWeight,
       h1: {
         fontSize: 'clamp(56px, 10vw, 96px)',
         fontWeight: 600,
@@ -117,7 +124,7 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
         fontSize: 18,
         fontWeight: 400,
         lineHeight: 1.2,
-        letterSpacing: -0.75,
+        letterSpacing: -0.25,
       },
       paragraphSmall: {
         fontSize: 12,

@@ -13,7 +13,7 @@ import {
   AppDrawer,
   AppDropdown,
   AppMenuItem,
-  useBreakpoint,
+  //useBreakpoint,
 } from '@benbeck764/react-components';
 
 interface NavigationDrawerProps {
@@ -28,7 +28,7 @@ export const NavigationDrawer: FC<NavigationDrawerProps> = (
   props: NavigationDrawerProps
 ) => {
   const pathname = usePathname();
-  const { breakpoint } = useBreakpoint();
+  //const { breakpoint } = useBreakpoint();
   const [forcedToggleState, setForcedToggleState] = useState<
     boolean | undefined
   >(undefined);
@@ -69,10 +69,10 @@ export const NavigationDrawer: FC<NavigationDrawerProps> = (
       <Stack
         direction="column"
         justifyContent="space-between"
-        sx={{
-          height: (theme: Theme) =>
-            `calc(100vh - ${theme.headerHeights?.[breakpoint]}px)`,
-        }}
+        // sx={{
+        //   height: (theme: Theme) =>
+        //     `calc(100vh - ${theme.headerHeights?.[breakpoint]}px)`,
+        // }}
       >
         <Box sx={{ overflowY: 'scroll' }}>
           {props.navigationConfig.map(

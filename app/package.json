@@ -12,8 +12,8 @@
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
     "@azure/storage-blob": "^12.16.0",
-    "@benbeck764/react-components": "^1.2.1",
-    "@benbeck764/react-components-grid": "^1.2.1",
+    "@benbeck764/react-components": "^1.2.3",
+    "@benbeck764/react-components-grid": "^1.2.3",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.9",

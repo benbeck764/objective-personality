@@ -1,7 +1,11 @@
+import { Typography } from '@mui/material';
+
 const Home = () => {
   return (
     <>
-      <h1>Home</h1>
+      <Typography variant="h1" sx={{ color: { xs: 'red', xl: 'blue' } }}>
+        Hello World
+      </Typography>
     </>
   );
 };

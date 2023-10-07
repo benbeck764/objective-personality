@@ -1,8 +1,5 @@
 import { FC, useRef } from 'react';
-import {
-  StyledEllipsingTextContainer,
-  useBreakpoint,
-} from '@benbeck764/react-components';
+import { StyledEllipsingTextContainer } from '@benbeck764/react-components';
 import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 import { StyledCard, StyledCardAvatar } from './TypedPersonCard.styles';
 import { useHovered } from '@/utilities';
@@ -28,7 +25,6 @@ export const TypedPersonCard: FC<TypedPersonCardProps> = (
   const { person, loadingPlaceholder } = props;
   const cardFocusRef = useRef<HTMLDivElement>();
   const hovered = useHovered(cardFocusRef);
-  const { device } = useBreakpoint();
   const theme = useTheme();
 
   if (loadingPlaceholder) {
