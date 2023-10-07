@@ -1,15 +1,14 @@
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import { Theme, styled } from '@mui/material/styles';
+import Image from 'next/image';
 
-export const StyledCardAvatar = styled(Avatar, {
+export const StyledCardImage = styled(Image, {
   shouldForwardProp: (prop) => prop !== 'hovered',
 })<{ hovered: boolean }>(({ theme, hovered }) => ({
-  width: 125,
-  height: 125,
   borderColor: theme.palette.coolGrey[300],
   borderStyle: 'solid',
   borderWidth: 0.5,
+  borderRadius: '50%',
   ...(hovered === true && {
     transition: 'all .25s ease-in-out',
     transform: 'scale(1.05)',
