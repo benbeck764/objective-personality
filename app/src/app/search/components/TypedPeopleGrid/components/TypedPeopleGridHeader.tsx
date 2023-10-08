@@ -12,7 +12,7 @@ const TypedPeopleGridHeader: FC<PoemsGridHeaderProps> = (
   const { filterInputContainerRef, sortInputContainerRef } = props;
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box width="100%" mb={2}>
       <Stack
         direction="row"
         alignItems="center"

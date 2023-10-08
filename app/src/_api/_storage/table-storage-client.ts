@@ -1,5 +1,6 @@
 import {
   GetTableEntityResponse,
+  ListTableEntitiesOptions,
   TableClient,
   TableEntity,
   TableEntityResult,
@@ -31,9 +32,11 @@ class TableStorageClient<T extends object = Record<string, unknown>> {
     }
   }
 
-  public async getEntities(): Promise<TableEntityResult<T>[]> {
+  public async getEntities(
+    options?: ListTableEntitiesOptions
+  ): Promise<TableEntityResult<T>[]> {
     const entities: TableEntityResult<T>[] = [];
-    const iterator = this.tableClient.listEntities<T>();
+    const iterator = this.tableClient.listEntities<T>(options);
     for await (const entity of iterator) {
       entities.push(entity);
     }

@@ -1,14 +1,39 @@
 import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
 import SearchCard from './SearchCard';
+import { Suspense } from 'react';
+import Await from './Await';
 
-const Search = async () => {
+const Search = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
   const service = OpsTypedPeopleService.getInstance();
 
-  let loading = true;
-  const data = (await service.searchOPSTypedPeople()).resultObject;
-  loading = false;
+  const filter =
+    typeof searchParams.filter === 'string' ? searchParams.filter : '';
 
-  return <SearchCard data={data} loading={loading} />;
+  // const data = (
+  //   await service.searchOPSTypedPeople({
+  //     filterText: filter,
+  //   })
+  // ).resultObject;
+
+  const promise = service.searchOPSTypedPeople({ filterText: filter });
+
+  return (
+    <Suspense fallback={<SearchCard data={undefined} loading={true} />}>
+      <Await promise={promise}>
+        {(res) => (
+          <SearchCard
+            data={res.resultObject}
+            loading={false}
+            filterText={filter}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
 };
 
 export default Search;

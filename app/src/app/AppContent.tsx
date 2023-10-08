@@ -1,4 +1,3 @@
-import { Stack } from '@mui/material';
 import { FC, PropsWithChildren } from 'react';
 import {
   StyledStickyHeaderContainer,
@@ -6,6 +5,7 @@ import {
   StyledPageContent,
 } from './App.styles';
 import { Header } from './site/Header/Header';
+import Stack from '@mui/material/Stack';
 
 const AppContent: FC<PropsWithChildren> = (props: PropsWithChildren) => {
   const { children } = props;

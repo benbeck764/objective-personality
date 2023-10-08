@@ -3,6 +3,8 @@ import {
   OPSTypedPersonTableRow,
   OPSTypedPerson,
   mapOpsTypedPersonTableRowToOpsTypedPerson,
+  OpsTypedPersonSearchRequestDto,
+  nameof,
 } from '@/_models/ops-typed-people.models';
 import TableStorageClient from '../_storage/table-storage-client';
 import { HttpStatus } from './common/http-status';
@@ -16,15 +18,27 @@ class TypedPersonService extends ServiceBase {
     super();
   }
 
-  public async searchTypedPeople(): Promise<ServiceResponse<OPSTypedPerson[]>> {
+  public async searchTypedPeople(
+    dto: OpsTypedPersonSearchRequestDto
+  ): Promise<ServiceResponse<OPSTypedPerson[]>> {
     try {
       const entities = await this.tableService.getEntities();
-      const dtos = entities.map(
-        (entity: TableEntityResult<OPSTypedPersonTableRow>) =>
-          mapOpsTypedPersonTableRowToOpsTypedPerson(entity)
-      );
 
-      return { status: HttpStatus.OK, data: dtos.slice(0, 100) };
+      const dtos = entities
+        .map((entity: TableEntityResult<OPSTypedPersonTableRow>) =>
+          mapOpsTypedPersonTableRowToOpsTypedPerson(entity)
+        )
+        .filter((val: OPSTypedPerson) => {
+          if (dto.filterText) {
+            return val.Name.toLocaleLowerCase().includes(
+              dto.filterText.toLocaleLowerCase()
+            );
+          } else {
+            return val;
+          }
+        });
+
+      return { status: HttpStatus.OK, data: dtos.slice(0, 400) };
     } catch (err: any) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,

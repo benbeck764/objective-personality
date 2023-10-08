@@ -1,4 +1,3 @@
-'use client';
 import { Typography, Box } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
@@ -20,7 +19,7 @@ type PoemsGridProps = {
   //sortBy?: TypedPersonSearchSortByType
   filterable?: boolean;
   filterText?: string;
-  //onDataRequested: (dataRequest: AppGridDataRequest) => void;
+  onDataRequested: (dataRequest: AppGridDataRequest) => void;
 };
 
 const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
@@ -31,8 +30,10 @@ const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
     //sortBy,
     filterable,
     filterText,
-    //onDataRequested,
+    onDataRequested,
   } = props;
+
+  console.log(`loading: ${loading}`);
 
   const [filterInputContainer, setFilterInputContainer] =
     useState<HTMLElement | null>(null);
@@ -65,7 +66,7 @@ const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
             {
               items: [],
               pageIndex: 0,
-              pageSize: 12,
+              pageSize: 16,
               isLoading: true,
             },
           ]
@@ -102,12 +103,13 @@ const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
     filterInputSx: { width: { xs: '100%', lg: 288 } },
     filterInputIcon: <SearchIcon color="primary" sx={{ ml: 1 }} />,
     sortInputSx: { width: { xs: '100%', lg: 288 } },
-    //onDataRequested: onDataRequested,
+    onDataRequested: onDataRequested,
     //onItemClicked: onPoemSelected,
     noItemsMessage: (
       <Typography variant="paragraph">No results found.</Typography>
     ),
   };
+
   return (
     <Box sx={{ mt: 2 }}>
       <TypedPeopleGridHeader

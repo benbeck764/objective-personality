@@ -56,6 +56,14 @@ export type OPSTypedPersonTableRow = TableEntity & {
   LastUpdatedDate: Date;
 };
 
+export type OpsTypedPersonSearchRequestDto = {
+  pageNumber?: number;
+  pageSize?: number;
+  filterText?: string;
+};
+
+//#region Mappers
+
 export const mapOpsTypedPersonTableRowToOpsTypedPerson = (
   row: OPSTypedPersonTableRow | any
 ): OPSTypedPerson => {
@@ -79,3 +87,5 @@ export const mapOpsTypedPersonToOpsTypedPersonTableRow = (
     Links: opsTypedPerson.Links ? JSON.stringify(opsTypedPerson.Links) : null,
   };
 };
+
+//#endregion
