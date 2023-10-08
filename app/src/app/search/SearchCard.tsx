@@ -1,7 +1,7 @@
 'use client';
 import { FC, useEffect, useState } from 'react';
 import { AppCard } from '@benbeck764/react-components';
-import TypedPeopleGrid from './components/TypedPeopleGrid/TypedPeopleGrid';
+//import TypedPeopleGrid from './components/TypedPeopleGrid/TypedPeopleGrid';
 import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -9,6 +9,7 @@ import Divider from '@mui/material/Divider';
 import { AppGridDataRequest } from '@benbeck764/react-components-grid';
 import { useRouter } from 'next/navigation';
 import { useDebounce } from '@/utilities/hooks/useDebounce';
+import TypedPeopleGrid from './components/TypedPeopleGrid/TypedPeopleGrid';
 
 type SearchCardProps = {
   data: OPSTypedPerson[] | undefined;

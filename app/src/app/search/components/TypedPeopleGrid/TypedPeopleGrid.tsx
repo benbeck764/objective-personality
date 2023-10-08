@@ -33,8 +33,6 @@ const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
     onDataRequested,
   } = props;
 
-  console.log(`loading: ${loading}`);
-
   const [filterInputContainer, setFilterInputContainer] =
     useState<HTMLElement | null>(null);
   const [sortInputContainer, setSortInputContainer] =
@@ -66,7 +64,7 @@ const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
             {
               items: [],
               pageIndex: 0,
-              pageSize: 16,
+              pageSize: 18,
               isLoading: true,
             },
           ]
