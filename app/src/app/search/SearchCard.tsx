@@ -24,7 +24,7 @@ const SearchCard: FC<SearchCardProps> = (props: SearchCardProps) => {
   const [dataRequest, setDataRequest] = useState<AppGridDataRequest>({
     pageNumber: 0,
     pageSize: 250,
-    filterText: '',
+    filterText: filterText,
   });
   const debouncedDataRequest = useDebounce(dataRequest, 300);
 
