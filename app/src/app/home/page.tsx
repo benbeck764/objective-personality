@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
-import dynamic from 'next/dynamic';
 import HomeTest from './HomeTest';
+import { AppButton } from '@benbeck764/react-components';
 
 //const HomeTest = dynamic(() => import('./HomeTest'), { ssr: false });
 const Home = () => {
@@ -10,6 +10,7 @@ const Home = () => {
         Hello World
       </Typography>
       <HomeTest />
+      <AppButton>Hello</AppButton>
     </>
   );
 };
