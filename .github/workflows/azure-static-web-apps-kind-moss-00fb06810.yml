@@ -39,7 +39,7 @@ jobs:
           output_location: '' # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
-          is_static_export: true
+          IS_STATIC_EXPORT: true
           API_BASE_URL: ${{ vars.API_BASE_URL }}
           STORAGE_CONNECTION_STRING: ${{ vars.STORAGE_CONNECTION_STRING }}
           STORAGE_OPS_TYPED_PEOPLE_TABLE: ${{ vars.STORAGE_OPS_TYPED_PEOPLE_TABLE }}
