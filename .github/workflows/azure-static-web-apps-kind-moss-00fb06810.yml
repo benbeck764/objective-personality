@@ -34,11 +34,12 @@ jobs:
           action: 'upload'
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: '/app' # App source code path
-          api_location: '/api' # Api source code path - optional
+          app_location: 'app' # App source code path
+          api_location: '' # Api source code path - optional
           output_location: '' # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
+          is_static_export: true
           API_BASE_URL: ${{ vars.API_BASE_URL }}
           STORAGE_CONNECTION_STRING: ${{ vars.STORAGE_CONNECTION_STRING }}
           STORAGE_OPS_TYPED_PEOPLE_TABLE: ${{ vars.STORAGE_OPS_TYPED_PEOPLE_TABLE }}
