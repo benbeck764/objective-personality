@@ -5,7 +5,11 @@ import { StyledHeaderContainer } from './Header.styles';
 import { AppRoutes, RouteName } from '../../../routing/common/routes';
 import { Navigation } from './components/Navigation/Navigation';
 import { useRouter, usePathname } from 'next/navigation';
-import { AppButton, useBreakpoint } from '@benbeck764/react-components';
+import {
+  AppButton,
+  AppCard,
+  useBreakpoint,
+} from '@benbeck764/react-components';
 
 export const Header: FC = () => {
   //const { breakpoint } = useBreakpoint();

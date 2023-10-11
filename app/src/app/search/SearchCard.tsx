@@ -48,7 +48,7 @@ const SearchCard: FC<SearchCardProps> = (props: SearchCardProps) => {
         Search
       </Typography>
       <Divider />
-      <Box mt={2} pb={4} mb={4}>
+      <Box mt={2} pb={4} mb={4} width="100%">
         <TypedPeopleGrid
           data={data}
           loading={loading}

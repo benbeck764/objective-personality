@@ -16,7 +16,12 @@ const Search = async ({
   const promise = service.searchOPSTypedPeople({ filterText: filter });
 
   return (
-    <Suspense key={filter} fallback={'Loading...'}>
+    <Suspense
+      key={filter}
+      fallback={
+        <SearchCard data={undefined} loading={true} filterText={filter} />
+      }
+    >
       <Await promise={promise}>
         {(res) => (
           <SearchCard

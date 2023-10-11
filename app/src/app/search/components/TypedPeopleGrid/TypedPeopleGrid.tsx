@@ -1,15 +1,15 @@
 import { Typography, Box } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import {
-  AppGridDataRequest,
-  AppGridData,
-  AppGridProps,
-  AppGrid,
-} from '@benbeck764/react-components-grid';
 import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 import { createCardViewDefinitions } from './TypedPeopleGrid.card';
 import TypedPeopleGridHeader from './components/TypedPeopleGridHeader';
+import {
+  AppGrid,
+  AppGridData,
+  AppGridDataRequest,
+  AppGridProps,
+} from '@benbeck764/react-components-grid';
 
 type PoemsGridProps = {
   data: OPSTypedPerson[] | undefined;
@@ -102,14 +102,14 @@ const TypedPeopleGrid: FC<PoemsGridProps> = (props: PoemsGridProps) => {
     filterInputIcon: <SearchIcon color="primary" sx={{ ml: 1 }} />,
     sortInputSx: { width: { xs: '100%', lg: 288 } },
     onDataRequested: onDataRequested,
-    //onItemClicked: onPoemSelected,
+    //onItemClicked: onPersonSelected,
     noItemsMessage: (
       <Typography variant="paragraph">No results found.</Typography>
     ),
   };
 
   return (
-    <Box sx={{ mt: 2 }}>
+    <Box sx={{ mt: 2, width: '100%' }}>
       <TypedPeopleGridHeader
         filterInputContainerRef={filterInputContainerRef}
         //sortInputContainerRef={sortInputContainerRef}

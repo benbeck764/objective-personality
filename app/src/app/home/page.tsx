@@ -1,18 +1,12 @@
+import { AppCard } from '@benbeck764/react-components';
 import { Typography } from '@mui/material';
-import HomeTest from './HomeTest';
-import { AppButton } from '@benbeck764/react-components';
+//import HomeTest from './HomeTest';
 
 //const HomeTest = dynamic(() => import('./HomeTest'), { ssr: false });
-const Home = () => {
+export default function Page() {
   return (
-    <>
-      <Typography variant="h1" sx={{ color: { xs: 'red', xl: 'blue' } }}>
-        Hello World
-      </Typography>
-      <HomeTest />
-      <AppButton>Hello</AppButton>
-    </>
+    <AppCard>
+      <Typography variant="h1">Test</Typography>
+    </AppCard>
   );
-};
-
-export default Home;
+}
