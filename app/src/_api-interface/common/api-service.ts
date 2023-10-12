@@ -4,7 +4,7 @@ abstract class ApiService {
   protected readonly baseUrl: string;
 
   protected constructor() {
-    this.baseUrl = process.env.API_BASE_URL || '/api';
+    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
   }
 
   protected async get<T>(
