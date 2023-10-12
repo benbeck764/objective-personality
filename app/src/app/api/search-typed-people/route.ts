@@ -11,6 +11,8 @@ export const POST = async (request: Request) => {
     const serviceResponse = await service.searchTypedPeople(dto);
     return NextResponseBuilder.buildResponse(serviceResponse);
   } catch (e: any) {
-    return NextResponseBuilder.internalServerError(e.message);
+    return NextResponseBuilder.internalServerError(
+      `${process.env.STORAGE_CONNECTION_STRING} | ${process.env.STORAGE_OPS_TYPED_PEOPLE_TABLE}`
+    );
   }
 };
