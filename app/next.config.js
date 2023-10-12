@@ -9,6 +9,7 @@ module.exports = {
         pathname: '/images/**',
       },
     ],
+    unoptimized: true,
   },
   output: 'standalone',
 };
