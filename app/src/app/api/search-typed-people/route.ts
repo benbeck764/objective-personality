@@ -7,9 +7,10 @@ export const POST = async (request: Request) => {
     const service = await TypedPersonService.getInstance();
 
     const dto = (await request.json()) as OpsTypedPersonSearchRequestDto;
+
     const serviceResponse = await service.searchTypedPeople(dto);
     return NextResponseBuilder.buildResponse(serviceResponse);
-  } catch (e) {
-    return NextResponseBuilder.internalServerError();
+  } catch (e: any) {
+    return NextResponseBuilder.internalServerError(e.message);
   }
 };
