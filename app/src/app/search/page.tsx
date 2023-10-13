@@ -18,17 +18,19 @@ const Search = async ({
 }) => {
   const service = OpsTypedPeopleService.getInstance();
 
-  const pageNumber = isString(searchParams.pageNumber)
-    ? Number(searchParams.pageNumber)
+  const pageNumber = isString(searchParams.page)
+    ? Number(searchParams.page)
     : 0;
-  const pageSize = isString(searchParams.pageSize)
-    ? Number(searchParams.pageSize)
-    : 25;
-  const filter = isString(searchParams.filter)
+  const pageSize = isString(searchParams.size) ? Number(searchParams.size) : 25;
+  const filterText = isString(searchParams.filter)
     ? searchParams.filter?.toString()
     : '';
 
-  const promise = service.searchOPSTypedPeople({ filterText: filter });
+  const promise = service.searchOPSTypedPeople({
+    filterText,
+    pageSize,
+    pageNumber,
+  });
 
   return (
     <AppCard elevation={0} paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
@@ -37,14 +39,14 @@ const Search = async ({
       </Typography>
       <Divider />
       <Box mt={2} pb={4} mb={4} width="100%">
-        <TypedPeopleSearch filterText={filter} />
+        <TypedPeopleSearch filterText={filterText} />
         <Suspense
-          key={filter}
+          key={filterText}
           fallback={
             <TypedPeopleSearchResults
               data={undefined}
               loading={true}
-              filterText={filter}
+              filterText={filterText}
             />
           }
         >
@@ -53,7 +55,7 @@ const Search = async ({
               <TypedPeopleSearchResults
                 data={res.resultObject}
                 loading={false}
-                filterText={filter}
+                filterText={filterText}
               />
             )}
           </Await>

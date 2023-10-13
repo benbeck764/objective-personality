@@ -1,10 +1,10 @@
 'use client';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
 import { AppGridDataRequest } from '@benbeck764/react-components-grid';
 import { useRouter } from 'next/navigation';
-import { useDebounce } from '@/utilities/hooks/useDebounce';
 import TypedPeopleGrid from './TypedPeopleGrid/TypedPeopleGrid';
+import { getSearchUrl } from '@/routing/common/url';
 
 type TypedPeopleSearchResultsProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
@@ -18,26 +18,14 @@ const TypedPeopleSearchResults: FC<TypedPeopleSearchResultsProps> = (
   const { data, loading, filterText } = props;
   const router = useRouter();
 
-  const [dataRequest, setDataRequest] = useState<AppGridDataRequest>({
-    pageNumber: 0,
-    pageSize: 250,
-    filterText: filterText,
-  });
-  const debouncedDataRequest = useDebounce(dataRequest, 300);
-
-  const handleOnDataRequest = (
-    appGridDataRequest: AppGridDataRequest
-  ): void => {
-    setDataRequest(appGridDataRequest);
+  const handleOnDataRequest = (request: AppGridDataRequest): void => {
+    const url = getSearchUrl({
+      filter: filterText,
+      pageNumber: request.pageNumber,
+      pageSize: request.pageSize,
+    });
+    router.push(url);
   };
-
-  useEffect(() => {
-    if (dataRequest.filterText) {
-      router.push(`/search?filter=${dataRequest.filterText}`);
-    } else {
-      router.push('/search');
-    }
-  }, [debouncedDataRequest]);
 
   return (
     <TypedPeopleGrid

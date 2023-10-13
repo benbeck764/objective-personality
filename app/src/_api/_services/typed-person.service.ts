@@ -34,9 +34,9 @@ class TypedPersonService extends ServiceBase {
           mapOpsTypedPersonTableRowToOpsTypedPerson(entity)
         )
         .filter((val: OPSTypedPerson) => {
-          if (dto.filterText) {
+          if (queryText) {
             return val.Name.toLocaleLowerCase().includes(
-              dto.filterText.toLocaleLowerCase()
+              queryText.toLocaleLowerCase()
             );
           } else {
             return val;
@@ -54,6 +54,7 @@ class TypedPersonService extends ServiceBase {
         pageSize: pageSize,
         totalItems: filteredDtos.length,
         items: dtos,
+        databaseTotal: entities.length,
       };
 
       return { status: HttpStatus.OK, data: result };

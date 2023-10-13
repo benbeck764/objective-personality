@@ -20,7 +20,11 @@ const TypedPeopleSearch: FC<TypedPeopleSearchProps> = (
   const debouncedFilterText = useDebounce(text, 300);
 
   useEffect(() => {
-    const url = getSearchUrl({ filter: debouncedFilterText });
+    const url = getSearchUrl({
+      filter: debouncedFilterText,
+      pageNumber: 0,
+      pageSize: 25,
+    });
     router.push(url);
   }, [debouncedFilterText]);
 

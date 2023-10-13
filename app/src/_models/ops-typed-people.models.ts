@@ -68,6 +68,7 @@ export type OpsTypedPersonSearchResponseDto = {
   pageSize: number;
   totalItems: number;
   items: OPSTypedPerson[];
+  databaseTotal: number
 };
 
 //#region Mappers

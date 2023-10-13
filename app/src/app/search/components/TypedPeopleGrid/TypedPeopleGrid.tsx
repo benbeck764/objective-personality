@@ -1,3 +1,4 @@
+'use client';
 import { FC } from 'react';
 import { Typography, Box } from '@mui/material';
 import {
@@ -15,7 +16,6 @@ import { createCardViewDefinitions } from './TypedPeopleGrid.card';
 type TypedPeopleGridProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
   loading: boolean;
-  pagination?: boolean;
   onDataRequested: (dataRequest: AppGridDataRequest) => void;
 };
 
@@ -56,7 +56,9 @@ const TypedPeopleGrid: FC<TypedPeopleGridProps> = (
     onDataRequested: onDataRequested,
     //onItemClicked: onPersonSelected,
     noItemsMessage: (
-      <Typography variant="paragraph">No results found.</Typography>
+      <Box py={4}>
+        <Typography variant="paragraph">No results found.</Typography>
+      </Box>
     ),
   };
 
