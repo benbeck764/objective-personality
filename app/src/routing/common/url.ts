@@ -1,8 +1,11 @@
 import { AppRoutes, RouteName } from './routes';
 import { getQueryParamsString } from './routing-helpers';
 
-export const getSearchUrl = (queryStringParams: { tag?: string }): string => {
+export const getSearchUrl = (queryStringParams: {
+  filter?: string;
+}): string => {
   const params = [];
-  if (queryStringParams.tag) params.push(['tag', queryStringParams.tag]);
+  if (queryStringParams.filter)
+    params.push(['filter', queryStringParams.filter]);
   return `${AppRoutes[RouteName.Search].path}${getQueryParamsString(params)}`;
 };
