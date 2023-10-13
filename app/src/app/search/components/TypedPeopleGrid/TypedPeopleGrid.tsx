@@ -17,12 +17,13 @@ type TypedPeopleGridProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
   loading: boolean;
   onDataRequested: (dataRequest: AppGridDataRequest) => void;
+  onPersonSelected: (person: OPSTypedPerson) => void;
 };
 
 const TypedPeopleGrid: FC<TypedPeopleGridProps> = (
   props: TypedPeopleGridProps
 ) => {
-  const { data, loading, onDataRequested } = props;
+  const { data, loading, onDataRequested, onPersonSelected } = props;
 
   const gridData: AppGridData<OPSTypedPerson> = {
     pages:
@@ -54,7 +55,7 @@ const TypedPeopleGrid: FC<TypedPeopleGridProps> = (
     displayMode: 'card',
     cursorStyle: 'pointer',
     onDataRequested: onDataRequested,
-    //onItemClicked: onPersonSelected,
+    onItemClicked: onPersonSelected,
     noItemsMessage: (
       <Box py={4}>
         <Typography variant="paragraph">No results found.</Typography>

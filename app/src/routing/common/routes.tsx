@@ -7,8 +7,6 @@ export enum RouteName {
 export type AppRoute = {
   displayName: string;
   path: string;
-  params?: string[];
-  icon?: React.ReactElement;
 };
 
 export const AppRoutes: Record<RouteName, AppRoute> = {

@@ -1,10 +1,14 @@
 'use client';
 import { FC } from 'react';
-import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
+import {
+  OPSTypedPerson,
+  OpsTypedPersonSearchResponseDto,
+} from '@/_models/ops-typed-people.models';
 import { AppGridDataRequest } from '@benbeck764/react-components-grid';
 import { useRouter } from 'next/navigation';
 import TypedPeopleGrid from './TypedPeopleGrid/TypedPeopleGrid';
 import { getSearchUrl } from '@/routing/common/url';
+import { AppRoutes, RouteName } from '@/routing';
 
 type TypedPeopleSearchResultsProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
@@ -18,7 +22,7 @@ const TypedPeopleSearchResults: FC<TypedPeopleSearchResultsProps> = (
   const { data, loading, filterText } = props;
   const router = useRouter();
 
-  const handleOnDataRequest = (request: AppGridDataRequest): void => {
+  const handleDataRequest = (request: AppGridDataRequest): void => {
     const url = getSearchUrl({
       filter: filterText,
       pageNumber: request.pageNumber,
@@ -27,11 +31,18 @@ const TypedPeopleSearchResults: FC<TypedPeopleSearchResultsProps> = (
     router.push(url);
   };
 
+  const handlePersonSelected = (person: OPSTypedPerson): void => {
+    router.push(
+      `${AppRoutes[RouteName.Search].path}/${encodeURIComponent(person.Name)}`
+    );
+  };
+
   return (
     <TypedPeopleGrid
       data={data}
       loading={loading}
-      onDataRequested={handleOnDataRequest}
+      onDataRequested={handleDataRequest}
+      onPersonSelected={handlePersonSelected}
     />
   );
 };

@@ -4,7 +4,7 @@ import { AppCard } from '@benbeck764/react-components';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import Await from './Await';
+import Await from '../Await';
 import TypedPeopleSearch from './components/TypedPeopleSearch';
 import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
 import { ApiResponse } from '@/_api-interface/common/api-shared.models';

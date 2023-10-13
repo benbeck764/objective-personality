@@ -1,5 +1,3 @@
 export const endpoints = {
-  opsTypedPeople: {
-    search: 'search-typed-people',
-  },
+  opsTypedPeople: 'search-typed-people',
 };

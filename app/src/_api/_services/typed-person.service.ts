@@ -19,12 +19,36 @@ class TypedPersonService extends ServiceBase {
     super();
   }
 
+  public async getTypedPerson(
+    name: string
+  ): Promise<ServiceResponse<OPSTypedPerson>> {
+    try {
+      const entities = await this.tableService.getEntities({
+        queryOptions: {
+          filter: `${nameof<OPSTypedPerson>('Name')} eq '${name}'`,
+        },
+      });
+
+      const entity = entities?.[0];
+      if (!entity) return { status: HttpStatus.NOT_FOUND };
+
+      const dto = mapOpsTypedPersonTableRowToOpsTypedPerson(entity);
+      return { status: HttpStatus.OK, data: dto };
+    } catch (err: any) {
+      console.log(err);
+      return {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        errorMessage: err.message,
+      };
+    }
+  }
+
   public async searchTypedPeople(
     dto: OpsTypedPersonSearchRequestDto
   ): Promise<ServiceResponse<OpsTypedPersonSearchResponseDto>> {
     try {
-      const currentPage = dto.pageNumber ?? 0;
-      const pageSize = dto.pageSize ?? 25;
+      const currentPage = dto.pageNumber;
+      const pageSize = dto.pageSize;
       const queryText = dto.filterText;
 
       const entities = await this.tableService.getEntities();
@@ -43,15 +67,20 @@ class TypedPersonService extends ServiceBase {
           }
         });
 
-      const dtos = filteredDtos.slice(
-        currentPage * pageSize,
-        Math.min(currentPage * pageSize + pageSize, filteredDtos.length)
-      );
+      let dtos = filteredDtos;
+      if (typeof currentPage !== 'undefined' && pageSize) {
+        dtos = filteredDtos.slice(
+          currentPage * pageSize,
+          Math.min(currentPage * pageSize + pageSize, filteredDtos.length)
+        );
+      }
 
       const result: OpsTypedPersonSearchResponseDto = {
-        currentPageNumber: currentPage,
-        numberOfPages: Math.ceil(filteredDtos.length / pageSize),
-        pageSize: pageSize,
+        currentPageNumber: currentPage ?? 0,
+        numberOfPages: Math.ceil(
+          filteredDtos.length / (pageSize ?? filteredDtos.length)
+        ),
+        pageSize: pageSize ?? filteredDtos.length,
         totalItems: filteredDtos.length,
         items: dtos,
         databaseTotal: entities.length,
