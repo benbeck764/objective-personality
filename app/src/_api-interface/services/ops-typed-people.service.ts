@@ -2,8 +2,8 @@ import ApiService from '../common/api-service';
 import { endpoints } from '../common/endpoints';
 import { ServiceResult } from '../common/api-shared.models';
 import {
-  OPSTypedPerson,
   OpsTypedPersonSearchRequestDto,
+  OpsTypedPersonSearchResponseDto,
 } from '../../_models/ops-typed-people.models';
 
 class OpsTypedPeopleService extends ApiService {
@@ -11,7 +11,7 @@ class OpsTypedPeopleService extends ApiService {
 
   public searchOPSTypedPeople(
     dto: OpsTypedPersonSearchRequestDto
-  ): ServiceResult<OPSTypedPerson[]> {
+  ): ServiceResult<OpsTypedPersonSearchResponseDto> {
     return this.post(`${this.baseUrl}/${endpoints.opsTypedPeople.search}`, dto);
   }
 

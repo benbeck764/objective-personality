@@ -62,6 +62,14 @@ export type OpsTypedPersonSearchRequestDto = {
   filterText?: string;
 };
 
+export type OpsTypedPersonSearchResponseDto = {
+  currentPageNumber: number;
+  numberOfPages: number;
+  pageSize: number;
+  totalItems: number;
+  items: OPSTypedPerson[];
+};
+
 //#region Mappers
 
 export const mapOpsTypedPersonTableRowToOpsTypedPerson = (

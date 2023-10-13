@@ -6,11 +6,14 @@ import {
   AppGridDataRequest,
   AppGridProps,
 } from '@benbeck764/react-components-grid';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import {
+  OPSTypedPerson,
+  OpsTypedPersonSearchResponseDto,
+} from '@/_models/ops-typed-people.models';
 import { createCardViewDefinitions } from './TypedPeopleGrid.card';
 
 type TypedPeopleGridProps = {
-  data: OPSTypedPerson[] | undefined;
+  data: OpsTypedPersonSearchResponseDto | undefined;
   loading: boolean;
   pagination?: boolean;
   onDataRequested: (dataRequest: AppGridDataRequest) => void;
@@ -34,15 +37,15 @@ const TypedPeopleGrid: FC<TypedPeopleGridProps> = (
           ]
         : [
             {
-              items: data,
-              pageIndex: 0,
-              pageSize: data.length,
+              items: data.items,
+              pageIndex: data.currentPageNumber,
+              pageSize: data.pageSize,
               isLoading: false,
             },
           ],
-    totalItemCount: data?.length ?? 0,
-    totalPageCount: 1,
-    pagingMode: 'none',
+    totalItemCount: data?.totalItems ?? 0,
+    totalPageCount: data?.numberOfPages ?? 0,
+    pagingMode: 'pagination',
   };
 
   const gridProps: AppGridProps<OPSTypedPerson> = {

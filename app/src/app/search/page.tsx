@@ -8,7 +8,8 @@ import Await from './Await';
 import TypedPeopleSearch from './components/TypedPeopleSearch';
 import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
 import { ApiResponse } from '@/_api-interface/common/api-shared.models';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
+import { isString } from '@/utilities/string';
 
 const Search = async ({
   searchParams,
@@ -17,8 +18,15 @@ const Search = async ({
 }) => {
   const service = OpsTypedPeopleService.getInstance();
 
-  const filter =
-    typeof searchParams.filter === 'string' ? searchParams.filter : '';
+  const pageNumber = isString(searchParams.pageNumber)
+    ? Number(searchParams.pageNumber)
+    : 0;
+  const pageSize = isString(searchParams.pageSize)
+    ? Number(searchParams.pageSize)
+    : 25;
+  const filter = isString(searchParams.filter)
+    ? searchParams.filter?.toString()
+    : '';
 
   const promise = service.searchOPSTypedPeople({ filterText: filter });
 
@@ -41,7 +49,7 @@ const Search = async ({
           }
         >
           <Await promise={promise}>
-            {(res: ApiResponse<OPSTypedPerson[]>) => (
+            {(res: ApiResponse<OpsTypedPersonSearchResponseDto>) => (
               <TypedPeopleSearchResults
                 data={res.resultObject}
                 loading={false}

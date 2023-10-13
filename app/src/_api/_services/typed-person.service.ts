@@ -5,6 +5,7 @@ import {
   mapOpsTypedPersonTableRowToOpsTypedPerson,
   OpsTypedPersonSearchRequestDto,
   nameof,
+  OpsTypedPersonSearchResponseDto,
 } from '@/_models/ops-typed-people.models';
 import TableStorageClient from '../_storage/table-storage-client';
 import { HttpStatus } from './common/http-status';
@@ -20,11 +21,15 @@ class TypedPersonService extends ServiceBase {
 
   public async searchTypedPeople(
     dto: OpsTypedPersonSearchRequestDto
-  ): Promise<ServiceResponse<OPSTypedPerson[]>> {
+  ): Promise<ServiceResponse<OpsTypedPersonSearchResponseDto>> {
     try {
+      const currentPage = dto.pageNumber ?? 0;
+      const pageSize = dto.pageSize ?? 25;
+      const queryText = dto.filterText;
+
       const entities = await this.tableService.getEntities();
 
-      const dtos = entities
+      const filteredDtos = entities
         .map((entity: TableEntityResult<OPSTypedPersonTableRow>) =>
           mapOpsTypedPersonTableRowToOpsTypedPerson(entity)
         )
@@ -38,7 +43,20 @@ class TypedPersonService extends ServiceBase {
           }
         });
 
-      return { status: HttpStatus.OK, data: dtos.slice(0, 400) };
+      const dtos = filteredDtos.slice(
+        currentPage * pageSize,
+        Math.min(currentPage * pageSize + pageSize, filteredDtos.length)
+      );
+
+      const result: OpsTypedPersonSearchResponseDto = {
+        currentPageNumber: currentPage,
+        numberOfPages: Math.ceil(filteredDtos.length / pageSize),
+        pageSize: pageSize,
+        totalItems: filteredDtos.length,
+        items: dtos,
+      };
+
+      return { status: HttpStatus.OK, data: result };
     } catch (err: any) {
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,

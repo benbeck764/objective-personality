@@ -1,13 +1,13 @@
 'use client';
 import { FC, useEffect, useState } from 'react';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
 import { AppGridDataRequest } from '@benbeck764/react-components-grid';
 import { useRouter } from 'next/navigation';
 import { useDebounce } from '@/utilities/hooks/useDebounce';
 import TypedPeopleGrid from './TypedPeopleGrid/TypedPeopleGrid';
 
 type TypedPeopleSearchResultsProps = {
-  data: OPSTypedPerson[] | undefined;
+  data: OpsTypedPersonSearchResponseDto | undefined;
   loading: boolean;
   filterText?: string;
 };

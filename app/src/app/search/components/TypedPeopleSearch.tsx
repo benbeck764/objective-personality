@@ -36,6 +36,7 @@ const TypedPeopleSearch: FC<TypedPeopleSearchProps> = (
       showClearButton
       onClear={() => setText('')}
       fullWidth
+      autoFocus
     />
   );
 };
