@@ -9,7 +9,7 @@ import {
   StyledPrimaryConnector,
   StyledAuxiliaryConnector,
 } from './TypeStack.styles';
-import { FunctionType } from '@/_models/typed-person-helper';
+import { FunctionType, AnimalType } from '@/_models/typed-person-helper';
 import Box from '@mui/material/Box';
 
 type TypeStackProps = {
@@ -17,6 +17,10 @@ type TypeStackProps = {
   secondFunction: FunctionType;
   thirdFunction: FunctionType;
   fourthFunction: FunctionType;
+  firstAnimal: AnimalType;
+  secondAnimal: AnimalType;
+  thirdAnimal: AnimalType;
+  fourthAnimal: AnimalType;
   jumper: boolean;
 };
 
@@ -26,6 +30,10 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
     secondFunction,
     thirdFunction,
     fourthFunction,
+    firstAnimal,
+    secondAnimal,
+    thirdAnimal,
+    fourthAnimal,
     jumper,
   } = props;
 
@@ -67,6 +75,9 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderColor: '#0010FC',
         }}
       ></Box>
+      <Typography sx={{ position: 'absolute', top: 52.5, left: 250 }}>
+        {firstAnimal}
+      </Typography>
       {/* RIGHT */}
       <Box
         sx={{
@@ -76,7 +87,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           width: 35,
           height: 10,
           borderRadius: '0 0 100% 100%',
-          borderWidth: '0 0 3px 3px',
+          borderWidth: '0 0 3px 0',
           borderStyle: 'solid',
           borderColor: '#0010FC',
         }}
@@ -94,6 +105,9 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderColor: '#0010FC',
         }}
       ></Box>
+      <Typography sx={{ position: 'absolute', top: 145, left: 275 }}>
+        {secondAnimal}
+      </Typography>
       {/* BOTTOM */}
       <Box
         sx={{
@@ -106,7 +120,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderWidth: '0 2px 2px 0',
           borderStyle: 'solid',
           borderColor: '#0010FC',
-          transform: 'rotate(30deg)',
+          transform: 'rotate(31deg)',
         }}
       ></Box>
       <Box
@@ -116,13 +130,16 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           position: 'absolute',
           width: 39,
           height: 15,
-          borderWidth: '0 0 2px 2px',
+          borderWidth: '0 0 2px 0',
           borderRadius: '0 0 100% 100%',
           borderStyle: 'solid',
           borderColor: '#0010FC',
           transform: 'rotate(30.5deg)',
         }}
       ></Box>
+      <Typography sx={{ position: 'absolute', top: 225, left: 237.5 }}>
+        {thirdAnimal}
+      </Typography>
       {/* LEFT */}
       <Box
         sx={{
@@ -151,6 +168,9 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderColor: '#8A2D39',
         }}
       ></Box>
+      <Typography sx={{ position: 'absolute', top: 196, left: 0 }}>
+        {fourthAnimal}
+      </Typography>
       <Stack>
         <StyledFirstFunction func={firstFunction}>
           <Typography sx={{ zIndex: 3 }} variant="h3">

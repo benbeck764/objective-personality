@@ -1,5 +1,6 @@
 import { TableEntity } from '@azure/data-tables';
 import {
+  AnimalType,
   FunctionType,
   getOpposingFunction,
   isJumper,
@@ -53,10 +54,10 @@ export type OPSTypedPerson = {
   ExtrovertedVsIntroverted: string;
   GlassLizard: boolean;
   AnimalStack: string;
-  FirstAnimal: string;
-  SecondAnimal: string;
-  ThirdAnimal: string;
-  FourthAnimal: string;
+  FirstAnimal: AnimalType;
+  SecondAnimal: AnimalType;
+  ThirdAnimal: AnimalType;
+  FourthAnimal: AnimalType;
   BiologicalSex: string;
   PictureUrl: string;
   UniqueId: string;

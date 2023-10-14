@@ -9,6 +9,13 @@ export enum FunctionType {
   ExtrovertedSensing = 'Se',
 }
 
+export enum AnimalType {
+  Consume = 'Consume',
+  Blast = 'Blast',
+  Play = 'Play',
+  Sleep = 'Sleep',
+}
+
 export const getOpposingFunction = (
   func: FunctionType
 ): FunctionType | undefined => {

@@ -50,6 +50,10 @@ const TypedPersonResult: FC<TypedPersonResultProps> = (
             secondFunction={person.SecondFunction}
             thirdFunction={person.ThirdFunction}
             fourthFunction={person.FourthFunction}
+            firstAnimal={person.FirstAnimal}
+            secondAnimal={person.SecondAnimal}
+            thirdAnimal={person.ThirdAnimal}
+            fourthAnimal={person.FourthAnimal}
             jumper={person.Jumper}
           />
         </Box>
