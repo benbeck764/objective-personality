@@ -75,7 +75,13 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderColor: '#0010FC',
         }}
       ></Box>
-      <Typography sx={{ position: 'absolute', top: 52.5, left: 250 }}>
+      <Typography
+        sx={{
+          position: 'absolute',
+          top: { xs: 35, md: 52.5 },
+          left: { xs: 150, md: 250 },
+        }}
+      >
         {firstAnimal}
       </Typography>
       {/* RIGHT */}
@@ -105,7 +111,13 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderColor: '#0010FC',
         }}
       ></Box>
-      <Typography sx={{ position: 'absolute', top: 145, left: 275 }}>
+      <Typography
+        sx={{
+          position: 'absolute',
+          top: { xs: 205, md: 145 },
+          left: { xs: 220, md: 275 },
+        }}
+      >
         {secondAnimal}
       </Typography>
       {/* BOTTOM */}
@@ -137,7 +149,13 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           transform: 'rotate(30.5deg)',
         }}
       ></Box>
-      <Typography sx={{ position: 'absolute', top: 225, left: 237.5 }}>
+      <Typography
+        sx={{
+          position: 'absolute',
+          top: { xs: 257.5, md: 225 },
+          left: { xs: 160, md: 237.5 },
+        }}
+      >
         {thirdAnimal}
       </Typography>
       {/* LEFT */}
@@ -168,7 +186,13 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           borderColor: '#8A2D39',
         }}
       ></Box>
-      <Typography sx={{ position: 'absolute', top: 196, left: 0 }}>
+      <Typography
+        sx={{
+          position: 'absolute',
+          top: { xs: 215, md: 196 },
+          left: { xs: 35, md: 0 },
+        }}
+      >
         {fourthAnimal}
       </Typography>
       <Stack>
