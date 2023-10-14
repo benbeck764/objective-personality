@@ -1,12 +1,12 @@
 'use client';
 import { FunctionType } from '@/_models/typed-person-helper';
 import Box from '@mui/material/Box';
-import { Theme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
-const thinking = `linear-gradient(180deg, #8BF5F4, #68F2F7, #1CBCFB, #0084B5, #005480)`;
-const feeling = `linear-gradient(180deg, #FCBDD1, #F991B8, #EF3367, #F32D62, #8F002D)`;
-const intuition = `linear-gradient(180deg, #FEF461, #FEF461, #FAE633, #FCE137, #DD9D00)`;
-const sensing = `linear-gradient(180deg, #99F8C2, #8BFDBE, #36DE8A, #37CD7D, #008A57)`;
+const thinking = `radial-gradient(circle at 50% 10%, #FFFFFF, #86F3F9 10%, #4FD3F9 40%, #21648F 80%, #103147 90%, #000000 100%)`;
+const feeling = `radial-gradient(circle at 50% 10%, #FFFFFF, #FCBDD1 10%, #F36998 40%, #C31536 80%, #5B0028 90%, #000000 100%)`;
+const intuition = `radial-gradient(circle at 50% 10%, #FFFFFF, #FFF662 10%, #FCF049 40%, #C79100 80%, #6E4400 90%, #000000 100%)`;
+const sensing = `radial-gradient(circle at 50% 10%, #FFFFFF, #99F7C1 10%, #5AD491 40%, #32875F 80%, #19462F 90%, #000000 100%)`;
 
 const getBackground = (func: FunctionType | undefined): string | undefined => {
   if (func?.startsWith('T')) return thinking;
@@ -15,19 +15,29 @@ const getBackground = (func: FunctionType | undefined): string | undefined => {
   if (func?.startsWith('S')) return sensing;
 };
 
-const StyledFunction = styled(Box)<{ func?: FunctionType }>(
-  ({ theme, func }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
-    borderColor: theme.palette.coolGrey[300],
-    borderStyle: 'solid',
-    borderWidth: 1,
+const StyledFunction = styled(Box)<{ func?: FunctionType }>(({ func }) => ({
+  display: 'flex',
+  position: 'relative',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 2,
+
+  borderRadius: '50%',
+
+  backgroundImage: getBackground(func),
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: '1%',
+    left: '5%',
+    width: '90%',
+    height: '90%',
     borderRadius: '50%',
-    backgroundImage: getBackground(func),
-  })
-);
+    backgroundImage: `radial-gradient(circle at 50% 0px, #ffffff, rgba(255, 255, 255, 0) 60%)`,
+    filter: 'blur(5px)',
+    zIndex: 2,
+  },
+}));
 
 export const StyledFirstFunction = styled(StyledFunction)(({ theme }) => ({
   width: 110,
@@ -72,8 +82,8 @@ export const StyledPrimaryConnector = styled(Box)(({ theme }) => ({
   width: '2px',
   height: '105px',
   position: 'absolute',
-  top: 50,
-  left: 85,
+  top: 112.5,
+  left: 137,
   transform: 'rotate(-45deg)',
 }));
 
@@ -82,7 +92,7 @@ export const StyledAuxiliaryConnector = styled(Box)(({ theme }) => ({
   width: '2px',
   height: '105px',
   position: 'absolute',
-  top: 50,
-  left: 122.5,
+  top: 112.5,
+  left: 174.5,
   transform: 'rotate(45deg)',
 }));

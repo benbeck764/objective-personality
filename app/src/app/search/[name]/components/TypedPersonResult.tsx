@@ -23,8 +23,12 @@ const TypedPersonResult: FC<TypedPersonResultProps> = (
         {person.Name}
       </Typography>
       <Divider />
-      <Stack direction="row" py={1}>
-        <Stack gap={1}>
+      <Stack
+        sx={{ flexDirection: { xs: 'column', lg: 'row' } }}
+        py={1}
+        alignItems="center"
+      >
+        <Stack gap={1} alignItems="center" justifyContent="center">
           <Box width={250} height={250} display="block" position="relative">
             <StyledPersonImage
               src={person.PictureUrl}
