@@ -3,12 +3,19 @@ import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.se
 import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 import Await from '@/app/Await';
 import { AppCard } from '@benbeck764/react-components';
-import Box from '@mui/material/Box';
 import { Suspense } from 'react';
+import TypedPersonResult from './components/TypedPersonResult';
+import { Metadata } from 'next';
 
-// export async function generateStaticParams() {
-//
-// }
+export const generateMetadata = ({
+  params,
+}: {
+  params: { name: string };
+}): Metadata => {
+  return {
+    title: `Objective Personality - ${decodeURIComponent(params.name)}`,
+  };
+};
 
 const SearchedPerson = async ({ params }: { params: { name: string } }) => {
   const service = OpsTypedPeopleService.getInstance();
@@ -16,15 +23,13 @@ const SearchedPerson = async ({ params }: { params: { name: string } }) => {
 
   return (
     <AppCard elevation={0} paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
-      <Box>
-        <Suspense>
-          <Await promise={promise}>
-            {(res: ApiResponse<OPSTypedPerson>) => (
-              <>{res.resultObject?.Name}</>
-            )}
-          </Await>
-        </Suspense>
-      </Box>
+      <Suspense>
+        <Await promise={promise}>
+          {(res: ApiResponse<OPSTypedPerson>) => (
+            <TypedPersonResult person={res.resultObject} />
+          )}
+        </Await>
+      </Suspense>
     </AppCard>
   );
 };

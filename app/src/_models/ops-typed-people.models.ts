@@ -1,34 +1,11 @@
 import { TableEntity } from '@azure/data-tables';
+import {
+  FunctionType,
+  getOpposingFunction,
+  isJumper,
+} from './typed-person-helper';
 
 export const nameof = <T>(name: keyof T) => name;
-
-type OpsTypedPersonLink = { Href: string; Value: string };
-
-export type OPSTypedPerson = {
-  Id: string;
-  Name: string;
-  Type: string;
-  SocialType: string;
-  MBTIType: string;
-  Links?: OpsTypedPersonLink[];
-  Temperament: string;
-  Modality: string;
-  FirstSaviorFunction: string;
-  SecondSaviorFunction: string;
-  EnergyVsInfoDom: string;
-  ExtrovertedVsIntroverted: string;
-  GlassLizard: boolean;
-  AnimalStack: string;
-  FirstAnimal: string;
-  SecondAnimal: string;
-  ThirdAnimal: string;
-  FourthAnimal: string;
-  BiologicalSex: string;
-  PictureUrl: string;
-  UniqueId: string;
-  CreatedDate: Date;
-  LastUpdatedDate: Date;
-};
 
 export type OPSTypedPersonTableRow = TableEntity & {
   Id: string;
@@ -56,6 +33,37 @@ export type OPSTypedPersonTableRow = TableEntity & {
   LastUpdatedDate: Date;
 };
 
+type OpsTypedPersonLink = { Href: string; Value: string };
+
+export type OPSTypedPerson = {
+  Id: string;
+  Name: string;
+  Type: string;
+  SocialType: string;
+  MBTIType: string;
+  Links?: OpsTypedPersonLink[];
+  Temperament: string;
+  Modality: string;
+  FirstFunction: FunctionType;
+  SecondFunction: FunctionType;
+  ThirdFunction: FunctionType;
+  FourthFunction: FunctionType;
+  Jumper: boolean;
+  EnergyVsInfoDom: string;
+  ExtrovertedVsIntroverted: string;
+  GlassLizard: boolean;
+  AnimalStack: string;
+  FirstAnimal: string;
+  SecondAnimal: string;
+  ThirdAnimal: string;
+  FourthAnimal: string;
+  BiologicalSex: string;
+  PictureUrl: string;
+  UniqueId: string;
+  CreatedDate: Date;
+  LastUpdatedDate: Date;
+};
+
 export type OpsTypedPersonSearchRequestDto = {
   pageNumber?: number;
   pageSize?: number;
@@ -68,7 +76,7 @@ export type OpsTypedPersonSearchResponseDto = {
   pageSize: number;
   totalItems: number;
   items: OPSTypedPerson[];
-  databaseTotal: number
+  databaseTotal: number;
 };
 
 //#region Mappers
@@ -83,6 +91,11 @@ export const mapOpsTypedPersonTableRowToOpsTypedPerson = (
   return {
     ...row,
     Links: links,
+    FirstFunction: row.FirstSaviorFunction,
+    SecondFunction: row.SecondSaviorFunction,
+    ThirdFunction: getOpposingFunction(row.SecondSaviorFunction),
+    FourthFunction: getOpposingFunction(row.FirstSaviorFunction),
+    Jumper: isJumper(row.FirstSaviorFunction, row.SecondSaviorFunction),
   };
 };
 
