@@ -103,7 +103,7 @@ export const StyledPrimaryConnector = styled(Box)(({ theme }) => ({
   height: '105px',
   position: 'absolute',
   top: 112.5,
-  left: 137,
+  left: 162,
   transform: 'rotate(-45deg)',
 }));
 
@@ -113,7 +113,7 @@ export const StyledAuxiliaryConnector = styled(Box)(({ theme }) => ({
   height: '105px',
   position: 'absolute',
   top: 112.5,
-  left: 174.5,
+  left: 199.5,
   transform: 'rotate(45deg)',
 }));
 
@@ -121,7 +121,7 @@ export const StyledTopAnimalConnectorOne = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 61.5,
-  left: 112,
+  left: 137,
   position: 'absolute',
   width: 130,
   height: 40,
@@ -135,7 +135,7 @@ export const StyledTopAnimalTopConnectorTwo = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 61.5,
-  left: 197,
+  left: 222,
   position: 'absolute',
   width: 50,
   height: 50,
@@ -149,7 +149,7 @@ export const StyledRightAnimalConnectorOne = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 149.35,
-  left: 235.8,
+  left: 260.8,
   position: 'absolute',
   width: 35,
   height: 10,
@@ -163,7 +163,7 @@ export const StyledRightAnimalConnectorTwo = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 155.5,
-  left: 204,
+  left: 229,
   position: 'absolute',
   width: 66.5,
   height: 55,
@@ -177,7 +177,7 @@ export const StyledBottomAnimalConnectorOne = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 210,
-  left: 132,
+  left: 157,
   position: 'absolute',
   width: 95,
   height: 50,
@@ -192,7 +192,7 @@ export const StyledBottomAnimalConnectorTwo = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 218.5,
-  left: 197,
+  left: 222,
   position: 'absolute',
   width: 39,
   height: 15,
@@ -207,7 +207,7 @@ export const StyledLeftAnimalConnectorOne = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 187.5,
-  left: 55,
+  left: 80,
   position: 'absolute',
   width: 50,
   height: 30,
@@ -222,7 +222,7 @@ export const StyledLeftAnimalConnectorTwo = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 145,
-  left: 50,
+  left: 75,
   position: 'absolute',
   width: 25,
   height: 65,

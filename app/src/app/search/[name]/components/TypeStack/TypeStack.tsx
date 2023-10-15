@@ -120,7 +120,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
       direction="row"
       position="relative"
       height={300}
-      width={300}
+      width={350}
       alignItems="center"
       justifyContent="center"
       sx={{ pointerEvents: 'none', userSelect: 'none' }}
@@ -133,7 +133,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         sx={{
           position: 'absolute',
           top: { xs: 35, md: 52.5 },
-          left: { xs: 150, md: 250 },
+          left: { xs: 175, md: 275 },
         }}
       >
         {top.name}
@@ -146,7 +146,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         sx={{
           position: 'absolute',
           top: { xs: 205, md: 145 },
-          left: { xs: 240, md: 275 },
+          left: { xs: 265, md: 300 },
         }}
       >
         {right.name}
@@ -159,7 +159,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         sx={{
           position: 'absolute',
           top: { xs: 257.5, md: 230 },
-          left: { xs: 160, md: 237.5 },
+          left: { xs: 185, md: 262.5 },
         }}
       >
         {bottom.name}
@@ -172,7 +172,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         sx={{
           position: 'absolute',
           top: { xs: 215, md: 202.5 },
-          right: { xs: 225, md: 255 },
+          right: { xs: 250, md: 280 },
         }}
       >
         {left.name}
