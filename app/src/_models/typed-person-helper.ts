@@ -16,6 +16,13 @@ export enum AnimalType {
   Sleep = 'Sleep',
 }
 
+export enum TemperamentType {
+  IxxP = 'IP',
+  ExxP = 'EP',
+  IxxJ = 'IJ',
+  ExxJ = 'EJ',
+}
+
 export const getOpposingFunction = (
   func: FunctionType
 ): FunctionType | undefined => {

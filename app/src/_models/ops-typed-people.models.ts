@@ -2,6 +2,7 @@ import { TableEntity } from '@azure/data-tables';
 import {
   AnimalType,
   FunctionType,
+  TemperamentType,
   getOpposingFunction,
   isJumper,
 } from './typed-person-helper';
@@ -43,7 +44,7 @@ export type OPSTypedPerson = {
   SocialType: string;
   MBTIType: string;
   Links?: OpsTypedPersonLink[];
-  Temperament: string;
+  Temperament: TemperamentType;
   Modality: string;
   FirstFunction: FunctionType;
   SecondFunction: FunctionType;

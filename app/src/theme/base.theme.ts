@@ -126,6 +126,12 @@ export function getThemeBase(palette: PaletteOptions): ThemeOptions {
         lineHeight: 1.2,
         letterSpacing: -0.25,
       },
+      paragraphLargeBold: {
+        fontSize: 18,
+        fontWeight: 700,
+        lineHeight: 1.2,
+        letterSpacing: -0.25,
+      },
       paragraphSmall: {
         fontSize: 12,
         fontWeight: 400,

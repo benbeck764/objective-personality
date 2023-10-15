@@ -14,6 +14,20 @@ declare module '@mui/material/styles' {
     pageContentMargin: number;
     pageWidths: { [key in Breakpoint]: number };
   }
+
+  interface TypographyVariants {
+    paragraphLargeBold: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    paragraphLargeBold: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    paragraphLargeBold: true;
+  }
 }
 
 export const getTheme = (): Theme => {

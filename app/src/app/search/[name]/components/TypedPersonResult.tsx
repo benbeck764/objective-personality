@@ -1,12 +1,11 @@
 import { FC } from 'react';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
+import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 import { StyledPersonImage } from './TypedPersonResult.styles';
-import TypeStack from './TypeStack';
-import { FunctionType } from '@/_models/typed-person-helper';
+import TypeStack from './TypeStack/TypeStack';
 
 type TypedPersonResultProps = {
   person: OPSTypedPerson;
@@ -54,6 +53,7 @@ const TypedPersonResult: FC<TypedPersonResultProps> = (
             secondAnimal={person.SecondAnimal}
             thirdAnimal={person.ThirdAnimal}
             fourthAnimal={person.FourthAnimal}
+            temperament={person.Temperament}
             jumper={person.Jumper}
           />
         </Box>
