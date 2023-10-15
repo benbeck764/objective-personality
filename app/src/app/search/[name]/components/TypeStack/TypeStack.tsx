@@ -1,4 +1,5 @@
-import { FC } from 'react';
+'use client';
+import { FC, useRef } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography, {
   TypographyPropsVariantOverrides,
@@ -26,7 +27,7 @@ import {
   AnimalType,
   TemperamentType,
 } from '@/_models/typed-person-helper';
-import Box from '@mui/material/Box';
+import { useHovered } from '@/utilities/hooks/useHovered';
 
 export type AnimalConnectorProps = {
   name: AnimalType | undefined;
@@ -65,6 +66,9 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
     temperament,
     jumper,
   } = props;
+
+  const stackFocusRef = useRef<HTMLDivElement | null>(null);
+  const hovered = useHovered(stackFocusRef);
 
   const calculateAnimal = (
     position: 'left' | 'right' | 'top' | 'bottom'
@@ -117,13 +121,19 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
 
   return (
     <Stack
+      ref={stackFocusRef}
       direction="row"
       position="relative"
       height={300}
       width={350}
       alignItems="center"
       justifyContent="center"
-      sx={{ pointerEvents: 'none', userSelect: 'none' }}
+      sx={{
+        userSelect: 'none',
+        '&:hover': {
+          cursor: 'pointer',
+        },
+      }}
     >
       {/* TOP ANIMAL */}
       <StyledTopAnimalConnectorOne props={top} />
@@ -182,33 +192,35 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         <StyledPrimaryConnector />
         <StyledAuxiliaryConnector />
         {/* FUNCTIONS */}
-        <StyledFirstFunction func={firstFunction}>
-          <Typography sx={{ zIndex: 3, fontSize: '40px', fontWeight: 700 }}>
-            {firstFunction}
-          </Typography>
+        <StyledFirstFunction
+          func={firstFunction}
+          savior={true}
+          hovered={hovered}
+        >
+          <Typography>{firstFunction}</Typography>
         </StyledFirstFunction>
-        <StyledThirdFunction func={jumper ? secondFunction : thirdFunction}>
-          <Typography sx={{ zIndex: 3, fontSize: '20px', fontWeight: 700 }}>
-            {jumper ? secondFunction : thirdFunction}
-          </Typography>
+        <StyledThirdFunction
+          func={jumper ? secondFunction : thirdFunction}
+          savior={jumper}
+          hovered={hovered}
+        >
+          <Typography>{jumper ? secondFunction : thirdFunction}</Typography>
         </StyledThirdFunction>
       </Stack>
       <Stack>
-        <StyledSecondFunction func={jumper ? thirdFunction : secondFunction}>
-          <Typography sx={{ zIndex: 3, fontSize: '28px', fontWeight: 700 }}>
-            {jumper ? thirdFunction : secondFunction}
-          </Typography>
+        <StyledSecondFunction
+          func={jumper ? thirdFunction : secondFunction}
+          savior={!jumper}
+          hovered={hovered}
+        >
+          <Typography>{jumper ? thirdFunction : secondFunction}</Typography>
         </StyledSecondFunction>
-        <StyledFourthFunction func={fourthFunction}>
-          <Typography
-            sx={{
-              zIndex: 3,
-              fontSize: '16px',
-              fontWeight: 700,
-            }}
-          >
-            {fourthFunction}
-          </Typography>
+        <StyledFourthFunction
+          func={fourthFunction}
+          savior={false}
+          hovered={hovered}
+        >
+          <Typography>{fourthFunction}</Typography>
         </StyledFourthFunction>
       </Stack>
     </Stack>

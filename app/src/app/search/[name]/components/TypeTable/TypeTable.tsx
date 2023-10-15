@@ -10,12 +10,70 @@ import {
   StyledTypeTableHeaderCell,
 } from './TypeTable.styles';
 import Typography from '@mui/material/Typography';
+import {
+  FunctionType,
+  AnimalType,
+  TemperamentType,
+} from '@/_models/typed-person-helper';
+
+type TypeTableRow = {
+  activation: '1' | '2';
+  sex: 'M' | 'F';
+  function: FunctionType;
+  saviorsF: '1' | '2' | 'A' | '-';
+  saviorsA: '1' | '2' | 'A' | '-';
+  Animals: 'S' | 'B' | 'C' | 'P';
+};
 
 type TypeTableProps = {
-  //
+  firstFunction: FunctionType;
+  secondFunction: FunctionType;
+  thirdFunction: FunctionType;
+  fourthFunction: FunctionType;
+  firstAnimal: AnimalType;
+  secondAnimal: AnimalType;
+  thirdAnimal: AnimalType;
+  fourthAnimal: AnimalType;
+  temperament: TemperamentType;
+  jumper: boolean;
 };
 
 const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
+  const {
+    firstFunction,
+    secondFunction,
+    thirdFunction,
+    fourthFunction,
+    firstAnimal,
+    secondAnimal,
+    thirdAnimal,
+    fourthAnimal,
+    temperament,
+    jumper,
+  } = props;
+
+  const generateRows = (): TypeTableRow[] => {
+    const functions = [
+      firstFunction,
+      secondFunction,
+      thirdFunction,
+      fourthFunction,
+    ];
+
+    // [TODO]:
+    // const rows: TypeTableRow[] = [];
+    // functions.forEach((func: FunctionType) => {
+    //   const row: TypeTableRow = {
+    //     function: func,
+    //   };
+    //   rows.push(row);
+    // });
+
+    return [];
+  };
+
+  const rows = generateRows();
+
   return (
     <TableContainer sx={{ width: { xs: 225, sm: 275, md: 430 } }}>
       <Table aria-label="Functions & Animals">

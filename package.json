@@ -14,6 +14,5 @@
     "start:app": "cd app && yarn dev",
     "start:api": "cd api && yarn watch",
     "start:proxy": "swa start http://localhost:3000 --api-location ./api --verbose"
-
   }
 }

@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { FunctionType } from '@/_models/typed-person-helper';
 import { AnimalConnectorProps } from './TypeStack';
 
+const greyBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #CDCCCC 10%, #C2C2C2 40%, #888888 80%, #595959 90%, #000000 100%)`;
 const thinkingBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #86F3F9 10%, #4FD3F9 40%, #21648F 80%, #103147 90%, #000000 100%)`;
 const feelingBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #FCBDD1 10%, #F36998 40%, #C31536 80%, #5B0028 90%, #000000 100%)`;
 const intuitionBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #FFF662 10%, #FCF049 40%, #C79100 80%, #6E4400 90%, #000000 100%)`;
@@ -32,39 +33,59 @@ const getBackground = (func: FunctionType | undefined): string | undefined => {
     return sensingBackground;
 };
 
-const StyledFunction = styled(Box)<{ func?: FunctionType }>(
-  ({ theme, func }) => ({
-    display: 'flex',
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
+const StyledFunction = styled(Box, {
+  shouldForwardProp: (prop) =>
+    prop !== 'func' && prop !== 'savior' && prop !== 'hovered',
+})<{
+  func?: FunctionType;
+  savior: boolean;
+  hovered: boolean;
+}>(({ theme, func, savior, hovered }) => ({
+  display: 'flex',
+  position: 'relative',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 2,
 
+  borderRadius: '50%',
+  border: `3px solid ${theme.palette.common.white}`,
+
+  backgroundImage: savior
+    ? getBackground(func)
+    : hovered
+    ? getBackground(func)
+    : greyBackground,
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: '1%',
+    left: '5%',
+    width: '90%',
+    height: '90%',
     borderRadius: '50%',
-    border: `3px solid ${theme.palette.common.white}`,
+    backgroundImage: `radial-gradient(circle at 50% 0px, #ffffff, rgba(255, 255, 255, 0) 60%)`,
+    filter: 'blur(5px)',
+    zIndex: 2,
+  },
 
-    backgroundImage: getBackground(func),
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: '1%',
-      left: '5%',
-      width: '90%',
-      height: '90%',
-      borderRadius: '50%',
-      backgroundImage: `radial-gradient(circle at 50% 0px, #ffffff, rgba(255, 255, 255, 0) 60%)`,
-      filter: 'blur(5px)',
-      zIndex: 2,
-    },
-  })
-);
-
-export const StyledFirstFunction = styled(StyledFunction)(({ theme }) => ({
-  width: 110,
-  height: 110,
+  '& .MuiTypography-root': {
+    zIndex: 3,
+    color: savior ? theme.palette.common.black : theme.palette.grey[700],
+  },
 }));
 
-export const StyledSecondFunction = styled(StyledFunction)(({ theme }) => ({
+export const StyledFirstFunction = styled(StyledFunction)(() => ({
+  width: 110,
+  height: 110,
+
+  '& .MuiTypography-root': {
+    fontSize: '40px',
+    fontWeight: 700,
+  },
+}));
+
+export const StyledSecondFunction = styled(StyledFunction)(() => ({
   width: 75,
   height: 75,
   display: 'flex',
@@ -72,10 +93,14 @@ export const StyledSecondFunction = styled(StyledFunction)(({ theme }) => ({
   justifyContent: 'center',
   marginLeft: 7,
   marginTop: 43,
-  zIndex: 2,
+
+  '& .MuiTypography-root': {
+    fontSize: '28px',
+    fontWeight: 700,
+  },
 }));
 
-export const StyledThirdFunction = styled(StyledFunction)(({ theme }) => ({
+export const StyledThirdFunction = styled(StyledFunction)(() => ({
   width: 55,
   height: 55,
   display: 'flex',
@@ -83,10 +108,14 @@ export const StyledThirdFunction = styled(StyledFunction)(({ theme }) => ({
   justifyContent: 'center',
   marginLeft: 42,
   marginTop: 7,
-  zIndex: 2,
+
+  '& .MuiTypography-root': {
+    fontSize: '20px',
+    fontWeight: 700,
+  },
 }));
 
-export const StyledFourthFunction = styled(StyledFunction)(({ theme }) => ({
+export const StyledFourthFunction = styled(StyledFunction)(() => ({
   width: 37.5,
   height: 37.5,
   display: 'flex',
@@ -94,10 +123,14 @@ export const StyledFourthFunction = styled(StyledFunction)(({ theme }) => ({
   justifyContent: 'center',
   marginLeft: 5,
   marginTop: 12,
-  zIndex: 2,
+
+  '& .MuiTypography-root': {
+    fontSize: '16px',
+    fontWeight: 700,
+  },
 }));
 
-export const StyledPrimaryConnector = styled(Box)(({ theme }) => ({
+export const StyledPrimaryConnector = styled(Box)(() => ({
   backgroundColor: 'black',
   width: '2px',
   height: '105px',
@@ -107,7 +140,7 @@ export const StyledPrimaryConnector = styled(Box)(({ theme }) => ({
   transform: 'rotate(-45deg)',
 }));
 
-export const StyledAuxiliaryConnector = styled(Box)(({ theme }) => ({
+export const StyledAuxiliaryConnector = styled(Box)(() => ({
   backgroundColor: 'black',
   width: '2px',
   height: '105px',
