@@ -14,23 +14,26 @@ const getBackground = (func: FunctionType | undefined): string | undefined => {
   if (
     func === FunctionType.IntrovertedThinking ||
     func === FunctionType.ExtrovertedThinking
-  )
+  ) {
     return thinkingBackground;
-  if (
+  } else if (
     func === FunctionType.IntrovertedFeeling ||
     func === FunctionType.ExtovertedFeeling
-  )
+  ) {
     return feelingBackground;
-  if (
+  } else if (
     func === FunctionType.IntrovertedIntuition ||
     func === FunctionType.ExtrovertedIntuition
-  )
+  ) {
     return intuitionBackground;
-  if (
+  } else if (
     func === FunctionType.IntrovertedSensing ||
     func === FunctionType.ExtrovertedSensing
-  )
+  ) {
     return sensingBackground;
+  } else {
+    return greyBackground;
+  }
 };
 
 const StyledFunction = styled(Box, {

@@ -14,62 +14,84 @@ import {
   FunctionType,
   AnimalType,
   TemperamentType,
+  getFunctionModality,
+  isDoubleActivated,
 } from '@/_models/typed-person-helper';
+import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import { isEmpty } from '@/utilities/string';
 
 type TypeTableRow = {
-  activation: '1' | '2';
-  sex: 'M' | 'F';
+  activation: string;
+  sex: 'M' | 'F' | undefined;
   function: FunctionType;
-  saviorsF: '1' | '2' | 'A' | '-';
-  saviorsA: '1' | '2' | 'A' | '-';
-  Animals: 'S' | 'B' | 'C' | 'P';
+  saviorFunction: string;
+  saviorAnimal: string;
+  animal: string;
 };
 
 type TypeTableProps = {
-  firstFunction: FunctionType;
-  secondFunction: FunctionType;
-  thirdFunction: FunctionType;
-  fourthFunction: FunctionType;
-  firstAnimal: AnimalType;
-  secondAnimal: AnimalType;
-  thirdAnimal: AnimalType;
-  fourthAnimal: AnimalType;
-  temperament: TemperamentType;
-  jumper: boolean;
+  person: OPSTypedPerson;
 };
 
 const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
   const {
-    firstFunction,
-    secondFunction,
-    thirdFunction,
-    fourthFunction,
-    firstAnimal,
-    secondAnimal,
-    thirdAnimal,
-    fourthAnimal,
-    temperament,
-    jumper,
-  } = props;
+    FirstFunction: firstFunction,
+    SecondFunction: secondFunction,
+    ThirdFunction: thirdFunction,
+    FourthFunction: fourthFunction,
+    FirstAnimal: firstAnimal,
+    SecondAnimal: secondAnimal,
+    ThirdAnimal: thirdAnimal,
+    FourthAnimal: fourthAnimal,
+    Temperament: temperament,
+    Jumper: jumper,
+    Modality: modality,
+  } = props.person;
 
   const generateRows = (): TypeTableRow[] => {
     const functions = [
       firstFunction,
-      secondFunction,
-      thirdFunction,
+      jumper ? thirdFunction : secondFunction,
+      jumper ? secondFunction : thirdFunction,
       fourthFunction,
     ];
+    const animals = [firstAnimal, secondAnimal, fourthAnimal, thirdAnimal];
 
-    // [TODO]:
-    // const rows: TypeTableRow[] = [];
-    // functions.forEach((func: FunctionType) => {
-    //   const row: TypeTableRow = {
-    //     function: func,
-    //   };
-    //   rows.push(row);
-    // });
+    const rows: TypeTableRow[] = [];
+    functions.forEach((func: FunctionType, index: number) => {
+      const doubleActivated = isDoubleActivated(func, fourthAnimal);
+      const animal = animals[index];
+      const row: TypeTableRow = {
+        activation:
+          doubleActivated === true
+            ? '2'
+            : doubleActivated === false
+            ? '1'
+            : '-',
+        sex: getFunctionModality(func, modality),
+        function: func,
+        saviorFunction: isEmpty(func)
+          ? ''
+          : {
+              [firstFunction]: '1',
+              [secondFunction]: '2',
+              [thirdFunction]: 'A',
+              [fourthFunction]: '-',
+            }[func],
+        saviorAnimal: isEmpty(animal)
+          ? ''
+          : {
+              [firstAnimal]: '1',
+              [secondAnimal]: '2',
+              [thirdAnimal]: 'A',
+              [fourthAnimal]: '-',
+            }[animal],
+        animal: animal?.[0],
+      };
+      rows.push(row);
+    });
 
-    return [];
+    return rows;
   };
 
   const rows = generateRows();
@@ -100,86 +122,38 @@ const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">1</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">M</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">Fi</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">1</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">1</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">C</Typography>
-            </StyledTypeTableCell>
-          </TableRow>
-          <TableRow>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">2</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">M</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">Ne</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">2</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">2</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">P</Typography>
-            </StyledTypeTableCell>
-          </TableRow>
-          <TableRow>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">1</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">F</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">Si</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">-</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">-</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">S</Typography>
-            </StyledTypeTableCell>
-          </TableRow>
-          <TableRow>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">2</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">F</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">Te</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell>
-              <Typography variant="paragraphLargeBold">A</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">A</Typography>
-            </StyledTypeTableCell>
-            <StyledTypeTableCell highlight>
-              <Typography variant="paragraphLargeBold">B</Typography>
-            </StyledTypeTableCell>
-          </TableRow>
+          {rows.map((row: TypeTableRow, index: number) => (
+            <TableRow key={row.function || index}>
+              <StyledTypeTableCell>
+                <Typography variant="paragraphLargeBold">
+                  {row.activation}
+                </Typography>
+              </StyledTypeTableCell>
+              <StyledTypeTableCell>
+                <Typography variant="paragraphLargeBold">{row.sex}</Typography>
+              </StyledTypeTableCell>
+              <StyledTypeTableCell>
+                <Typography variant="paragraphLargeBold">
+                  {row.function}
+                </Typography>
+              </StyledTypeTableCell>
+              <StyledTypeTableCell>
+                <Typography variant="paragraphLargeBold">
+                  {row.saviorFunction}
+                </Typography>
+              </StyledTypeTableCell>
+              <StyledTypeTableCell highlight>
+                <Typography variant="paragraphLargeBold">
+                  {row.saviorAnimal}
+                </Typography>
+              </StyledTypeTableCell>
+              <StyledTypeTableCell highlight>
+                <Typography variant="paragraphLargeBold">
+                  {row.animal}
+                </Typography>
+              </StyledTypeTableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>

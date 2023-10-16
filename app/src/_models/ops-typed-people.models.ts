@@ -3,6 +3,7 @@ import {
   AnimalType,
   FunctionType,
   TemperamentType,
+  ModalityType,
   getOpposingFunction,
   isJumper,
 } from './typed-person-helper';
@@ -45,7 +46,9 @@ export type OPSTypedPerson = {
   MBTIType: string;
   Links?: OpsTypedPersonLink[];
   Temperament: TemperamentType;
-  Modality: string;
+  Modality: ModalityType;
+  MasculineSensory?: boolean;
+  MasculineDe?: boolean;
   FirstFunction: FunctionType;
   SecondFunction: FunctionType;
   ThirdFunction: FunctionType;
@@ -98,6 +101,12 @@ export const mapOpsTypedPersonTableRowToOpsTypedPerson = (
     ThirdFunction: getOpposingFunction(row.SecondSaviorFunction),
     FourthFunction: getOpposingFunction(row.FirstSaviorFunction),
     Jumper: isJumper(row.FirstSaviorFunction, row.SecondSaviorFunction),
+    MasculineSensory: row.Modality
+      ? row.Modality.includes('MM') || row.Modality.includes('MF')
+      : undefined,
+    MasculineDe: row.Modality
+      ? row.Modality.includes('FM') || row.Modality.includes('MM')
+      : undefined,
   };
 };
 

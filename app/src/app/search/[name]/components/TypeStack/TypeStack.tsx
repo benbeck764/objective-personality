@@ -28,8 +28,10 @@ import {
   TemperamentType,
 } from '@/_models/typed-person-helper';
 import { useHovered } from '@/utilities/hooks/useHovered';
+import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
 
 export type AnimalConnectorProps = {
+  exists: boolean;
   name: AnimalType | undefined;
   borderSize: string;
   borderStyle: 'solid' | 'dashed';
@@ -41,31 +43,22 @@ export type AnimalConnectorProps = {
 };
 
 type TypeStackProps = {
-  firstFunction: FunctionType;
-  secondFunction: FunctionType;
-  thirdFunction: FunctionType;
-  fourthFunction: FunctionType;
-  firstAnimal: AnimalType;
-  secondAnimal: AnimalType;
-  thirdAnimal: AnimalType;
-  fourthAnimal: AnimalType;
-  temperament: TemperamentType;
-  jumper: boolean;
+  person: OPSTypedPerson;
 };
 
 const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
   const {
-    firstFunction,
-    secondFunction,
-    thirdFunction,
-    fourthFunction,
-    firstAnimal,
-    secondAnimal,
-    thirdAnimal,
-    fourthAnimal,
-    temperament,
-    jumper,
-  } = props;
+    FirstFunction: firstFunction,
+    SecondFunction: secondFunction,
+    ThirdFunction: thirdFunction,
+    FourthFunction: fourthFunction,
+    FirstAnimal: firstAnimal,
+    SecondAnimal: secondAnimal,
+    ThirdAnimal: thirdAnimal,
+    FourthAnimal: fourthAnimal,
+    Temperament: temperament,
+    Jumper: jumper,
+  } = props.person;
 
   const stackFocusRef = useRef<HTMLDivElement | null>(null);
   const hovered = useHovered(stackFocusRef);
@@ -99,6 +92,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
     }
 
     return {
+      exists: typeof animalType !== 'undefined' && animals.includes(animalType),
       name: animalType,
       borderSize: `${borderWidth}px`,
       borderStyle: borderWidth === 1 ? 'dashed' : 'solid',
@@ -130,63 +124,76 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
       justifyContent="center"
       sx={{
         userSelect: 'none',
-        '&:hover': {
-          cursor: 'pointer',
-        },
       }}
     >
       {/* TOP ANIMAL */}
-      <StyledTopAnimalConnectorOne props={top} />
-      <StyledTopAnimalTopConnectorTwo props={top} />
-      <Typography
-        variant={top.variant}
-        sx={{
-          position: 'absolute',
-          top: { xs: 35, md: 52.5 },
-          left: { xs: 175, md: 275 },
-        }}
-      >
-        {top.name}
-      </Typography>
+      {top.exists && (
+        <>
+          <StyledTopAnimalConnectorOne props={top} />
+          <StyledTopAnimalTopConnectorTwo props={top} />
+          <Typography
+            variant={top.variant}
+            sx={{
+              position: 'absolute',
+              top: { xs: 35, md: 52.5 },
+              left: { xs: 175, md: 275 },
+            }}
+          >
+            {top.name}
+          </Typography>
+        </>
+      )}
       {/* RIGHT ANIMAL */}
-      <StyledRightAnimalConnectorOne props={right} />
-      <StyledRightAnimalConnectorTwo props={right} />
-      <Typography
-        variant={right.variant}
-        sx={{
-          position: 'absolute',
-          top: { xs: 205, md: 145 },
-          left: { xs: 265, md: 300 },
-        }}
-      >
-        {right.name}
-      </Typography>
+      {right.exists && (
+        <>
+          <StyledRightAnimalConnectorOne props={right} />
+          <StyledRightAnimalConnectorTwo props={right} />
+          <Typography
+            variant={right.variant}
+            sx={{
+              position: 'absolute',
+              top: { xs: 205, md: 145 },
+              left: { xs: 265, md: 300 },
+            }}
+          >
+            {right.name}
+          </Typography>
+        </>
+      )}
       {/* BOTTOM ANIMAL */}
-      <StyledBottomAnimalConnectorOne props={bottom} />
-      <StyledBottomAnimalConnectorTwo props={bottom} />
-      <Typography
-        variant={bottom.variant}
-        sx={{
-          position: 'absolute',
-          top: { xs: 257.5, md: 230 },
-          left: { xs: 185, md: 262.5 },
-        }}
-      >
-        {bottom.name}
-      </Typography>
+      {bottom.exists && (
+        <>
+          <StyledBottomAnimalConnectorOne props={bottom} />
+          <StyledBottomAnimalConnectorTwo props={bottom} />
+          <Typography
+            variant={bottom.variant}
+            sx={{
+              position: 'absolute',
+              top: { xs: 257.5, md: 230 },
+              left: { xs: 185, md: 262.5 },
+            }}
+          >
+            {bottom.name}
+          </Typography>
+        </>
+      )}
       {/* LEFT ANIMAL */}
-      <StyledLeftAnimalConnectorOne props={left} />
-      <StyledLeftAnimalConnectorTwo props={left} />
-      <Typography
-        variant={left.variant}
-        sx={{
-          position: 'absolute',
-          top: { xs: 215, md: 202.5 },
-          right: { xs: 250, md: 280 },
-        }}
-      >
-        {left.name}
-      </Typography>
+      {left.exists && (
+        <>
+          <StyledLeftAnimalConnectorOne props={left} />
+          <StyledLeftAnimalConnectorTwo props={left} />
+          <Typography
+            variant={left.variant}
+            sx={{
+              position: 'absolute',
+              top: { xs: 215, md: 202.5 },
+              right: { xs: 250, md: 280 },
+            }}
+          >
+            {left.name}
+          </Typography>
+        </>
+      )}
       <Stack>
         {/* FUNCTION CONNECTORS */}
         <StyledPrimaryConnector />
@@ -197,14 +204,16 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           savior={true}
           hovered={hovered}
         >
-          <Typography>{firstFunction}</Typography>
+          <Typography>{firstFunction || '?'}</Typography>
         </StyledFirstFunction>
         <StyledThirdFunction
           func={jumper ? secondFunction : thirdFunction}
           savior={jumper}
           hovered={hovered}
         >
-          <Typography>{jumper ? secondFunction : thirdFunction}</Typography>
+          <Typography>
+            {jumper ? secondFunction || '?' : thirdFunction || '?'}
+          </Typography>
         </StyledThirdFunction>
       </Stack>
       <Stack>
@@ -213,14 +222,16 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           savior={!jumper}
           hovered={hovered}
         >
-          <Typography>{jumper ? thirdFunction : secondFunction}</Typography>
+          <Typography>
+            {jumper ? thirdFunction || '?' : secondFunction || '?'}
+          </Typography>
         </StyledSecondFunction>
         <StyledFourthFunction
           func={fourthFunction}
           savior={false}
           hovered={hovered}
         >
-          <Typography>{fourthFunction}</Typography>
+          <Typography>{fourthFunction ?? '?'}</Typography>
         </StyledFourthFunction>
       </Stack>
     </Stack>

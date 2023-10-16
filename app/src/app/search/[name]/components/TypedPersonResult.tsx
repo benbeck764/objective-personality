@@ -46,21 +46,10 @@ const TypedPersonResult: FC<TypedPersonResultProps> = (
           </Typography>
         </Stack>
         <Box>
-          <TypeStack
-            firstFunction={person.FirstFunction}
-            secondFunction={person.SecondFunction}
-            thirdFunction={person.ThirdFunction}
-            fourthFunction={person.FourthFunction}
-            firstAnimal={person.FirstAnimal}
-            secondAnimal={person.SecondAnimal}
-            thirdAnimal={person.ThirdAnimal}
-            fourthAnimal={person.FourthAnimal}
-            temperament={person.Temperament}
-            jumper={person.Jumper}
-          />
+          <TypeStack person={person} />
         </Box>
         <Box>
-          <TypeTable />
+          <TypeTable person={person} />
         </Box>
       </Stack>
     </Box>
