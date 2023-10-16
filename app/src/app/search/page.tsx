@@ -33,7 +33,7 @@ const Search = async ({
   });
 
   return (
-    <AppCard elevation={0} paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
+    <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
       <Typography mb={1} variant="h5">
         Search
       </Typography>

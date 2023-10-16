@@ -5,14 +5,9 @@ import { StyledHeaderContainer } from './Header.styles';
 import { AppRoutes, RouteName } from '../../../routing/common/routes';
 import { Navigation } from './components/Navigation/Navigation';
 import { useRouter, usePathname } from 'next/navigation';
-import {
-  AppButton,
-  AppCard,
-  useBreakpoint,
-} from '@benbeck764/react-components';
+import { AppButton } from '@benbeck764/react-components';
 
 export const Header: FC = () => {
-  //const { breakpoint } = useBreakpoint();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -23,8 +18,7 @@ export const Header: FC = () => {
           <Toolbar
             variant="dense"
             sx={{
-              //px: breakpoint === 'xl' ? 3 : `8px !important`,
-              px: 3,
+              px: { xs: '8px !important', xl: 3 },
             }}
           >
             <Grid container>
@@ -36,11 +30,9 @@ export const Header: FC = () => {
                 justifyContent="flex-start"
               >
                 <Stack direction="row" alignItems="center" gap={2}>
-                  {/* {breakpoint !== 'xl' && (
-                    <Box>
-                      <Navigation variant="drawer" />
-                    </Box>
-                  )} */}
+                  <Box sx={{ display: { xs: 'block', xl: 'none' } }}>
+                    <Navigation variant="drawer" />
+                  </Box>
 
                   <AppButton>
                     <Typography
@@ -58,12 +50,7 @@ export const Header: FC = () => {
                     </Typography>
                   </AppButton>
 
-                  {/* {breakpoint === 'xl' && (
-                    <Box ml={4}>
-                      <Navigation variant="bar" />
-                    </Box>
-                  )} */}
-                  <Box ml={4}>
+                  <Box ml={4} sx={{ display: { xs: 'none', xl: 'block' } }}>
                     <Navigation variant="bar" />
                   </Box>
                 </Stack>

@@ -22,7 +22,7 @@ const SearchedPerson = async ({ params }: { params: { name: string } }) => {
   const promise = service.getTypedPerson(decodeURIComponent(params.name));
 
   return (
-    <AppCard elevation={0} paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
+    <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
       <Suspense>
         <Await promise={promise}>
           {(res: ApiResponse<OPSTypedPerson>) => (

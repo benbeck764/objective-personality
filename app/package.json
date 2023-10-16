@@ -13,8 +13,8 @@
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
     "@azure/storage-blob": "^12.16.0",
-    "@benbeck764/react-components": "^1.4.0-beta.8",
-    "@benbeck764/react-components-grid": "^1.4.0-beta.8",
+    "@benbeck764/react-components": "^1.4.0-beta.9",
+    "@benbeck764/react-components-grid": "^1.4.0-beta.9",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.12",
