@@ -36,7 +36,7 @@ export type OPSTypedPersonTableRow = TableEntity & {
   LastUpdatedDate: Date;
 };
 
-type OpsTypedPersonLink = { Href: string; Value: string };
+export type OpsTypedPersonLink = { href: string; value: string };
 
 export type OPSTypedPerson = {
   Id: string;
@@ -89,9 +89,7 @@ export type OpsTypedPersonSearchResponseDto = {
 export const mapOpsTypedPersonTableRowToOpsTypedPerson = (
   row: OPSTypedPersonTableRow | any
 ): OPSTypedPerson => {
-  const links = row.Links
-    ? (JSON.parse(row.Links) as OpsTypedPersonLink[])
-    : null;
+  const links = row.Links ? (JSON.parse(row.Links) as OpsTypedPersonLink[]) : null;
 
   return {
     ...row,

@@ -31,6 +31,31 @@ export const getMUITheme = (themeBaseOptions: ThemeOptions): ThemeOptions => {
           },
         },
       },
+      MuiTooltip: {
+        defaultProps: {
+          arrow: true,
+        },
+        styleOverrides: {
+          arrow: {
+            '&.MuiTooltip-arrow': {
+              color: themeBase.palette.coolGrey[600],
+            },
+          },
+          tooltip: {
+            '&.MuiTooltip-tooltip': {
+              ...themeBase.typography.paragraphSmall,
+              background: themeBase.palette.coolGrey[600],
+              borderRadius: `${themeBase.shape.borderRadius}px`,
+              paddingLeft: 8,
+              paddingRight: 8,
+              paddingTop: 8,
+              paddingBottom: 8,
+              maxWidth: '600px',
+              margin: '6px !important',
+            },
+          },
+        },
+      },
     },
   };
 };
