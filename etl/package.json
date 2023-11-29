@@ -13,14 +13,15 @@
     "clean": "rimraf node_modules"
   },
   "dependencies": {
-    "@azure/data-tables": "^12.1.2",
-    "@azure/storage-blob": "^12.16.0",
+    "@azure/storage-blob": "^12.17.0",
+    "@prisma/client": "5.6.0",
     "axios": "^1.5.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/node": "^18.17.17",
+    "prisma": "^5.6.0",
     "puppeteer": "^21.2.1",
     "rimraf": "^4.4.1",
     "ts-node": "^10.9.1",

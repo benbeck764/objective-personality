@@ -1,16 +1,10 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
-import * as cheerio from 'cheerio';
-import 'dotenv/config';
-import TableStorageClient from './_storage/table-storage-client';
-import {
-  AirTableToOPSPersonMap,
-  OPSTypedPerson,
-  OPSTypedPersonTableRow,
-  mapOpsTypedPersonToOpsTypedPersonTableRow,
-  nameof,
-} from './models/OPSTypedPerson';
-import BlobStorageClient from './_storage/blob-storage-client';
+import { OPSTypedPerson, PrismaClient } from '@prisma/client';
 import axios from 'axios';
+import * as cheerio from 'cheerio';
+import puppeteer, { Browser, Page } from 'puppeteer';
+import 'dotenv/config';
+import { AirTableToOPSPersonMap } from './models/OPSTypedPerson';
+import BlobStorageClient from './_storage/blob-storage-client';
 
 (async () => {
   const airtableUrl =
@@ -18,10 +12,9 @@ import axios from 'axios';
   let browser: Browser;
   let page: Page;
   let cardIds: string[] = [];
-  const tableStorageService = new TableStorageClient<OPSTypedPersonTableRow>(
-    'OPSTypedPeople'
-  );
+
   const blobStorageService = new BlobStorageClient();
+  const prisma = new PrismaClient();
 
   //#region Page Scraping
 
@@ -63,9 +56,7 @@ import axios from 'axios';
 
         // Rapid scrolling
         await page.evaluate(() =>
-          document
-            .querySelector('.light-scrollbar')
-            .scrollBy({ top: 1000, behavior: 'smooth' })
+          document.querySelector('.light-scrollbar').scrollBy({ top: 1000, behavior: 'smooth' })
         );
         await waitFor(200);
 
@@ -92,11 +83,7 @@ import axios from 'axios';
     const $ = cheerio.load(pageContent);
     const cellPairs = $('.detailView').find('.labelCellPair');
 
-    let person: Partial<OPSTypedPerson> = {
-      Id: contentId,
-      rowKey: contentId,
-      partitionKey: 'OPSTypedPerson',
-    };
+    let person: Partial<OPSTypedPerson> = { Id: contentId };
 
     cellPairs.each((_, cellPair: cheerio.Element) => {
       let value: any;
@@ -104,21 +91,19 @@ import axios from 'axios';
       const label = pair.find('.fieldLabel')?.text();
 
       const links = pair.find('.cellContainer').find('a');
-      const checkboxDiv = pair
-        .find('.cellContainer')
-        .find('div[role=checkbox]');
+      const checkboxDiv = pair.find('.cellContainer').find('div[role=checkbox]');
       const image = pair.find('.cellContainer').find('img');
       const date = pair.find('.cellContainer').find('.date');
       const time = pair.find('.cellContainer').find('.time');
 
       if (links.length) {
         // Parse Textbox Links
-        const linksArray: { href: string; value: string }[] = [];
+        const linksArray: { Href: string; Value: string }[] = [];
         links.each((_, linkElement: cheerio.Element) => {
           const link = $(linkElement);
           const href = link.attr('href');
           const value = link.text();
-          linksArray.push({ href, value });
+          linksArray.push({ Href: href, Value: value });
         });
         value = linksArray;
       } else if (checkboxDiv.length) {
@@ -161,8 +146,7 @@ import axios from 'axios';
       person.PictureUrl = fileUploadResponse.url;
     }
 
-    const tableRow = mapOpsTypedPersonToOpsTypedPersonTableRow(person);
-    await tableStorageService.upsertEntity(tableRow);
+    await prisma.oPSTypedPerson.create({ data: person as OPSTypedPerson });
   };
 
   //#endregion
@@ -199,6 +183,8 @@ import axios from 'axios';
       await browser.close();
     } catch (ex) {
       console.error(ex);
+    } finally {
+      prisma.$disconnect;
     }
   };
 

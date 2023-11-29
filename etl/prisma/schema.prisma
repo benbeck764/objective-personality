@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// npx prisma migrate dev --name init (requires shadow db...)\
+// npx prisma db push
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL_AZURE")
+}
+
+model OPSTypedPerson {
+  Id                       String               @id
+  Name                     String
+  Type                     String
+  SocialType               String
+  MBTIType                 String
+  Links                    OPSTypedPersonLink[]
+  Temperament              String
+  Modality                 String
+  FirstSaviorFunction      String
+  SecondSaviorFunction     String
+  EnergyVsInfoDom          String
+  ExtrovertedVsIntroverted String
+  GlassLizard              Boolean
+  AnimalStack              String
+  FirstAnimal              String
+  SecondAnimal             String
+  ThirdAnimal              String
+  FourthAnimal             String
+  BiologicalSex            String
+  PictureUrl               String
+  UniqueId                 String
+  CreatedDate              DateTime             @default(now())
+  LastUpdatedDate          DateTime             @updatedAt
+}
+
+model OPSTypedPersonLink {
+  Id               String          @id
+  Href             String
+  Value            String
+  OPSTypedPerson   OPSTypedPerson? @relation(fields: [OPSTypedPersonId], references: [Id])
+  OPSTypedPersonId String?
+}
