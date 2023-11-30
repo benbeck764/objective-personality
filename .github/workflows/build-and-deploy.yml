@@ -44,6 +44,8 @@ jobs:
       # Deploy any necessary Prisma migrations
       - name: Deploy Migrations
         run: pnpm deploy-migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # Build and deploy the Azure SWA (Next.js app)
       - name: Build & Deploy Azure Static Web App
