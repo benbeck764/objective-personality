@@ -41,11 +41,14 @@ jobs:
       - name: Generate Models
         run: pnpm prisma-generate
 
+      # [TODO]: Temporarily disabling this as it will needed an Azure Service Principal
+      #  or other similar mechanism in order to deploy migrations to Azure SQL.
+      #  As migrations are currently executed locally, before deployments, this should be okay for now.
       # Deploy any necessary Prisma migrations
-      - name: Deploy Migrations
-        run: pnpm deploy-migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      # - name: Deploy Migrations
+      #   run: pnpm deploy-migrations
+      #   env:
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # Build and deploy the Azure SWA (Next.js app)
       - name: Build & Deploy Azure Static Web App
