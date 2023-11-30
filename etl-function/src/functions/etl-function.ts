@@ -219,7 +219,13 @@ export const airTableToSqlETL = async (
     await page.evaluate(observeMutation);
     await scrollToBottom(page);
 
-    for (const id of cardIds) {
+    const existingRecordIds = (await prisma.oPSTypedPerson.findMany({ select: { Id: true } })).map(
+      (val) => val.Id
+    );
+
+    const newIds = cardIds.filter((cardId: string) => !existingRecordIds.includes(cardId));
+
+    for (const id of newIds) {
       await page.goto(`${airtableUrl}/${id}`, {
         waitUntil: 'networkidle2',
       });
