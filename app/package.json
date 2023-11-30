@@ -35,8 +35,6 @@
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.2",
     "eslint-config-prettier": "^9.0.0",
-    "rimraf": "^5.0.5",
-    "tshy": "^1.7.0",
     "typescript": "^5.2.2"
   }
 }
