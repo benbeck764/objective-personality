@@ -35,8 +35,10 @@ model OPSTypedPerson {
   BiologicalSex            String
   PictureUrl               String
   UniqueId                 String
-  CreatedDate              DateTime             @default(now())
-  LastUpdatedDate          DateTime             @updatedAt
+  AirTableCreatedDate      DateTime
+  AirTableLastUpdatedDate  DateTime
+  CreatedDate              DateTime?            @default(now())
+  LastUpdatedDate          DateTime?            @updatedAt
 }
 
 model OPSTypedPersonLink {

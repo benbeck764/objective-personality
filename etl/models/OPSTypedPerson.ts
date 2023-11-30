@@ -22,8 +22,8 @@ export const AirTableToOPSPersonMap: { [key: string]: string } = {
   'Biological Sex': nameof<OPSTypedPerson>('BiologicalSex'),
   Picture: nameof<OPSTypedPerson>('PictureUrl'),
   'Unique ID': nameof<OPSTypedPerson>('UniqueId'),
-  'Created Date': nameof<OPSTypedPerson>('CreatedDate'),
-  'Last Modified': nameof<OPSTypedPerson>('LastUpdatedDate'),
+  'Created Date': nameof<OPSTypedPerson>('AirTableCreatedDate'),
+  'Last Modified': nameof<OPSTypedPerson>('AirTableLastUpdatedDate'),
 };
 
 // type OpsTypedPersonLink = { Href: string; Value: string };
