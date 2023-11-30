@@ -12,15 +12,20 @@
   },
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
   "license": "ISC",
+  "main": "dist/node/index.js",
   "module": "dist/index.js",
   "types:": "dist/index.d.ts",
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "pnpm build:esm && pnpm build:common",
+    "build:prod": "node ../../scripts/build.mjs esm && node ../../scripts/build.mjs common",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build:common": "tsc --project tsconfig.common.json",
     "migrate": "npx prisma migrate dev",
-    "clean": "rimraf node_modules"
+    "clean": "rimraf node_modules",
+    "clean:build": "rimraf dist"
   },
   "dependencies": {
     "@prisma/client": "5.6.0"
