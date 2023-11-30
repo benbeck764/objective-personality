@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "objective-personality-data": ["./data/dist"],
+      "objective-personality-data/*": ["./data/dist/*"]
+    }
+  }
+}

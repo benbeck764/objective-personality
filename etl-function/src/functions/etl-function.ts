@@ -5,6 +5,7 @@ import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import BlobStorageClient from '../blob-storage/blob-storage-client';
 import { AirTableToOPSPersonMap } from '../models/OPSTypedPerson';
+import { OPSTypedPerson, OPSTypedPersonLink, prisma } from 'objective-personality-data';
 
 export const airTableToSqlETL = async (
   myTimer: Timer,
@@ -18,7 +19,6 @@ export const airTableToSqlETL = async (
 
   axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
   const blobStorageService = new BlobStorageClient();
-  const prisma = new PrismaClient();
 
   //#region Page Scraping
 

@@ -2,7 +2,23 @@
   "name": "objective-personality-data",
   "version": "1.0.0",
   "description": "Prisma data layer for OP app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benbeck764/objective-personality.git",
+    "directory": "data"
+  },
+  "bugs": {
+    "url": "https://github.com/benbeck764/objective-personality/issues"
+  },
+  "homepage": "https://github.com/benbeck764/objective-personality#readme",
+  "license": "ISC",
+  "module": "index.js",
+  "types:": "index.d.ts",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
   "scripts": {
+    "build": "tsc",
     "migrate": "npx prisma migrate dev",
     "clean": "rimraf node_modules"
   },

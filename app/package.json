@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rimraf node_modules",
-    "clean:cache": "rimraf .next"
+    "clean:build": "rimraf .next"
   },
   "dependencies": {
     "@azure/data-tables": "^13.2.2",

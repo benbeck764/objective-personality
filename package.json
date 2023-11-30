@@ -10,8 +10,11 @@
     "url": "https://github.com/benbeck764/objective-personality/issues"
   },
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
+  "author": "Ben Beck",
+  "license": "ISC",
   "scripts": {
     "start:app": "cd app && pnpm dev",
+    "build": "pnpm -r run build",
     "clean": "pnpm -r run clean",
     "clean:app-cache": "pnpm --filter=\"./app\" run clean:cache"
   }
