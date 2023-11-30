@@ -11,6 +11,7 @@ export const airTableToSqlETL = async (
   _myTimer: Timer,
   _context: InvocationContext
 ): Promise<void> => {
+  const environment = process.env.environment as 'local' | 'production';
   const airtableUrl =
     'https://airtable.com/appudq0aG1uwqIFX5/shrQ6IoDtlXpzmC1l/tblyUDDV5zVyuX5VL/viwwzc3yLw0s2PAEi';
   let browser: Browser;
@@ -199,10 +200,8 @@ export const airTableToSqlETL = async (
   //#endregion
 
   try {
-    console.log(process.env.IS_LOCAL);
-    console.log(process.env.NODE_ENV);
     browser = await puppeteer.launch({
-      headless: false, // [TODO]: Change to true for function deployment
+      headless: environment !== 'local',
       args: [`--window-size=1920,1080`],
       defaultViewport: {
         width: 1920,
@@ -239,4 +238,5 @@ export const airTableToSqlETL = async (
 app.timer('etl-function', {
   schedule: '0 * * */1 * *',
   handler: airTableToSqlETL,
+  runOnStartup: process.env.Environment === 'local',
 });
