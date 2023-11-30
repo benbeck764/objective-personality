@@ -13,8 +13,8 @@
   "author": "Ben Beck",
   "license": "ISC",
   "scripts": {
-    "start:app": "cd app && pnpm dev",
-    "start:function": "cd etl-function && pnpm start",
+    "start:app": "pnpm --filter=\"./app\" run dev",
+    "start:function": "pnpm --filter=\"./etl-function\" run start",
     "build": "pnpm -r run build",
     "build:function": "pnpm --filter=\"./etl-function\" run build",
     "clean": "pnpm -r run clean",

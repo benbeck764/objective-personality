@@ -1,9 +1,7 @@
 'use client';
 import { FC, useRef } from 'react';
 import Stack from '@mui/material/Stack';
-import Typography, {
-  TypographyPropsVariantOverrides,
-} from '@mui/material/Typography';
+import Typography, { TypographyPropsVariantOverrides } from '@mui/material/Typography';
 import { OverridableStringUnion } from '@mui/types';
 import { Variant } from '@mui/material/styles/createTypography';
 import {
@@ -22,13 +20,9 @@ import {
   StyledRightAnimalConnectorOne,
   StyledRightAnimalConnectorTwo,
 } from './TypeStack.styles';
-import {
-  FunctionType,
-  AnimalType,
-  TemperamentType,
-} from '@/_models/typed-person-helper';
+import { FunctionType, AnimalType, TemperamentType } from '@/_models/typed-person-helper';
 import { useHovered } from '@/utilities/hooks/useHovered';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 
 export type AnimalConnectorProps = {
   exists: boolean;
@@ -36,14 +30,11 @@ export type AnimalConnectorProps = {
   borderSize: string;
   borderStyle: 'solid' | 'dashed';
   borderColor: string;
-  variant: OverridableStringUnion<
-    Variant | 'inherit',
-    TypographyPropsVariantOverrides
-  >;
+  variant: OverridableStringUnion<Variant | 'inherit', TypographyPropsVariantOverrides>;
 };
 
 type TypeStackProps = {
-  person: OPSTypedPerson;
+  person: OPSTypedPersonExtended;
 };
 
 const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
@@ -63,17 +54,12 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
   const stackFocusRef = useRef<HTMLDivElement | null>(null);
   const hovered = useHovered(stackFocusRef);
 
-  const calculateAnimal = (
-    position: 'left' | 'right' | 'top' | 'bottom'
-  ): AnimalConnectorProps => {
+  const calculateAnimal = (position: 'left' | 'right' | 'top' | 'bottom'): AnimalConnectorProps => {
     const animals = [firstAnimal, secondAnimal, thirdAnimal, fourthAnimal];
 
-    const perceiver =
-      temperament === TemperamentType.IxxP ||
-      temperament === TemperamentType.ExxP;
+    const perceiver = temperament === TemperamentType.IxxP || temperament === TemperamentType.ExxP;
     const introverted =
-      temperament === TemperamentType.IxxP ||
-      temperament === TemperamentType.IxxJ;
+      temperament === TemperamentType.IxxP || temperament === TemperamentType.IxxJ;
 
     let borderWidth: number = -1;
     let animalType: AnimalType | undefined;
@@ -199,11 +185,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         <StyledPrimaryConnector />
         <StyledAuxiliaryConnector />
         {/* FUNCTIONS */}
-        <StyledFirstFunction
-          func={firstFunction}
-          savior={true}
-          hovered={hovered}
-        >
+        <StyledFirstFunction func={firstFunction} savior={true} hovered={hovered}>
           <Typography>{firstFunction || '?'}</Typography>
         </StyledFirstFunction>
         <StyledThirdFunction
@@ -211,9 +193,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           savior={jumper}
           hovered={hovered}
         >
-          <Typography>
-            {jumper ? secondFunction || '?' : thirdFunction || '?'}
-          </Typography>
+          <Typography>{jumper ? secondFunction || '?' : thirdFunction || '?'}</Typography>
         </StyledThirdFunction>
       </Stack>
       <Stack>
@@ -222,15 +202,9 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
           savior={!jumper}
           hovered={hovered}
         >
-          <Typography>
-            {jumper ? thirdFunction || '?' : secondFunction || '?'}
-          </Typography>
+          <Typography>{jumper ? thirdFunction || '?' : secondFunction || '?'}</Typography>
         </StyledSecondFunction>
-        <StyledFourthFunction
-          func={fourthFunction}
-          savior={false}
-          hovered={hovered}
-        >
+        <StyledFourthFunction func={fourthFunction} savior={false} hovered={hovered}>
           <Typography>{fourthFunction ?? '?'}</Typography>
         </StyledFourthFunction>
       </Stack>

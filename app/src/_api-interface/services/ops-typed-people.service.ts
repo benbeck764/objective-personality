@@ -2,7 +2,7 @@ import ApiService from '../common/api-service';
 import { endpoints } from '../common/endpoints';
 import { ServiceResult } from '../common/api-shared.models';
 import {
-  OPSTypedPerson,
+  OPSTypedPersonExtended,
   OpsTypedPersonSearchRequestDto,
   OpsTypedPersonSearchResponseDto,
 } from '../../_models/ops-typed-people.models';
@@ -10,7 +10,7 @@ import {
 class OpsTypedPeopleService extends ApiService {
   private static classInstance: OpsTypedPeopleService;
 
-  public getTypedPerson(name: string): ServiceResult<OPSTypedPerson> {
+  public getTypedPerson(name: string): ServiceResult<OPSTypedPersonExtended> {
     return this.get(`${this.baseUrl}/${endpoints.opsTypedPeople}`, { name });
   }
 

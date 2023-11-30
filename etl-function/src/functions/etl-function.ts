@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import BlobStorageClient from '../blob-storage/blob-storage-client';
 import { AirTableToOPSPersonMap } from '../models/OPSTypedPerson';
-import { OPSTypedPerson, OPSTypedPersonLink, prisma } from 'objective-personality-data';
+import { OPSTypedPerson, OPSTypedPersonLink, PrismaClient } from 'objective-personality-data';
 
 export const airTableToSqlETL = async (
   _myTimer: Timer,
@@ -14,6 +14,7 @@ export const airTableToSqlETL = async (
   const environment = process.env.environment as 'local' | 'production';
   const airtableUrl =
     'https://airtable.com/appudq0aG1uwqIFX5/shrQ6IoDtlXpzmC1l/tblyUDDV5zVyuX5VL/viwwzc3yLw0s2PAEi';
+  const prisma = new PrismaClient();
   let browser: Browser;
   let page: Page;
   let cardIds: string[] = [];

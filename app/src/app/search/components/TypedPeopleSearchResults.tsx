@@ -1,7 +1,7 @@
 'use client';
 import { FC } from 'react';
 import {
-  OPSTypedPerson,
+  OPSTypedPersonExtended,
   OpsTypedPersonSearchResponseDto,
 } from '@/_models/ops-typed-people.models';
 import { AppGridDataRequest } from '@benbeck764/react-components-grid';
@@ -31,10 +31,8 @@ const TypedPeopleSearchResults: FC<TypedPeopleSearchResultsProps> = (
     router.push(url);
   };
 
-  const handlePersonSelected = (person: OPSTypedPerson): void => {
-    router.push(
-      `${AppRoutes[RouteName.Search].path}/${encodeURIComponent(person.Name)}`
-    );
+  const handlePersonSelected = (person: OPSTypedPersonExtended): void => {
+    router.push(`${AppRoutes[RouteName.Search].path}/${encodeURIComponent(person.Name)}`);
   };
 
   return (

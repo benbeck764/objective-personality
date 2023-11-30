@@ -3,18 +3,16 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 import { StyledPersonImage } from './TypedPersonResult.styles';
 import TypeStack from './TypeStack/TypeStack';
 import TypeTable from './TypeTable/TypeTable';
 
 type TypedPersonResultProps = {
-  person: OPSTypedPerson;
+  person: OPSTypedPersonExtended;
 };
 
-const TypedPersonResult: FC<TypedPersonResultProps> = (
-  props: TypedPersonResultProps
-) => {
+const TypedPersonResult: FC<TypedPersonResultProps> = (props: TypedPersonResultProps) => {
   const { person } = props;
 
   return (
@@ -23,12 +21,7 @@ const TypedPersonResult: FC<TypedPersonResultProps> = (
         {person.Name}
       </Typography>
       <Divider />
-      <Stack
-        sx={{ flexDirection: { xs: 'column', lg: 'row' } }}
-        py={1}
-        alignItems="center"
-        gap={2}
-      >
+      <Stack sx={{ flexDirection: { xs: 'column', lg: 'row' } }} py={1} alignItems="center" gap={2}>
         <Stack gap={1} alignItems="center" justifyContent="center">
           <Box width={250} height={250} display="block" position="relative">
             <StyledPersonImage
