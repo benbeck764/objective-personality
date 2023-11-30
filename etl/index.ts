@@ -1,5 +1,6 @@
 import { OPSTypedPerson, OPSTypedPersonLink, PrismaClient } from '@prisma/client';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import 'dotenv/config';
@@ -13,6 +14,7 @@ import BlobStorageClient from './_storage/blob-storage-client';
   let page: Page;
   let cardIds: string[] = [];
 
+  axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
   const blobStorageService = new BlobStorageClient();
   const prisma = new PrismaClient();
 
