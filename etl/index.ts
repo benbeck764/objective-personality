@@ -1,4 +1,4 @@
-import { OPSTypedPerson, PrismaClient } from '@prisma/client';
+import { OPSTypedPerson, OPSTypedPersonLink, PrismaClient } from '@prisma/client';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
@@ -18,11 +18,24 @@ import BlobStorageClient from './_storage/blob-storage-client';
 
   //#region Page Scraping
 
+  // Observe added/removed nodes and keep track of Card Ids
+  // Removed nodes are used to capture the first nodes (and potentially any missed while scrolling)
   const observeMutation = (): void => {
     const onMutationHandler = async (mutations: MutationRecord[]) => {
       for (let mutation of mutations) {
         if (mutation.addedNodes.length) {
           for (let node of mutation.addedNodes) {
+            const element = node as HTMLElement;
+            if (!element.className.includes('galleryCardContainer')) continue;
+
+            const card = element.firstChild.firstChild as HTMLElement;
+            const id = card.attributes.getNamedItem('data-rowid').value;
+
+            await transferCardId(id);
+          }
+        }
+        if (mutation.removedNodes.length) {
+          for (let node of mutation.removedNodes) {
             const element = node as HTMLElement;
             if (!element.className.includes('galleryCardContainer')) continue;
 
@@ -40,10 +53,12 @@ import BlobStorageClient from './_storage/blob-storage-client';
     observer.observe(virtualListNode, { childList: true, subtree: true });
   };
 
+  // Timeout helper
   const waitFor = (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
+  // Scroll through the page, 1000px at a time
   const scrollToBottom = async (page: Page) => {
     let retryScrollCount = 3;
 
@@ -72,8 +87,9 @@ import BlobStorageClient from './_storage/blob-storage-client';
     }
   };
 
+  // Transfers Id from puppeteer environment to here
   const transferCardId = async (id: string) => {
-    cardIds.push(id);
+    if (!cardIds.includes(id)) cardIds.push(id);
   };
 
   const createOpsTypedPersonRecord = async (
@@ -84,6 +100,7 @@ import BlobStorageClient from './_storage/blob-storage-client';
     const cellPairs = $('.detailView').find('.labelCellPair');
 
     let person: Partial<OPSTypedPerson> = { Id: contentId };
+    let personLinks: Partial<OPSTypedPersonLink>[] = [];
 
     cellPairs.each((_, cellPair: cheerio.Element) => {
       let value: any;
@@ -98,14 +115,16 @@ import BlobStorageClient from './_storage/blob-storage-client';
 
       if (links.length) {
         // Parse Textbox Links
-        const linksArray: { Href: string; Value: string }[] = [];
-        links.each((_, linkElement: cheerio.Element) => {
+        links.each((index: number, linkElement: cheerio.Element) => {
           const link = $(linkElement);
           const href = link.attr('href');
           const value = link.text();
-          linksArray.push({ Href: href, Value: value });
+          personLinks.push({
+            Id: `${contentId}-${index}`,
+            Href: href,
+            Value: value,
+          });
         });
-        value = linksArray;
       } else if (checkboxDiv.length) {
         // Parse Checkboxes
         value = checkboxDiv.attr('aria-checked') === 'true';
@@ -125,7 +144,7 @@ import BlobStorageClient from './_storage/blob-storage-client';
       }
 
       const mappedValue = AirTableToOPSPersonMap[label];
-      person[mappedValue] = value;
+      if (mappedValue) person[mappedValue] = value;
     });
 
     // Upload Image
@@ -135,7 +154,9 @@ import BlobStorageClient from './_storage/blob-storage-client';
         responseType: 'arraybuffer',
       });
       const imageData = response.data;
-      const fileName = `${contentId}.png`;
+      const contentType = response.headers['content-type'];
+      const fileExtension = contentType.split('/').pop();
+      const fileName = `${contentId}.${fileExtension}`;
 
       const fileUploadResponse = await blobStorageService.uploadFile({
         file: imageData,
@@ -146,7 +167,29 @@ import BlobStorageClient from './_storage/blob-storage-client';
       person.PictureUrl = fileUploadResponse.url;
     }
 
-    await prisma.oPSTypedPerson.create({ data: person as OPSTypedPerson });
+    const linksUpsert = personLinks.map((l: Partial<OPSTypedPersonLink>) => ({
+      where: { Id: l.Id },
+      create: { ...(l as OPSTypedPersonLink) },
+      update: { ...(l as OPSTypedPersonLink) },
+    }));
+
+    await prisma.oPSTypedPerson.upsert({
+      where: {
+        Id: person.Id,
+      },
+      create: {
+        ...(person as OPSTypedPerson),
+        Links: {
+          create: [...(personLinks as OPSTypedPersonLink[])],
+        },
+      },
+      update: {
+        ...(person as OPSTypedPerson),
+        Links: {
+          upsert: [...linksUpsert],
+        },
+      },
+    });
   };
 
   //#endregion
