@@ -1,0 +1,76 @@
+name: Objective Personality Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      # Creates an .npmrc using an NPM token stored as a Github secret
+      - name: NPM Auth Token
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN 
+          @benbeck764:registry=https://npm.pkg.github.com" > .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Install dependencies for all projects via PNPM
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      # Create @prisma/client (if non-existent) and generate the models to be exported
+      - name: Generate Models
+        run: pnpm prisma-generate
+
+      # Deploy any necessary Prisma migrations
+      - name: Deploy Migrations
+        run: pnpm deploy-migrations
+
+      # Build and deploy the Azure SWA (Next.js app)
+      - name: Build & Deploy Azure Static Web App
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_MOSS_00FB06810 }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: 'upload'
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: 'app' # App source code path
+          api_location: '' # Api source code path - optional
+          output_location: '' # Built app content directory - optional
+          ###### End of Repository/Build Configurations ######
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ vars.API_BASE_URL }}
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          app_location: 'app'
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_MOSS_00FB06810 }}
+          action: 'close'
