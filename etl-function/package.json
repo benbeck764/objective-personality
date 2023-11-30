@@ -1,0 +1,30 @@
+{
+  "name": "objective-personality-etl-function",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf node_modules",
+    "clean:dist": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "objective-personality-data": "workspace:*",
+    "@azure/storage-blob": "^12.17.0",
+    "@azure/functions": "^4.0.0",
+    "axios": "^1.5.0",
+    "axios-retry": "^4.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^21.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "typescript": "^4.0.0",
+    "prisma": "^5.6.0",
+    "rimraf": "^5.0.0"
+  },
+  "main": "dist/src/functions/*.js"
+}

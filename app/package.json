@@ -13,14 +13,14 @@
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
     "@azure/storage-blob": "^12.16.0",
-    "@benbeck764/react-components": "^1.4.0-beta.10",
-    "@benbeck764/react-components-grid": "^1.4.0-beta.10",
+    "@benbeck764/react-components": "^1.4.0-beta.21",
+    "@benbeck764/react-components-grid": "^1.4.0-beta.21",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "^5.14.12",
     "@types/react-dom": "^18.2.7",
-    "next": "^13.5.4",
+    "next": "^14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-ga4": "^2.1.0"

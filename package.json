@@ -11,8 +11,8 @@
   },
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
   "scripts": {
-    "start:app": "cd app && yarn dev",
-    "start:api": "cd api && yarn watch",
-    "start:proxy": "swa start http://localhost:3000 --api-location ./api --verbose"
+    "start:app": "cd app && pnpm dev",
+    "clean": "pnpm -r run clean",
+    "clean:app-cache": "pnpm --filter=\"./app\" run clean:cache"
   }
 }
