@@ -161,7 +161,7 @@ import BlobStorageClient from './_storage/blob-storage-client';
       const fileUploadResponse = await blobStorageService.uploadFile({
         file: imageData,
         filename: fileName,
-        container: 'images',
+        container: 'images-new',
       });
 
       person.PictureUrl = fileUploadResponse.url;
