@@ -18,15 +18,35 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       # Creates an .npmrc using an NPM token stored as a Github secret
       - name: NPM Auth Token
         run: |
-          touch .npmrc
           echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN 
           @benbeck764:registry=https://npm.pkg.github.com" > .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Build And Deploy
+
+      # Install dependencies for all projects via PNPM
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      # Create @prisma/client (if non-existent) and generate the models to be exported
+      - name: Generate Models
+        run: pnpm generate
+
+      # Deploy any necessary Prisma migrations
+      - name: Deploy Migrations
+        run: pnpm deploy-migrations
+
+      # Build and deploy the Azure SWA (Next.js app)
+      - name: Build & Deploy Azure Static Web App
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:

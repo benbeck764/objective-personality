@@ -17,6 +17,8 @@
     "start:function": "cd etl-function && pnpm start",
     "build": "pnpm -r run build",
     "build:function": "pnpm --filter=\"./etl-function\" run build",
-    "clean": "pnpm -r run clean"
+    "clean": "pnpm -r run clean",
+    "deploy-migrations": "pnpm --filter=\"./data\" run migrate-deploy",
+    "prisma-generate": "pnpm --filter=\"./data\" run generate"
   }
 }
