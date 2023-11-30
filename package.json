@@ -14,8 +14,9 @@
   "license": "ISC",
   "scripts": {
     "start:app": "cd app && pnpm dev",
+    "start:function": "cd etl-function && pnpm start",
     "build": "pnpm -r run build",
-    "clean": "pnpm -r run clean",
-    "clean:app-cache": "pnpm --filter=\"./app\" run clean:cache"
+    "build:function": "pnpm --filter=\"./etl-function\" run build",
+    "clean": "pnpm -r run clean"
   }
 }

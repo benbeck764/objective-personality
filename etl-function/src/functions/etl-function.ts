@@ -8,8 +8,8 @@ import { AirTableToOPSPersonMap } from '../models/OPSTypedPerson';
 import { OPSTypedPerson, OPSTypedPersonLink, prisma } from 'objective-personality-data';
 
 export const airTableToSqlETL = async (
-  myTimer: Timer,
-  context: InvocationContext
+  _myTimer: Timer,
+  _context: InvocationContext
 ): Promise<void> => {
   const airtableUrl =
     'https://airtable.com/appudq0aG1uwqIFX5/shrQ6IoDtlXpzmC1l/tblyUDDV5zVyuX5VL/viwwzc3yLw0s2PAEi';
@@ -199,6 +199,8 @@ export const airTableToSqlETL = async (
   //#endregion
 
   try {
+    console.log(process.env.IS_LOCAL);
+    console.log(process.env.NODE_ENV);
     browser = await puppeteer.launch({
       headless: false, // [TODO]: Change to true for function deployment
       args: [`--window-size=1920,1080`],
