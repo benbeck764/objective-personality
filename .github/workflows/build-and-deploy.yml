@@ -63,7 +63,8 @@ jobs:
           app_location: 'app' # App source code path
           api_location: '' # Api source code path - optional
           output_location: '' # Built app content directory - optional
-          app_build_command: 'pnpm build:app'
+          #app_build_command: 'pnpm build:app'
+          skip_app_build: true
           ###### End of Repository/Build Configurations ######
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ vars.API_BASE_URL }}
