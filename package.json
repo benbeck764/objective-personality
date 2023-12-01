@@ -13,13 +13,13 @@
   "author": "Ben Beck",
   "license": "ISC",
   "scripts": {
-    "start:app": "pnpm --filter=\"./app\" run dev",
-    "start:function": "pnpm --filter=\"./etl-function\" run start",
-    "build": "pnpm -r run build",
-    "build:app": "pnpm --filter=\"./app\" run build",
-    "build:function": "pnpm --filter=\"./etl-function\" run build",
-    "clean": "pnpm -r run clean",
-    "deploy-migrations": "pnpm --filter=\"./data\" run migrate-deploy",
-    "prisma-generate": "pnpm -r run generate"
+    "start:app": "cd app && npm run dev",
+    "start:function": "cd etl-function && npm run start",
+    "build:app": "cd app && npm run build",
+    "build:function": "cd etl-function && npm run build",
+    "clean:app": "cd app && npm run clean",
+    "clean:function": "cd etl-function && npm run clean",
+    "generate:app": "cd app && npm run generate",
+    "generate:function": "cd etl-function && npm run generate"
   }
 }

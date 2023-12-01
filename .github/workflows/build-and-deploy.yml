@@ -21,35 +21,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
 
       # Creates an .npmrc using an NPM token stored as a Github secret
       - name: NPM Auth Token
         run: |
+          cd app
           echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN 
           @benbeck764:registry=https://npm.pkg.github.com" > .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # Install dependencies for all projects via PNPM
-      - name: Install Dependencies
-        run: pnpm install --no-frozen-lockfile
-
       # Create @prisma/client (if non-existent) and generate the models to be exported
-      # This will run in both the Next.js web app & the Azure Function
-      - name: Generate Models
-        run: pnpm prisma-generate
+      - name: Generate Prisma Models (Next.js web app)
+        run: npm run generate:app
 
-      # [TODO]: Temporarily disabling this as it will needed an Azure Service Principal
-      #  or other similar mechanism in order to deploy migrations to Azure SQL.
-      #  As migrations are currently executed locally, before deployments, this should be okay for now.
-      # Deploy any necessary Prisma migrations
-      # - name: Deploy Migrations
-      #   run: pnpm deploy-migrations
-      #   env:
-      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      # [TODO]: Ignore this for now, handle separately with function deploy
+      # Create @prisma/client (if non-existent) and generate the models to be exported
+      #- name: Generate Prisma Models (Azure Function)
+      #  run: npm run generate:function
 
       # Build and deploy the Azure SWA (Next.js app)
       - name: Build & Deploy Azure Static Web App
