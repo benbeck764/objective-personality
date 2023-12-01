@@ -1,4 +1,4 @@
-import { OPSTypedPerson } from 'objective-personality-data';
+import { OPSTypedPerson } from '@prisma/client';
 
 export const nameof = <T>(name: keyof T) => name;
 

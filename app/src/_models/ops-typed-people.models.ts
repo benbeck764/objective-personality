@@ -7,7 +7,7 @@ import {
   getOpposingFunction,
   isJumper,
 } from './typed-person-helper';
-import { OPSTypedPerson, OPSTypedPersonLink } from 'objective-personality-data';
+import { OPSTypedPerson, OPSTypedPersonLink } from '@prisma/client';
 
 export const nameof = <T>(name: keyof T) => name;
 

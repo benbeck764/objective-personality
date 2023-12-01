@@ -1,5 +1,5 @@
 import BlobStorageClient from '../../_storage/blob-storage-client';
-import { PrismaClient } from 'objective-personality-data';
+import { PrismaClient } from '@prisma/client';
 
 abstract class ServiceBase {
   protected readonly blobStorageClient: BlobStorageClient;

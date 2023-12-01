@@ -20,7 +20,7 @@ import {
   StyledRightAnimalConnectorOne,
   StyledRightAnimalConnectorTwo,
 } from './TypeStack.styles';
-import { FunctionType, AnimalType, TemperamentType } from '@/_models/typed-person-helper';
+import { AnimalType, TemperamentType } from '@/_models/typed-person-helper';
 import { useHovered } from '@/utilities/hooks/useHovered';
 import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 

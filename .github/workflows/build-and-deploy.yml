@@ -38,6 +38,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       # Create @prisma/client (if non-existent) and generate the models to be exported
+      # This will run in both the Next.js web app & the Azure Function
       - name: Generate Models
         run: pnpm prisma-generate
 
@@ -49,10 +50,6 @@ jobs:
       #   run: pnpm deploy-migrations
       #   env:
       #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      # Build the Next app... then deploy to SWA?
-      - name: Build Next.js App
-        run: pnpm build:app
 
       # Build and deploy the Azure SWA (Next.js app)
       - name: Build & Deploy Azure Static Web App
@@ -67,7 +64,6 @@ jobs:
           app_location: 'app' # App source code path
           api_location: '' # Api source code path - optional
           output_location: '' # Built app content directory - optional
-          skip_app_build: true
           ###### End of Repository/Build Configurations ######
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ vars.API_BASE_URL }}
