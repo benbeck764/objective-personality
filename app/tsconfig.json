@@ -24,9 +24,7 @@
       "@/*": ["./src/*"],
       "@/routes/*": ["./src/routing/*"],
       "@/theme/*": ["./src/theme/*"],
-      "@/utilities/*": ["./src/utilities/*"],
-      "objective-personality-data": ["../data/dist"],
-      "objective-personality-data/*": ["../data/dist/*"]
+      "@/utilities/*": ["./src/utilities/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

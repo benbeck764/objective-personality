@@ -37,15 +37,15 @@ importers:
       '@mui/material':
         specifier: ^5.14.12
         version: 5.14.19(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.39)(react-dom@18.2.0)(react@18.2.0)
+      '@prisma/client':
+        specifier: 5.6.0
+        version: 5.6.0(prisma@5.6.0)
       '@types/react-dom':
         specifier: ^18.2.7
         version: 18.2.17
       next:
         specifier: ^14.0.3
         version: 14.0.3(react-dom@18.2.0)(react@18.2.0)
-      objective-personality-data:
-        specifier: workspace:*
-        version: link:../data
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -77,6 +77,9 @@ importers:
       eslint-config-prettier:
         specifier: ^9.0.0
         version: 9.0.0(eslint@8.49.0)
+      prisma:
+        specifier: ^5.6.0
+        version: 5.6.0
       typescript:
         specifier: ^5.2.2
         version: 5.3.2
@@ -108,6 +111,9 @@ importers:
       '@azure/storage-blob':
         specifier: ^12.17.0
         version: 12.17.0(encoding@0.1.13)
+      '@prisma/client':
+        specifier: 5.6.0
+        version: 5.6.0(prisma@5.6.0)
       axios:
         specifier: ^1.5.0
         version: 1.6.2
@@ -117,9 +123,6 @@ importers:
       cheerio:
         specifier: ^1.0.0-rc.12
         version: 1.0.0-rc.12
-      objective-personality-data:
-        specifier: workspace:*
-        version: link:../data
       puppeteer:
         specifier: ^21.2.1
         version: 21.5.2(typescript@4.9.5)

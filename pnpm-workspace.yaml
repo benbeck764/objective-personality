@@ -1,4 +1,3 @@
 packages:
   - app
-  - data
   - etl-function

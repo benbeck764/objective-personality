@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import BlobStorageClient from '../blob-storage/blob-storage-client';
 import { AirTableToOPSPersonMap } from '../models/OPSTypedPerson';
-import { OPSTypedPerson, OPSTypedPersonLink, PrismaClient } from 'objective-personality-data';
+import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink } from '@prisma/client';
 
 export const airTableToSqlETL = async (
   _myTimer: Timer,

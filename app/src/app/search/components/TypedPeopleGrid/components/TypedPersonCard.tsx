@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import Tooltip from '@mui/material/Tooltip';
-import { OPSTypedPersonLink } from 'objective-personality-data';
+import { OPSTypedPersonLink } from '@prisma/client';
 
 type TypedPersonCardProps =
   | {
