@@ -33,14 +33,13 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # Install dependencies for all projects via PNPM
-      - name: Install Dependencies
-        run: pnpm install --no-frozen-lockfile
+      # Create @prisma/client (if non-existent) and generate the models to be exported
+      - name: Generate Prisma Models (Next.js web app)
+        run: pnpm generate:app
 
       # Create @prisma/client (if non-existent) and generate the models to be exported
-      # This will run in both the Next.js web app & the Azure Function
-      - name: Generate Models
-        run: pnpm prisma-generate
+      - name: Generate Prisma Models (Azure Function)
+        run: pnpm generate:function
 
       # [TODO]: Temporarily disabling this as it will needed an Azure Service Principal
       #  or other similar mechanism in order to deploy migrations to Azure SQL.
