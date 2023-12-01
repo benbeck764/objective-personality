@@ -33,7 +33,7 @@ function build() {
   // Temporarily Modify tsconfig.{moduleType}.json file
   modifyTSConfig(moduleType, false);
 
-  exec(`pnpm build:${moduleType}`, (err, stdout) => {
+  exec(`npm run build:${moduleType}`, (err, stdout) => {
     if (err) {
       console.error(err);
       console.log(`Build ${process.cwd()} (${moduleType}) failed :(`);

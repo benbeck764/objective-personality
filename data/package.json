@@ -19,7 +19,7 @@
     "schema": "src/prisma/schema.prisma"
   },
   "scripts": {
-    "build": "pnpm build:esm && pnpm build:common",
+    "build": "npm run build:esm && npm run build:common",
     "build:prod": "node ../../scripts/build.mjs esm && node ../../scripts/build.mjs common",
     "build:esm": "tsc --project tsconfig.esm.json",
     "build:common": "tsc --project tsconfig.common.json",
