@@ -14,7 +14,6 @@
     "clean:build": "rimraf .next"
   },
   "dependencies": {
-    "objective-personality-data": "workspace:*",
     "@azure/data-tables": "^13.2.2",
     "@azure/storage-blob": "^12.16.0",
     "@benbeck764/react-components": "^1.4.0-beta.21",
@@ -26,11 +25,13 @@
     "@mui/material": "^5.14.12",
     "@types/react-dom": "^18.2.7",
     "next": "^14.0.3",
+    "objective-personality-data": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-ga4": "^2.1.0"
   },
   "devDependencies": {
+    "@mui/types": "^7.2.10",
     "@types/node": "^20.6.3",
     "@types/react": "^18.2.22",
     "encoding": "^0.1.13",
