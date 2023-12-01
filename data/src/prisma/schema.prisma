@@ -1,16 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// npx prisma migrate dev --name init (requires shadow db...)\
-// npx prisma db push
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL_AZURE")
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model OPSTypedPerson {
@@ -19,7 +14,6 @@ model OPSTypedPerson {
   Type                     String
   SocialType               String
   MBTIType                 String
-  Links                    OPSTypedPersonLink[]
   Temperament              String
   Modality                 String
   FirstSaviorFunction      String
@@ -39,12 +33,13 @@ model OPSTypedPerson {
   AirTableLastUpdatedDate  DateTime
   CreatedDate              DateTime?            @default(now())
   LastUpdatedDate          DateTime?            @updatedAt
+  Links                    OPSTypedPersonLink[]
 }
 
 model OPSTypedPersonLink {
   Id               String          @id
   Href             String
   Value            String
-  OPSTypedPerson   OPSTypedPerson? @relation(fields: [OPSTypedPersonId], references: [Id])
   OPSTypedPersonId String?
+  OPSTypedPerson   OPSTypedPerson? @relation(fields: [OPSTypedPersonId], references: [Id])
 }

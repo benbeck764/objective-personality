@@ -5,10 +5,7 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import { FC } from 'react';
-import {
-  StyledTypeTableCell,
-  StyledTypeTableHeaderCell,
-} from './TypeTable.styles';
+import { StyledTypeTableCell, StyledTypeTableHeaderCell } from './TypeTable.styles';
 import Typography from '@mui/material/Typography';
 import {
   FunctionType,
@@ -17,7 +14,7 @@ import {
   getFunctionModality,
   isDoubleActivated,
 } from '@/_models/typed-person-helper';
-import { OPSTypedPerson } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 import { isEmpty } from '@/utilities/string';
 
 type TypeTableRow = {
@@ -30,7 +27,7 @@ type TypeTableRow = {
 };
 
 type TypeTableProps = {
-  person: OPSTypedPerson;
+  person: OPSTypedPersonExtended;
 };
 
 const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
@@ -62,12 +59,7 @@ const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
       const doubleActivated = isDoubleActivated(func, fourthAnimal);
       const animal = animals[index];
       const row: TypeTableRow = {
-        activation:
-          doubleActivated === true
-            ? '2'
-            : doubleActivated === false
-            ? '1'
-            : '-',
+        activation: doubleActivated === true ? '2' : doubleActivated === false ? '1' : '-',
         sex: getFunctionModality(func, modality),
         function: func,
         saviorFunction: isEmpty(func)
@@ -125,32 +117,22 @@ const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
           {rows.map((row: TypeTableRow, index: number) => (
             <TableRow key={row.function || index}>
               <StyledTypeTableCell>
-                <Typography variant="paragraphLargeBold">
-                  {row.activation}
-                </Typography>
+                <Typography variant="paragraphLargeBold">{row.activation}</Typography>
               </StyledTypeTableCell>
               <StyledTypeTableCell>
                 <Typography variant="paragraphLargeBold">{row.sex}</Typography>
               </StyledTypeTableCell>
               <StyledTypeTableCell>
-                <Typography variant="paragraphLargeBold">
-                  {row.function}
-                </Typography>
+                <Typography variant="paragraphLargeBold">{row.function}</Typography>
               </StyledTypeTableCell>
               <StyledTypeTableCell>
-                <Typography variant="paragraphLargeBold">
-                  {row.saviorFunction}
-                </Typography>
+                <Typography variant="paragraphLargeBold">{row.saviorFunction}</Typography>
               </StyledTypeTableCell>
               <StyledTypeTableCell highlight>
-                <Typography variant="paragraphLargeBold">
-                  {row.saviorAnimal}
-                </Typography>
+                <Typography variant="paragraphLargeBold">{row.saviorAnimal}</Typography>
               </StyledTypeTableCell>
               <StyledTypeTableCell highlight>
-                <Typography variant="paragraphLargeBold">
-                  {row.animal}
-                </Typography>
+                <Typography variant="paragraphLargeBold">{row.animal}</Typography>
               </StyledTypeTableCell>
             </TableRow>
           ))}

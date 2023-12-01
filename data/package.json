@@ -1,0 +1,41 @@
+{
+  "name": "objective-personality-data",
+  "version": "1.0.0",
+  "description": "Prisma data layer for OP app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benbeck764/objective-personality.git",
+    "directory": "data"
+  },
+  "bugs": {
+    "url": "https://github.com/benbeck764/objective-personality/issues"
+  },
+  "homepage": "https://github.com/benbeck764/objective-personality#readme",
+  "license": "ISC",
+  "main": "dist/node/index.js",
+  "module": "dist/index.js",
+  "types:": "dist/index.d.ts",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
+  "scripts": {
+    "build": "pnpm build:esm && pnpm build:common",
+    "build:prod": "node ../../scripts/build.mjs esm && node ../../scripts/build.mjs common",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build:common": "tsc --project tsconfig.common.json",
+    "clean": "rimraf node_modules",
+    "clean:build": "rimraf dist",
+    "migrate": "npx prisma migrate dev",
+    "migrate-deploy": "npx prisma migrate dev",
+    "generate": "npx prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "prisma": "^5.6.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^4.0.0"
+  }
+}

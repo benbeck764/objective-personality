@@ -8,7 +8,7 @@ import {
   AppGridProps,
 } from '@benbeck764/react-components-grid';
 import {
-  OPSTypedPerson,
+  OPSTypedPersonExtended,
   OpsTypedPersonSearchResponseDto,
 } from '@/_models/ops-typed-people.models';
 import { createCardViewDefinitions } from './TypedPeopleGrid.card';
@@ -17,15 +17,13 @@ type TypedPeopleGridProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
   loading: boolean;
   onDataRequested: (dataRequest: AppGridDataRequest) => void;
-  onPersonSelected: (person: OPSTypedPerson) => void;
+  onPersonSelected: (person: OPSTypedPersonExtended) => void;
 };
 
-const TypedPeopleGrid: FC<TypedPeopleGridProps> = (
-  props: TypedPeopleGridProps
-) => {
+const TypedPeopleGrid: FC<TypedPeopleGridProps> = (props: TypedPeopleGridProps) => {
   const { data, loading, onDataRequested, onPersonSelected } = props;
 
-  const gridData: AppGridData<OPSTypedPerson> = {
+  const gridData: AppGridData<OPSTypedPersonExtended> = {
     pages:
       !data || loading
         ? [
@@ -49,7 +47,7 @@ const TypedPeopleGrid: FC<TypedPeopleGridProps> = (
     pagingMode: 'pagination',
   };
 
-  const gridProps: AppGridProps<OPSTypedPerson> = {
+  const gridProps: AppGridProps<OPSTypedPersonExtended> = {
     data: gridData,
     cardView: createCardViewDefinitions(),
     displayMode: 'card',

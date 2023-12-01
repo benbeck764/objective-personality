@@ -10,9 +10,16 @@
     "url": "https://github.com/benbeck764/objective-personality/issues"
   },
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
+  "author": "Ben Beck",
+  "license": "ISC",
   "scripts": {
-    "start:app": "cd app && yarn dev",
-    "start:api": "cd api && yarn watch",
-    "start:proxy": "swa start http://localhost:3000 --api-location ./api --verbose"
+    "start:app": "pnpm --filter=\"./app\" run dev",
+    "start:function": "pnpm --filter=\"./etl-function\" run start",
+    "build": "pnpm -r run build",
+    "build:app": "pnpm --filter=\"./app\" run build",
+    "build:function": "pnpm --filter=\"./etl-function\" run build",
+    "clean": "pnpm -r run clean",
+    "deploy-migrations": "pnpm --filter=\"./data\" run migrate-deploy",
+    "prisma-generate": "pnpm --filter=\"./data\" run generate"
   }
 }

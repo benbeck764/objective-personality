@@ -1,22 +1,26 @@
-import { OPSTypedPerson, OPSTypedPersonLink, PrismaClient } from '@prisma/client';
+import { app, InvocationContext, Timer } from '@azure/functions';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
-import 'dotenv/config';
-import { AirTableToOPSPersonMap } from './models/OPSTypedPerson';
-import BlobStorageClient from './_storage/blob-storage-client';
+import BlobStorageClient from '../blob-storage/blob-storage-client';
+import { AirTableToOPSPersonMap } from '../models/OPSTypedPerson';
+import { OPSTypedPerson, OPSTypedPersonLink, PrismaClient } from 'objective-personality-data';
 
-(async () => {
+export const airTableToSqlETL = async (
+  _myTimer: Timer,
+  _context: InvocationContext
+): Promise<void> => {
+  const environment = process.env.environment as 'local' | 'production';
   const airtableUrl =
     'https://airtable.com/appudq0aG1uwqIFX5/shrQ6IoDtlXpzmC1l/tblyUDDV5zVyuX5VL/viwwzc3yLw0s2PAEi';
+  const prisma = new PrismaClient();
   let browser: Browser;
   let page: Page;
   let cardIds: string[] = [];
 
   axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
   const blobStorageService = new BlobStorageClient();
-  const prisma = new PrismaClient();
 
   //#region Page Scraping
 
@@ -151,7 +155,7 @@ import BlobStorageClient from './_storage/blob-storage-client';
 
     // Upload Image
     const imageUrl = person.PictureUrl;
-    if (imageUrl) {
+    if (imageUrl && imageUrl !== 'No attachments') {
       const response = await axios.get<ArrayBuffer>(imageUrl, {
         responseType: 'arraybuffer',
       });
@@ -196,42 +200,50 @@ import BlobStorageClient from './_storage/blob-storage-client';
 
   //#endregion
 
-  const init = async (): Promise<void> => {
-    try {
-      browser = await puppeteer.launch({
-        headless: false,
-        args: [`--window-size=1920,1080`],
-        defaultViewport: {
-          width: 1920,
-          height: 1080,
-        },
+  try {
+    browser = await puppeteer.launch({
+      headless: environment !== 'local',
+      args: [`--window-size=1920,1080`],
+      defaultViewport: {
+        width: 1920,
+        height: 1080,
+      },
+    });
+
+    page = await browser.newPage();
+
+    await page.goto(airtableUrl, { waitUntil: 'networkidle2' });
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.waitForSelector('#view', { timeout: 5_000 });
+
+    await page.exposeFunction('transferCardId', transferCardId);
+    await page.evaluate(observeMutation);
+    await scrollToBottom(page);
+
+    const existingRecordIds = (await prisma.oPSTypedPerson.findMany({ select: { Id: true } })).map(
+      (val) => val.Id
+    );
+
+    const newIds = cardIds.filter((cardId: string) => !existingRecordIds.includes(cardId));
+
+    for (const id of newIds) {
+      await page.goto(`${airtableUrl}/${id}`, {
+        waitUntil: 'networkidle2',
       });
-
-      page = await browser.newPage();
-
-      await page.goto(airtableUrl, { waitUntil: 'networkidle2' });
-      await page.setViewport({ width: 1920, height: 1080 });
-      await page.waitForSelector('#view', { timeout: 5_000 });
-
-      await page.exposeFunction('transferCardId', transferCardId);
-      await page.evaluate(observeMutation);
-      await scrollToBottom(page);
-
-      for (const id of cardIds) {
-        await page.goto(`${airtableUrl}/${id}`, {
-          waitUntil: 'networkidle2',
-        });
-        const content = await page.content();
-        await createOpsTypedPersonRecord(id, content);
-      }
-
-      await browser.close();
-    } catch (ex) {
-      console.error(ex);
-    } finally {
-      prisma.$disconnect;
+      const content = await page.content();
+      await createOpsTypedPersonRecord(id, content);
     }
-  };
 
-  await init();
-})();
+    await browser.close();
+  } catch (ex) {
+    console.error(ex);
+  } finally {
+    prisma.$disconnect;
+  }
+};
+
+app.timer('etl-function', {
+  schedule: '0 * * */1 * *',
+  handler: airTableToSqlETL,
+  runOnStartup: process.env.Environment === 'local',
+});

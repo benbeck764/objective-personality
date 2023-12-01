@@ -1,35 +1,33 @@
 import { TableEntityResult } from '@azure/data-tables';
 import {
-  OPSTypedPersonTableRow,
-  OPSTypedPerson,
-  mapOpsTypedPersonTableRowToOpsTypedPerson,
+  OPSTypedPersonExtended,
+  mapOpsTypedPersonToOpsTypedPersonExtended,
   OpsTypedPersonSearchRequestDto,
   nameof,
   OpsTypedPersonSearchResponseDto,
 } from '@/_models/ops-typed-people.models';
-import TableStorageClient from '../_storage/table-storage-client';
 import { HttpStatus } from './common/http-status';
 import ServiceBase from './common/service-base';
 import { ServiceResponse } from './common/service-response';
 import { FunctionType, TemperamentType } from '@/_models/typed-person-helper';
+import { OPSTypedPerson } from 'objective-personality-data';
 
 class TypedPersonService extends ServiceBase {
-  constructor(private readonly tableService: TableStorageClient<OPSTypedPersonTableRow>) {
+  private static classInstance: TypedPersonService;
+
+  constructor() {
     super();
   }
 
-  public async getTypedPerson(name: string): Promise<ServiceResponse<OPSTypedPerson>> {
+  public async getTypedPerson(name: string): Promise<ServiceResponse<OPSTypedPersonExtended>> {
     try {
-      const entities = await this.tableService.getEntities({
-        queryOptions: {
-          filter: `${nameof<OPSTypedPerson>('Name')} eq '${name}'`,
-        },
+      const person = await this.prismaClient.oPSTypedPerson.findFirst({
+        where: { Name: name },
+        include: { Links: true },
       });
+      if (!person) return { status: HttpStatus.NOT_FOUND };
 
-      const entity = entities?.[0];
-      if (!entity) return { status: HttpStatus.NOT_FOUND };
-
-      const dto = mapOpsTypedPersonTableRowToOpsTypedPerson(entity);
+      const dto = mapOpsTypedPersonToOpsTypedPersonExtended(person);
       return { status: HttpStatus.OK, data: dto };
     } catch (err: any) {
       console.log(err);
@@ -48,13 +46,13 @@ class TypedPersonService extends ServiceBase {
       const pageSize = dto.pageSize;
       const queryText = dto.filterText;
 
-      const entities = await this.tableService.getEntities();
+      const entities = await this.prismaClient.oPSTypedPerson.findMany({
+        include: { Links: true },
+      });
 
       const filteredDtos = entities
-        .map((entity: TableEntityResult<OPSTypedPersonTableRow>) =>
-          mapOpsTypedPersonTableRowToOpsTypedPerson(entity)
-        )
-        .filter((val: OPSTypedPerson) => {
+        .map((entity: OPSTypedPerson) => mapOpsTypedPersonToOpsTypedPersonExtended(entity))
+        .filter((val: OPSTypedPersonExtended) => {
           return this.filterTypedPerson(val, queryText);
         });
 
@@ -84,7 +82,7 @@ class TypedPersonService extends ServiceBase {
     }
   }
 
-  public filterTypedPerson(person: OPSTypedPerson, filter?: string): boolean {
+  public filterTypedPerson(person: OPSTypedPersonExtended, filter?: string): boolean {
     if (!filter) return true;
 
     const filterText = filter.toLocaleLowerCase();
@@ -222,9 +220,8 @@ class TypedPersonService extends ServiceBase {
   }
 
   static async getInstance(): Promise<TypedPersonService> {
-    const tableName = process.env.STORAGE_OPS_TYPED_PEOPLE_TABLE ?? '';
-    const tableService = new TableStorageClient<OPSTypedPersonTableRow>(tableName);
-    return new TypedPersonService(tableService);
+    if (!this.classInstance) this.classInstance = new TypedPersonService();
+    return this.classInstance;
   }
 }
 

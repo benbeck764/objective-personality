@@ -1,9 +1,4 @@
-import {
-  BlobServiceClient,
-  BlockBlobClient,
-  BlockBlobUploadOptions,
-  BlockBlobUploadResponse,
-} from '@azure/storage-blob';
+import { BlobServiceClient, BlockBlobUploadOptions } from '@azure/storage-blob';
 
 export type BlobUploadResponse = {
   storageAccountName: string;
@@ -17,9 +12,7 @@ class BlobStorageClient {
   protected readonly blobClient: BlobServiceClient;
 
   constructor() {
-    this.blobClient = BlobServiceClient.fromConnectionString(
-      process.env.STORAGE_CONNECTION_STRING
-    );
+    this.blobClient = BlobServiceClient.fromConnectionString(process.env.STORAGE_CONNECTION_STRING);
   }
 
   public async uploadFile(options: {
@@ -44,10 +37,7 @@ class BlobStorageClient {
     };
   }
 
-  public async deleteBlobsByFilename(
-    container: string,
-    filenames: string[]
-  ): Promise<void> {
+  public async deleteBlobsByFilename(container: string, filenames: string[]): Promise<void> {
     const containerClient = this.blobClient.getContainerClient(container);
     for (const filename of filenames) {
       try {
@@ -60,10 +50,7 @@ class BlobStorageClient {
     }
   }
 
-  public async deleteBlobsByUrl(
-    container: string,
-    fileUrls: string[]
-  ): Promise<void> {
+  public async deleteBlobsByUrl(container: string, fileUrls: string[]): Promise<void> {
     const containerClient = this.blobClient.getContainerClient(container);
     for (const fileUrl of fileUrls) {
       const fileName = fileUrl.replace(`${containerClient.url}/`, '');

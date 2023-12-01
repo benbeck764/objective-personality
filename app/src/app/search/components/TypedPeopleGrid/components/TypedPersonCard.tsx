@@ -1,7 +1,7 @@
 import { FC, useRef, Fragment } from 'react';
 import { StyledEllipsingTextContainer, TypographySkeleton } from '@benbeck764/react-components';
 import Image from 'next/image';
-import { OPSTypedPerson, OpsTypedPersonLink } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 import { StyledCard, StyledCardImage } from './TypedPersonCard.styles';
 import { useHovered } from '@/utilities';
 import Stack from '@mui/material/Stack';
@@ -11,14 +11,15 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import Tooltip from '@mui/material/Tooltip';
+import { OPSTypedPersonLink } from 'objective-personality-data';
 
 type TypedPersonCardProps =
   | {
-      person: OPSTypedPerson;
+      person: OPSTypedPersonExtended;
       loadingPlaceholder?: never;
     }
   | {
-      person?: OPSTypedPerson;
+      person?: OPSTypedPersonExtended;
       loadingPlaceholder: true;
     };
 
@@ -30,6 +31,17 @@ export const TypedPersonCard: FC<TypedPersonCardProps> = (props: TypedPersonCard
   const TypedPersonCardSkeleton = (
     <StyledCard>
       <Stack direction="column" alignItems="center" justifyContent="center" gap={1}>
+        <Stack
+          height={27}
+          width="100%"
+          direction="row"
+          alignItems="center"
+          justifyContent="flex-start"
+          gap={0.5}
+        >
+          <Skeleton variant="circular" width={20} height={20} />
+          <Skeleton variant="circular" width={20} height={20} />
+        </Stack>
         <Skeleton variant="circular" width={150} height={150} />
         <StyledEllipsingTextContainer lines={2} reserveHeight={20}>
           <TypographySkeleton variant="h6" charCount={20} charCountVariance={10} lines={2} />
@@ -54,27 +66,27 @@ export const TypedPersonCard: FC<TypedPersonCardProps> = (props: TypedPersonCard
               justifyContent="flex-start"
               gap={0.5}
             >
-              {person.Links?.map((link: OpsTypedPersonLink, index: number) => (
+              {person.Links?.map((link: OPSTypedPersonLink, index: number) => (
                 <Fragment key={index}>
-                  {link.href.includes('objectivepersonalitysystem.com') &&
-                    link.value.match(/Class [0-9]{0,3}/) && (
-                      <Tooltip title={link.value} placement="top">
+                  {link.Href.includes('objectivepersonalitysystem.com') &&
+                    link.Value.match(/Class [0-9]{0,3}/) && (
+                      <Tooltip title={link.Value} placement="top">
                         <Link
                           target="_blank"
                           rel="noopener noreferrer"
-                          href={link.href}
+                          href={link.Href}
                           onClick={(event) => event.stopPropagation()}
                         >
                           <Image src="/images/OPSLogo.png" alt="OPS" width="20" height="20" />
                         </Link>
                       </Tooltip>
                     )}
-                  {link.href.includes('wikipedia.org') && (
+                  {link.Href.includes('wikipedia.org') && (
                     <Tooltip title={`Wikipedia - ${person.Name}`} placement="top">
                       <Link
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={link.href}
+                        href={link.Href}
                         onClick={(event) => event.stopPropagation()}
                       >
                         <Image
@@ -86,12 +98,12 @@ export const TypedPersonCard: FC<TypedPersonCardProps> = (props: TypedPersonCard
                       </Link>
                     </Tooltip>
                   )}
-                  {link.href.includes('imdb.com') && (
+                  {link.Href.includes('imdb.com') && (
                     <Tooltip title={`IMDb - ${person.Name}`} placement="top">
                       <Link
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={link.href}
+                        href={link.Href}
                         onClick={(event) => event.stopPropagation()}
                       >
                         <Image src="/images/IMDbLogo.png" alt="IMDb" width="20" height="20" />
