@@ -25,6 +25,7 @@ jobs:
       # Creates an .npmrc using an NPM token stored as a Github secret
       - name: NPM Auth Token
         run: |
+          cd app
           echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN 
           @benbeck764:registry=https://npm.pkg.github.com" > .npmrc
         env:
