@@ -11,7 +11,7 @@ class TestApiService extends ServiceBase {
 
   public async test(): Promise<ServiceResponse<unknown>> {
     try {
-      return { status: HttpStatus.OK, data: { test1: process.env.DATABASE_URL } };
+      return { status: HttpStatus.OK, data: { test1: process.env?.DATABASE_URL } };
     } catch (err: any) {
       console.log(err);
       return {
