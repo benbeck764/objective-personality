@@ -1,9 +1,7 @@
-import TestService from '@/_api-interface/services/test.service';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 const Home = async () => {
-  const service = TestService.getInstance();
-  const data = await service.test();
+  const data = process.env;
   console.log(data);
 
   return (
