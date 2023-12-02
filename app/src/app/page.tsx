@@ -10,7 +10,7 @@ const Home = async () => {
       <Typography variant="h1" sx={{ color: { xs: 'red', xl: 'blue' } }}>
         Hello World
       </Typography>
-      <Typography variant="paragraph">{JSON.stringify(data.resultObject)}</Typography>
+      <Typography variant="paragraph">{JSON.stringify(data.resultObject.test1)}</Typography>
     </>
   );
 };
