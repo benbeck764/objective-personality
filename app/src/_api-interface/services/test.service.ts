@@ -5,7 +5,7 @@ import { ServiceResult } from '../common/api-shared.models';
 class TestService extends ApiService {
   private static classInstance: TestService;
 
-  public test(): ServiceResult<{ test1: string }> {
+  public test(): ServiceResult<unknown> {
     return this.get(`${this.baseUrl}/${endpoints.test}`);
   }
 
