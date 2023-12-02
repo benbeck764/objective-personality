@@ -56,8 +56,6 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ vars.API_BASE_URL }}
-          #DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          #STORAGE_CONNECTION_STRING: ${{ secrets.STORAGE_CONNECTION_STRING }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
