@@ -1,16 +1,14 @@
 'use client';
+import { FC } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
-import { FC } from 'react';
-import { StyledTypeTableCell, StyledTypeTableHeaderCell } from './TypeTable.styles';
 import Typography from '@mui/material/Typography';
+import { StyledTypeTableCell, StyledTypeTableHeaderCell } from './TypeTable.styles';
 import {
   FunctionType,
-  AnimalType,
-  TemperamentType,
   getFunctionModality,
   isDoubleActivated,
 } from '@/_models/typed-person-helper';
@@ -40,9 +38,8 @@ const TypeTable: FC<TypeTableProps> = (props: TypeTableProps) => {
     SecondAnimal: secondAnimal,
     ThirdAnimal: thirdAnimal,
     FourthAnimal: fourthAnimal,
-    Temperament: temperament,
     Jumper: jumper,
-    Modality: modality,
+    ModalityLetters: modality,
   } = props.person;
 
   const generateRows = (): TypeTableRow[] => {

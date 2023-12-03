@@ -3,36 +3,77 @@ generator client {
 }
 
 datasource db {
-  provider          = "sqlserver"
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
 }
 
 model OPSTypedPerson {
   Id                       String               @id
-  Name                     String
-  Type                     String
-  SocialType               String
-  MBTIType                 String
-  Temperament              String
-  Modality                 String
-  FirstSaviorFunction      String
-  SecondSaviorFunction     String
-  EnergyVsInfoDom          String
-  ExtrovertedVsIntroverted String
-  GlassLizard              Boolean
-  AnimalStack              String
-  FirstAnimal              String
-  SecondAnimal             String
-  ThirdAnimal              String
-  FourthAnimal             String
-  BiologicalSex            String
-  PictureUrl               String
-  UniqueId                 String
+  Name                     String               @default("")
+  Type                     String?
+  SocialType               String?
+  MBTIType                 String?
+  Temperament              String?
+  Modality                 String?
+  FirstSaviorFunction      String?
+  SecondSaviorFunction     String?
+  EnergyVsInfoDom          String?
+  ExtrovertedVsIntroverted String?
+  GlassLizard              Boolean?
+  AnimalStack              String?
+  FirstAnimal              String?
+  SecondAnimal             String?
+  ThirdAnimal              String?
+  FourthAnimal             String?
+  BiologicalSex            String?
+  PictureUrl               String?
+  UniqueId                 String?
   AirTableCreatedDate      DateTime
   AirTableLastUpdatedDate  DateTime
-  CreatedDate              DateTime?            @default(now())
-  LastUpdatedDate          DateTime?            @updatedAt
+  CreatedDate              DateTime             @default(now())
+  LastUpdatedDate          DateTime             @updatedAt
+  AirTablePictureUrl       String?
+  BlastOrConsume           String?
+  BlastSexuals             String?
+  ConsumeSexuals           String?
+  DeSexual                 String?
+  DeciderAxis              String?
+  DeciderHumanNeed         String?
+  FirstFunction            String?
+  FourthFunction           String?
+  FullTypeNumber           String?
+  Jumper                   Boolean?
+  MasculineDe              Boolean?
+  MasculineSensory         Boolean?
+  ObserverAxis             String?
+  ObserverHumanNeed        String?
+  PlayOrSleep              String?
+  PlaySexuals              String?
+  Quadra                   String?
+  SecondFunction           String?
+  SensorySexual            String?
+  SexualOrientation        String?
+  SingleObserverOrDecider  String?
+  SleepSexuals             String?
+  Tags                     String?
+  ThirdFunction            String?
+  Transgender              Boolean?
+  TypeLetter               String?
+  TypeNumber               String?
+  SaviorDecider            String?
+  SaviorObserver           String?
+  DoubleDecider            Boolean?
+  DoubleObserver           Boolean?
+  EnergyDominant           Boolean?
+  ExtroversionPercentage   Float?
+  ExtroversionScale        Int?
+  InfoDominant             Boolean?
+  ModalityLetters          String?
+  ModalityName             String?
+  SingleDecider            Boolean?
+  SingleObserver           Boolean?
+  TemperamentLong          String?
+  SocialTypeShort          Int?
   Links                    OPSTypedPersonLink[]
 }
 

@@ -11,25 +11,16 @@ const intuitionBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #FFF662
 const sensingBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #99F7C1 10%, #5AD491 40%, #32875F 80%, #19462F 90%, #000000 100%)`;
 
 const getBackground = (func: FunctionType | undefined): string | undefined => {
-  if (
-    func === FunctionType.IntrovertedThinking ||
-    func === FunctionType.ExtrovertedThinking
-  ) {
+  if (func === FunctionType.IntrovertedThinking || func === FunctionType.ExtrovertedThinking) {
     return thinkingBackground;
-  } else if (
-    func === FunctionType.IntrovertedFeeling ||
-    func === FunctionType.ExtovertedFeeling
-  ) {
+  } else if (func === FunctionType.IntrovertedFeeling || func === FunctionType.ExtovertedFeeling) {
     return feelingBackground;
   } else if (
     func === FunctionType.IntrovertedIntuition ||
     func === FunctionType.ExtrovertedIntuition
   ) {
     return intuitionBackground;
-  } else if (
-    func === FunctionType.IntrovertedSensing ||
-    func === FunctionType.ExtrovertedSensing
-  ) {
+  } else if (func === FunctionType.IntrovertedSensing || func === FunctionType.ExtrovertedSensing) {
     return sensingBackground;
   } else {
     return greyBackground;
@@ -37,11 +28,10 @@ const getBackground = (func: FunctionType | undefined): string | undefined => {
 };
 
 const StyledFunction = styled(Box, {
-  shouldForwardProp: (prop) =>
-    prop !== 'func' && prop !== 'savior' && prop !== 'hovered',
+  shouldForwardProp: (prop) => prop !== 'func' && prop !== 'savior' && prop !== 'hovered',
 })<{
   func?: FunctionType;
-  savior: boolean;
+  savior: boolean | null;
   hovered: boolean;
 }>(({ theme, func, savior, hovered }) => ({
   display: 'flex',
@@ -53,11 +43,7 @@ const StyledFunction = styled(Box, {
   borderRadius: '50%',
   border: `3px solid ${theme.palette.common.white}`,
 
-  backgroundImage: savior
-    ? getBackground(func)
-    : hovered
-    ? getBackground(func)
-    : greyBackground,
+  backgroundImage: savior ? getBackground(func) : hovered ? getBackground(func) : greyBackground,
 
   '&::before': {
     content: '""',

@@ -1,11 +1,11 @@
-import { ApiResponse } from '@/_api-interface/common/api-shared.models';
-import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
 import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 import Await from '@/app/Await';
 import { AppCard } from '@benbeck764/react-components';
 import { Suspense } from 'react';
 import TypedPersonResult from './components/TypedPersonResult';
 import { Metadata } from 'next';
+import { ApiResponse } from '@/app/api-interface/common/api-shared.models';
+import OpsTypedPeopleService from '@/app/api-interface/services/ops-typed-people.service';
 
 export const generateMetadata = ({ params }: { params: { name: string } }): Metadata => {
   return {

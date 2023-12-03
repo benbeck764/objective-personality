@@ -5,19 +5,19 @@ import {
   OPSTypedPersonExtended,
   OpsTypedPersonSearchRequestDto,
   OpsTypedPersonSearchResponseDto,
-} from '../../_models/ops-typed-people.models';
+} from '@/_models/ops-typed-people.models';
 
 class OpsTypedPeopleService extends ApiService {
   private static classInstance: OpsTypedPeopleService;
 
   public getTypedPerson(name: string): ServiceResult<OPSTypedPersonExtended> {
-    return this.get(`${this.baseUrl}/${endpoints.opsTypedPeople}`, { name });
+    return this.get(`${this.baseUrl}/${endpoints.searchTypedPeople}`, { name });
   }
 
   public searchOPSTypedPeople(
     dto: OpsTypedPersonSearchRequestDto
   ): ServiceResult<OpsTypedPersonSearchResponseDto> {
-    return this.post(`${this.baseUrl}/${endpoints.opsTypedPeople}`, dto);
+    return this.post(`${this.baseUrl}/${endpoints.searchTypedPeople}`, dto);
   }
 
   static getInstance(): OpsTypedPeopleService {

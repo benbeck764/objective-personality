@@ -1,4 +1,3 @@
-import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
 import { Suspense } from 'react';
 import { AppCard } from '@benbeck764/react-components';
 import Typography from '@mui/material/Typography';
@@ -7,24 +6,21 @@ import Box from '@mui/material/Box';
 import Await from '../Await';
 import TypedPeopleSearch from './components/TypedPeopleSearch';
 import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
-import { ApiResponse } from '@/_api-interface/common/api-shared.models';
 import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
 import { isString } from '@/utilities/string';
+import { ApiResponse } from '../api-interface/common/api-shared.models';
+import OpsTypedPeopleService from '../api-interface/services/ops-typed-people.service';
 
-const Search = async ({
+const SearchPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   const service = OpsTypedPeopleService.getInstance();
 
-  const pageNumber = isString(searchParams.page)
-    ? Number(searchParams.page)
-    : 0;
+  const pageNumber = isString(searchParams.page) ? Number(searchParams.page) : 0;
   const pageSize = isString(searchParams.size) ? Number(searchParams.size) : 25;
-  const filterText = isString(searchParams.filter)
-    ? searchParams.filter?.toString()
-    : '';
+  const filterText = isString(searchParams.filter) ? searchParams.filter?.toString() : '';
 
   const promise = service.searchOPSTypedPeople({
     filterText,
@@ -43,11 +39,7 @@ const Search = async ({
         <Suspense
           key={filterText}
           fallback={
-            <TypedPeopleSearchResults
-              data={undefined}
-              loading={true}
-              filterText={filterText}
-            />
+            <TypedPeopleSearchResults data={undefined} loading={true} filterText={filterText} />
           }
         >
           <Await promise={promise}>
@@ -65,4 +57,4 @@ const Search = async ({
   );
 };
 
-export default Search;
+export default SearchPage;

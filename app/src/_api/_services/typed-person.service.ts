@@ -1,16 +1,13 @@
-import { TableEntityResult } from '@azure/data-tables';
 import {
   OPSTypedPersonExtended,
   mapOpsTypedPersonToOpsTypedPersonExtended,
   OpsTypedPersonSearchRequestDto,
-  nameof,
   OpsTypedPersonSearchResponseDto,
 } from '@/_models/ops-typed-people.models';
 import { HttpStatus } from './common/http-status';
 import ServiceBase from './common/service-base';
 import { ServiceResponse } from './common/service-response';
 import { FunctionType, TemperamentType } from '@/_models/typed-person-helper';
-import { OPSTypedPerson } from '@prisma/client';
 
 class TypedPersonService extends ServiceBase {
   private static classInstance: TypedPersonService;
@@ -51,7 +48,7 @@ class TypedPersonService extends ServiceBase {
       });
 
       const filteredDtos = entities
-        .map((entity: OPSTypedPerson) => mapOpsTypedPersonToOpsTypedPersonExtended(entity))
+        .map(mapOpsTypedPersonToOpsTypedPersonExtended)
         .filter((val: OPSTypedPersonExtended) => {
           return this.filterTypedPerson(val, queryText);
         });
@@ -189,29 +186,30 @@ class TypedPersonService extends ServiceBase {
       } else if (
         FUNCTIONS.map((func: FunctionType) => func.toLocaleLowerCase()).includes(searchTerm)
       ) {
-        searchTermsFound[index] = person.Type.toLocaleLowerCase().includes(searchTerm);
+        searchTermsFound[index] =
+          person.Type !== null && person.Type.toLocaleLowerCase().includes(searchTerm);
       } else if (searchTerm === 'jumper') {
-        searchTermsFound[index] = person.Jumper;
+        searchTermsFound[index] = person.Jumper !== null && person.Jumper;
       } else if (searchTerm === 'glasslizard' || searchTerm === 'glasssnake') {
-        searchTermsFound[index] = person.GlassLizard;
+        searchTermsFound[index] = person.GlassLizard !== null && person.GlassLizard;
       }
       //Catch all for OPS Type
       else if (
-        person.Type.toLocaleLowerCase().includes(searchTerm) ||
-        person.Type.replaceAll('/', '')
-          .replace('(', '')
-          .replace(')', '')
-          .toLocaleLowerCase()
-          .includes(searchTerm)
+        person.Type !== null &&
+        (person.Type.toLocaleLowerCase().includes(searchTerm) ||
+          person.Type.replace(/[\/()]/g, '').includes(searchTerm))
       ) {
         searchTermsFound[index] = true;
       }
       // Catch all for MBTI Type
-      else if (person.MBTIType.slice(0, 4).toLocaleLowerCase().includes(searchTerm)) {
+      else if (
+        person.MBTIType !== null &&
+        person.MBTIType.slice(0, 4).toLocaleLowerCase().includes(searchTerm)
+      ) {
         searchTermsFound[index] = true;
       }
       // Name (should be last)
-      else if (person.Name.toLocaleLowerCase().includes(searchTerm)) {
+      else if (person.Name !== null && person.Name.toLocaleLowerCase().includes(searchTerm)) {
         searchTermsFound[index] = true;
       }
     });

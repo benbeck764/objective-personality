@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import AppContent from './AppContent';
-import ThemeRegistry from '@/theme/ThemeRegistry';
+import Providers from './Providers';
 
 // Handle SEO & <head> here
 export const metadata: Metadata = {
@@ -12,9 +12,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry>
+        <Providers>
           <AppContent>{children}</AppContent>
-        </ThemeRegistry>
+        </Providers>
       </body>
     </html>
   );
