@@ -1,4 +1,3 @@
-import { TableEntity } from '@azure/data-tables';
 import {
   AnimalType,
   FunctionType,
@@ -77,16 +76,5 @@ export const mapOpsTypedPersonToOpsTypedPersonExtended = (
       : undefined,
   };
 };
-
-// export const mapOpsTypedPersonToOpsTypedPersonTableRow = (
-//   opsTypedPerson: OPSTypedPersonExtended | any
-// ): OPSTypedPersonTableRow | null => {
-//   if (!opsTypedPerson) return null;
-
-//   return {
-//     ...opsTypedPerson,
-//     Links: opsTypedPerson.Links ? JSON.stringify(opsTypedPerson.Links) : null,
-//   };
-// };
 
 //#endregion

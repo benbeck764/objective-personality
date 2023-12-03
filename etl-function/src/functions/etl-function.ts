@@ -4,7 +4,19 @@ import axiosRetry from 'axios-retry';
 import * as cheerio from 'cheerio';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import BlobStorageClient from '../blob-storage/blob-storage-client';
-import { AirTableToOPSPersonMap } from '../models/OPSTypedPerson';
+import {
+  AirTableOPSPerson,
+  AirTableOPSPersonLink,
+  AirTableToOPSPersonMap,
+  getAxisData,
+  getEnergyVsInfoDomData,
+  getExtroversionData,
+  getModalityData,
+  getOpposingFunction,
+  getTemperamentLong,
+  isJumper,
+  nameof,
+} from '../models/OPSTypedPerson';
 import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink } from '@prisma/client';
 
 export const airTableToSqlETL = async (
@@ -22,7 +34,7 @@ export const airTableToSqlETL = async (
   axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
   const blobStorageService = new BlobStorageClient();
 
-  //#region Page Scraping
+  //#region Initial Page Scraping
 
   // Observe added/removed nodes and keep track of Card Ids
   // Removed nodes are used to capture the first nodes (and potentially any missed while scrolling)
@@ -98,39 +110,50 @@ export const airTableToSqlETL = async (
     if (!cardIds.includes(id)) cardIds.push(id);
   };
 
-  const createOpsTypedPersonRecord = async (
-    contentId: string,
-    pageContent: string
-  ): Promise<void> => {
+  //#endregion
+
+  //#region Extract
+
+  const parseAirTableRecord = (contentId: string, pageContent: string): AirTableOPSPerson => {
     const $ = cheerio.load(pageContent);
     const cellPairs = $('.detailView').find('.labelCellPair');
 
-    let person: Partial<OPSTypedPerson> = { Id: contentId };
-    let personLinks: Partial<OPSTypedPersonLink>[] = [];
+    let person: Partial<AirTableOPSPerson> = { 'Unique ID': contentId };
 
     cellPairs.each((_, cellPair: cheerio.Element) => {
       let value: any;
       const pair = $(cellPair);
       const label = pair.find('.fieldLabel')?.text();
 
-      const links = pair.find('.cellContainer').find('a');
       const checkboxDiv = pair.find('.cellContainer').find('div[role=checkbox]');
       const image = pair.find('.cellContainer').find('img');
       const date = pair.find('.cellContainer').find('.date');
       const time = pair.find('.cellContainer').find('.time');
 
-      if (links.length) {
-        // Parse Textbox Links
-        links.each((index: number, linkElement: cheerio.Element) => {
+      if (label === nameof<AirTableOPSPerson>('Tags')) {
+        // Parse Tags as comma-separated string
+        const tagsArray: string[] = [];
+        const tagWrappers = pair.find('.cellContainer').find('li');
+        tagWrappers.each((_, tagElement: cheerio.Element) => {
+          const tagWrapper = $(tagElement);
+          const tag = tagWrapper.find(':last')?.text();
+          if (tag) tagsArray.push(tag);
+        });
+        value = tagsArray.join(',');
+      } else if (label === nameof<AirTableOPSPerson>('Links')) {
+        // Parse Textbox Links as separate entities
+        let personLinks: AirTableOPSPersonLink[] = [];
+        const links = pair.find('.cellContainer').find('a');
+        links.each((_, linkElement: cheerio.Element) => {
           const link = $(linkElement);
           const href = link.attr('href');
-          const value = link.text();
+          const linkValue = link.text();
           personLinks.push({
-            Id: `${contentId}-${index}`,
             Href: href,
-            Value: value,
+            Value: linkValue,
           });
         });
+        value = personLinks;
       } else if (checkboxDiv.length) {
         // Parse Checkboxes
         value = checkboxDiv.attr('aria-checked') === 'true';
@@ -149,12 +172,81 @@ export const airTableToSqlETL = async (
         value = pair.find('.cellContainer').find(':last')?.text();
       }
 
-      const mappedValue = AirTableToOPSPersonMap[label];
-      if (mappedValue) person[mappedValue] = value;
+      person[label] = value;
     });
 
+    return person as AirTableOPSPerson;
+  };
+
+  //#endregion
+
+  //#region Transform
+
+  const transformAirTableRecord = (
+    airtableRecord: AirTableOPSPerson
+  ): [OPSTypedPerson, OPSTypedPersonLink[]] => {
+    const person: Partial<OPSTypedPerson> = {};
+
+    // Map all direct fields
+    for (const [key, value] of Object.entries(airtableRecord)) {
+      const personKey = AirTableToOPSPersonMap[key];
+      if (personKey) person[key] = value;
+    }
+
+    // Transform direct fields to helper fields
+    person.FirstFunction = person.FirstSaviorFunction;
+    person.SecondFunction = person.SecondSaviorFunction;
+    person.ThirdFunction = getOpposingFunction(person.SecondSaviorFunction);
+    person.FourthFunction = getOpposingFunction(person.FirstSaviorFunction);
+    person.Jumper = isJumper(person.FirstSaviorFunction, person.SecondSaviorFunction);
+    person.MasculineSensory = person.Modality
+      ? person.Modality.includes('MM') || person.Modality.includes('MF')
+      : undefined;
+    person.MasculineDe = person.Modality
+      ? person.Modality.includes('FM') || person.Modality.includes('MM')
+      : undefined;
+
+    const axisData = getAxisData(person);
+    person.SingleObserver = axisData.singleObserver;
+    person.SingleDecider = axisData.singleDecider;
+    person.DoubleObserver = axisData.doubleObserver;
+    person.DoubleDecider = axisData.doubleDecider;
+
+    const energyVsInfoData = getEnergyVsInfoDomData(person);
+    person.EnergyDominant = energyVsInfoData.energyDominant;
+    person.InfoDominant = energyVsInfoData.infoDominant;
+
+    const extroversionData = getExtroversionData(person);
+    person.ExtroversionScale = extroversionData.scale;
+    person.ExtroversionPercentage = extroversionData.percentage;
+
+    const modalityData = getModalityData(person);
+    person.ModalityLetters = modalityData.letters;
+    person.ModalityName = modalityData.name;
+
+    person.TemperamentLong = getTemperamentLong(person);
+
+    // Relational fields
+    const links: OPSTypedPersonLink[] = [];
+    airtableRecord.Links.forEach((link: AirTableOPSPersonLink, index: number) => {
+      links.push({
+        Id: `${person.Id}-${index}`,
+        Href: link.Href,
+        Value: link.Value,
+        OPSTypedPersonId: person.Id,
+      });
+    });
+
+    return [person as OPSTypedPerson, links];
+  };
+
+  //#endregion
+
+  //#region Load
+
+  const uploadOPSTypedPerson = async (person: OPSTypedPerson, links: OPSTypedPersonLink[]) => {
     // Upload Image
-    const imageUrl = person.PictureUrl;
+    const imageUrl = person.AirTablePictureUrl;
     if (imageUrl && imageUrl !== 'No attachments') {
       const response = await axios.get<ArrayBuffer>(imageUrl, {
         responseType: 'arraybuffer',
@@ -162,7 +254,7 @@ export const airTableToSqlETL = async (
       const imageData = response.data;
       const contentType = response.headers['content-type'];
       const fileExtension = contentType.split('/').pop();
-      const fileName = `${contentId}.${fileExtension}`;
+      const fileName = `${person.Id}.${fileExtension}`;
 
       const fileUploadResponse = await blobStorageService.uploadFile({
         file: imageData,
@@ -170,10 +262,11 @@ export const airTableToSqlETL = async (
         container: 'images-new',
       });
 
+      // Assign to Picture URL the Blob URL
       person.PictureUrl = fileUploadResponse.url;
     }
 
-    const linksUpsert = personLinks.map((l: Partial<OPSTypedPersonLink>) => ({
+    const linksUpsert = links.map((l: Partial<OPSTypedPersonLink>) => ({
       where: { Id: l.Id },
       create: { ...(l as OPSTypedPersonLink) },
       update: { ...(l as OPSTypedPersonLink) },
@@ -184,13 +277,13 @@ export const airTableToSqlETL = async (
         Id: person.Id,
       },
       create: {
-        ...(person as OPSTypedPerson),
+        ...person,
         Links: {
-          create: [...(personLinks as OPSTypedPersonLink[])],
+          create: [...links],
         },
       },
       update: {
-        ...(person as OPSTypedPerson),
+        ...person,
         Links: {
           upsert: [...linksUpsert],
         },
@@ -231,7 +324,9 @@ export const airTableToSqlETL = async (
         waitUntil: 'networkidle2',
       });
       const content = await page.content();
-      await createOpsTypedPersonRecord(id, content);
+      const airtableRecord = parseAirTableRecord(id, content);
+      const [person, links] = transformAirTableRecord(airtableRecord);
+      await uploadOPSTypedPerson(person, links);
     }
 
     await browser.close();
