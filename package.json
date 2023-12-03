@@ -19,6 +19,7 @@
     "build:function": "cd etl-function && npm run build",
     "clean:app": "cd app && npm run clean",
     "clean:function": "cd etl-function && npm run clean",
+    "install:function": "cd etl-function && npm install",
     "generate:app": "cd app && npm run generate",
     "generate:function": "cd etl-function && npm run generate"
   }
