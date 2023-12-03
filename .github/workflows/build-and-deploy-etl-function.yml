@@ -19,25 +19,23 @@ jobs:
         with:
           submodules: true
 
-      - name: Cache Node.js dependencies
+      - name: Cache Node.js Dependencies
         uses: actions/cache@v3
         with:
           path: |
             etl-function/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('./etl-function/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - uses: actions/setup-node@v4
         with:
           node-version: 18
 
       # Install NPM Dependencies
-      - name: Install Dependencies (Azure Function)
+      - name: Install Dependencies
         run: npm run install:function
 
       # Create @prisma/client (if non-existent) and generate the models to be exported
-      - name: Generate Prisma Models (Azure Function)
+      - name: Generate Prisma Models
         run: npm run generate:function
 
       # Build Azure Function
@@ -45,7 +43,7 @@ jobs:
         run: npm run build:function
 
       # Deploy Azure Function
-      - name: Deploy to Azure Function
+      - name: Deploy Azure Function
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ vars.AZURE_FUNCTION_NAME }}
