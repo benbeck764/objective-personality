@@ -96,7 +96,9 @@ export const AirTableToOPSPersonMap: { [key: string]: string } = {
   'Last Modified': nameof<OPSTypedPerson>('AirTableLastUpdatedDate'),
 };
 
-export const getOpposingFunction = (func: string): string => {
+export const getOpposingFunction = (func: string): string | undefined => {
+  if (typeof func === 'undefined') return;
+
   func = func.toLocaleLowerCase();
   if (func === 'ti') return 'Fe';
   if (func === 'te') return 'Fi';
@@ -106,7 +108,6 @@ export const getOpposingFunction = (func: string): string => {
   if (func === 'ne') return 'Si';
   if (func === 'si') return 'Ne';
   if (func === 'se') return 'Ni';
-  return '';
 };
 
 export const isJumper = (firstFunction: string, secondFunction: string): boolean | undefined => {
@@ -196,8 +197,8 @@ export const getExtroversionData = (
   const results = { scale: undefined, percentage: undefined };
   if (!person.AnimalStack) return results;
 
-  const converted = person.AnimalStack.toLocaleLowerCase().replace(/(|\/|)/g, '');
-  const scale = {
+  const converted = person.AnimalStack.toLocaleLowerCase().replace(/[\/()]/g, '');
+  const scale: { [key: string]: number } = {
     scbp: 0,
     csbp: 1,
     scpb: 2,

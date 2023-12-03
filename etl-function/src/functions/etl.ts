@@ -102,7 +102,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
   };
 
   const scrollNewData = async (page: Page) => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       try {
         let scrollPosition = await page.$eval(
           '.light-scrollbar',
@@ -209,8 +209,14 @@ export const airTableToSqlETL = async (): Promise<void> => {
     // Map all direct fields
     for (const [key, value] of Object.entries(airtableRecord)) {
       const personKey = AirTableToOPSPersonMap[key];
-      if (personKey) person[key] = value;
+      if (personKey) {
+        if (typeof value === 'string') person[personKey] = value.trim();
+        else person[personKey] = value;
+      }
     }
+
+    // Assign ID
+    person.Id = airtableRecord['Unique ID'];
 
     // Transform direct fields to helper fields
     person.FirstFunction = person.FirstSaviorFunction;
@@ -247,17 +253,16 @@ export const airTableToSqlETL = async (): Promise<void> => {
     person.SocialTypeShort = getSocialTypeShort(person);
 
     // Relational fields
-    const links: OPSTypedPersonLink[] = [];
+    const links: Partial<OPSTypedPersonLink>[] = [];
     airtableRecord.Links.forEach((link: AirTableOPSPersonLink, index: number) => {
       links.push({
         Id: `${person.Id}-${index}`,
         Href: link.Href,
         Value: link.Value,
-        OPSTypedPersonId: person.Id,
       });
     });
 
-    return [person as OPSTypedPerson, links];
+    return [person as OPSTypedPerson, links as OPSTypedPersonLink[]];
   };
 
   //#endregion
@@ -315,7 +320,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
   try {
     browser = await puppeteer.launch({
-      headless: false,
+      headless: environment !== 'local',
       args: [`--window-size=1920,1080`],
       defaultViewport: {
         width: 1920,

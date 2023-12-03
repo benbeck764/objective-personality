@@ -62,7 +62,7 @@ model OPSTypedPerson {
   SexualOrientation        String?
   BiologicalSex            String?
   Transgender              Boolean?
-  TypeNumber               Int?
+  TypeNumber               String?
   TypeLetter               String?
   ObserverAxis             String?
   DeciderAxis              String?
