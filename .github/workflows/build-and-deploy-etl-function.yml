@@ -19,24 +19,25 @@ jobs:
         with:
           submodules: true
 
-      - name: Cache Node.js Dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            etl-function/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('./etl-function/package-lock.json') }}
+      # [TODO]: Ignore this for now, doesn't seem to work with Prisma Generate
+      # - name: Cache Node.js Dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       etl-function/node_modules
+      #     key: ${{ runner.os }}-node-${{ hashFiles('./etl-function/package-lock.json') }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # Create @prisma/client (if non-existent) and generate the models to be exported
-      - name: Generate Prisma Models
-        run: npm run generate:function
-
       # Install NPM Dependencies
       - name: Install Dependencies
         run: npm run install:function
+
+      # Create @prisma/client (if non-existent) and generate the models to be exported
+      - name: Generate Prisma Models
+        run: npm run generate:function
 
       # Build Azure Function
       - name: Build Azure Function
