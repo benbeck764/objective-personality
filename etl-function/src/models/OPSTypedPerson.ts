@@ -240,3 +240,12 @@ export const getTemperamentLong = (person: Partial<OPSTypedPerson>): string | un
   if (person.Temperament.toLocaleLowerCase() === 'ij') return 'IxxJ';
   if (person.Temperament.toLocaleLowerCase() === 'ep') return 'ExxP';
 };
+
+export const getSocialTypeShort = (person: Partial<OPSTypedPerson>): number | undefined => {
+  if (!person.SocialType) return;
+
+  const socialType = parseInt(person.SocialType.toLocaleLowerCase().replace('social type ', ''));
+  if (Number.isNaN(socialType)) return;
+
+  return socialType;
+};

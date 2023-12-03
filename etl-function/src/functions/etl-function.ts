@@ -13,6 +13,7 @@ import {
   getExtroversionData,
   getModalityData,
   getOpposingFunction,
+  getSocialTypeShort,
   getTemperamentLong,
   isJumper,
   nameof,
@@ -23,7 +24,8 @@ export const airTableToSqlETL = async (
   _myTimer: Timer,
   _context: InvocationContext
 ): Promise<void> => {
-  const environment = process.env.environment as 'local' | 'production';
+  const environment = process.env.Environment as 'local' | 'production';
+  const replaceData = process.env.REPLACE_DATA;
   const airtableUrl =
     'https://airtable.com/appudq0aG1uwqIFX5/shrQ6IoDtlXpzmC1l/tblyUDDV5zVyuX5VL/viwwzc3yLw0s2PAEi';
   const prisma = new PrismaClient();
@@ -225,6 +227,7 @@ export const airTableToSqlETL = async (
     person.ModalityName = modalityData.name;
 
     person.TemperamentLong = getTemperamentLong(person);
+    person.SocialTypeShort = getSocialTypeShort(person);
 
     // Relational fields
     const links: OPSTypedPersonLink[] = [];
@@ -313,13 +316,16 @@ export const airTableToSqlETL = async (
     await page.evaluate(observeMutation);
     await scrollToBottom(page);
 
+    // Find the difference between existing records and records scraped
     const existingRecordIds = (await prisma.oPSTypedPerson.findMany({ select: { Id: true } })).map(
       (val) => val.Id
     );
-
     const newIds = cardIds.filter((cardId: string) => !existingRecordIds.includes(cardId));
 
-    for (const id of newIds) {
+    // If REPLACE_DATA then upsert all data, otherwise only upsert newly scraped data
+    const ids = replaceData ? cardIds : newIds;
+
+    for (const id of ids) {
       await page.goto(`${airtableUrl}/${id}`, {
         waitUntil: 'networkidle2',
       });
