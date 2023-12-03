@@ -32,13 +32,13 @@ jobs:
         with:
           node-version: 18
 
-      # Install Azure Function packages
-      - name: Install Dependencies (Azure Function)
-        run: npm run install:function
-
       # Create @prisma/client (if non-existent) and generate the models to be exported
       - name: Generate Prisma Models (Azure Function)
         run: npm run generate:function
+
+      # Install NPM Dependencies
+      - name: Install Dependencies (Azure Function)
+        run: npm run install:function
 
       # Build Azure Function
       - name: Build Azure Function
