@@ -12,7 +12,7 @@
     "clean:dist": "rimraf dist",
     "prestart": "npm run clean:dist && npm run build",
     "start": "func start",
-    "start:local": "ts-node src/script.ts",
+    "start:local": "ts-node --project tsconfig.local.json src/script.ts",
     "test": "echo \"No tests yet...\"",
     "migrate": "npx prisma migrate dev",
     "migrate-deploy": "npx prisma migrate dev",

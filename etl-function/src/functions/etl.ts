@@ -46,7 +46,6 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
             const card = element.firstChild.firstChild as HTMLElement;
             const id = card.attributes.getNamedItem('data-rowid').value;
-
             await transferCardId(id);
           }
         }
@@ -57,7 +56,6 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
             const card = element.firstChild.firstChild as HTMLElement;
             const id = card.attributes.getNamedItem('data-rowid').value;
-
             await transferCardId(id);
           }
         }
@@ -105,21 +103,24 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
   const scrollNewData = async (page: Page) => {
     for (let i = 0; i < 5; i++) {
-      let scrollPosition = await page.$eval(
-        '.light-scrollbar',
-        (wrapper: Element) => wrapper.scrollTop
-      );
+      try {
+        let scrollPosition = await page.$eval(
+          '.light-scrollbar',
+          (wrapper: Element) => wrapper.scrollTop
+        );
 
-      // Rapid scrolling
-      await page.evaluate(() =>
-        document.querySelector('.light-scrollbar').scrollBy({ top: 1000, behavior: 'smooth' })
-      );
-      await waitFor(200);
+        await page.evaluate(() =>
+          document.querySelector('.light-scrollbar').scrollBy({ top: 1000, behavior: 'smooth' })
+        );
+        await waitFor(200);
 
-      await page.waitForFunction(
-        `document.querySelector('.light-scrollbar').scrollTop > ${scrollPosition}`,
-        { timeout: 1_000 }
-      );
+        await page.waitForFunction(
+          `document.querySelector('.light-scrollbar').scrollTop > ${scrollPosition}`,
+          { timeout: 1_000 }
+        );
+      } catch {
+        continue;
+      }
     }
   };
 
@@ -314,7 +315,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
   try {
     browser = await puppeteer.launch({
-      headless: environment !== 'local',
+      headless: false,
       args: [`--window-size=1920,1080`],
       defaultViewport: {
         width: 1920,
@@ -346,10 +347,6 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
     // If local environment and REPLACE_DATA then upsert all data, otherwise only upsert newly scraped data
     const ids = environment === 'local' && replaceData ? cardIds : newIds;
-
-    console.log(existingRecordIds.length);
-    console.log(newIds.length);
-    console.log(ids.length);
 
     for (const id of ids) {
       await page.goto(`${airtableUrl}/${id}`, {
