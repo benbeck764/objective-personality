@@ -24,7 +24,7 @@ jobs:
         with:
           path: |
             etl-function/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('etl-function/**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('./etl-function/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
