@@ -26,7 +26,6 @@
     "clean": "rimraf node_modules",
     "clean:build": "rimraf dist",
     "migrate": "npx prisma migrate dev",
-    "migrate-deploy": "npx prisma migrate dev",
     "generate": "npx prisma generate"
   },
   "dependencies": {

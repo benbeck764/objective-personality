@@ -28,7 +28,6 @@ class TypedPersonService extends ServiceBase {
       const dto = mapOpsTypedPersonToOpsTypedPersonExtended(person);
       return { status: HttpStatus.OK, data: dto };
     } catch (err: any) {
-      console.log(err);
       return {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         errorMessage: err.message,
@@ -44,17 +43,13 @@ class TypedPersonService extends ServiceBase {
       const pageSize = dto.pageSize;
       const queryText = dto.filterText;
 
-      const whereClause = this.filterTypedPerson(queryText);
-      console.log(whereClause);
+      const whereClause = this.buildSearchWhereClause(queryText);
       const entities = await this.prismaClient.oPSTypedPerson.findMany({
         where: whereClause,
         include: { Links: true },
       });
 
       const filteredDtos = entities.map(mapOpsTypedPersonToOpsTypedPersonExtended);
-      // .filter((val: OPSTypedPersonExtended) => {
-      //   return this.filterTypedPerson(val, queryText);
-      // });
 
       let dtos = filteredDtos;
       if (typeof currentPage !== 'undefined' && pageSize) {
@@ -82,7 +77,7 @@ class TypedPersonService extends ServiceBase {
     }
   }
 
-  public filterTypedPerson(filter?: string): Prisma.OPSTypedPersonWhereInput | undefined {
+  public buildSearchWhereClause(filter?: string): Prisma.OPSTypedPersonWhereInput | undefined {
     if (!filter) return;
 
     const searchTermWhereClause: Prisma.OPSTypedPersonWhereInput = { AND: [] };
@@ -248,24 +243,22 @@ class TypedPersonService extends ServiceBase {
       } else if (['glasslizard', 'glasssnake'].includes(searchTerm)) {
         term = { GlassLizard: { not: null, equals: true } };
       } else {
-        // Name (should be last)
-        term = { Name: { contains: searchTerm } };
+        term = {
+          OR: [
+            // OPS Type Catch-All
+            {
+              OR: [
+                { Type: { not: null, contains: searchTerm } },
+                { TypeClean: { not: null, contains: searchTerm } },
+              ],
+            },
+            // MBTI Type Catch-All
+            { MBTITypeShort: { not: null, equals: searchTerm } },
+            // Person's Name (should be last)
+            { Name: { contains: searchTerm } },
+          ],
+        };
       }
-
-      //   else if (
-      //     person.Type !== null &&
-      //     (person.Type.toLocaleLowerCase().includes(searchTerm) ||
-      //       person.Type.replace(/[\/()]/g, '').includes(searchTerm))
-      //   ) {
-      //     searchTermsFound[index] = true;
-      //   }
-      //   // Catch all for MBTI Type
-      //   else if (
-      //     person.MBTIType !== null &&
-      //     person.MBTIType.slice(0, 4).toLocaleLowerCase().includes(searchTerm)
-      //   ) {
-      //     searchTermsFound[index] = true;
-      //   }
 
       (searchTermWhereClause.AND as Prisma.OPSTypedPersonWhereInput[]).push(term);
     });

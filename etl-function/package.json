@@ -15,7 +15,6 @@
     "start:local": "ts-node --project tsconfig.local.json src/script.ts",
     "test": "echo \"No tests yet...\"",
     "migrate": "npx prisma migrate dev",
-    "migrate-deploy": "npx prisma migrate dev",
     "generate": "npx prisma generate"
   },
   "dependencies": {

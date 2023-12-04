@@ -12,9 +12,11 @@ model OPSTypedPerson {
   Id                       String               @id
   Name                     String               @default("")
   Type                     String?
+  TypeClean                String?
   SocialType               String?
   SocialTypeShort          Int?
   MBTIType                 String?
+  MBTITypeShort            String?
   Tags                     String?
   FullTypeNumber           String?
   Temperament              String?

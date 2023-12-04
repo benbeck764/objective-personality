@@ -111,7 +111,12 @@ export const getOpposingFunction = (func: string): string | undefined => {
 };
 
 export const isJumper = (firstFunction: string, secondFunction: string): boolean | undefined => {
-  if (!firstFunction || firstFunction.length < 2 || !secondFunction || secondFunction.length < 2)
+  if (
+    !firstFunction ||
+    firstFunction.length !== 2 ||
+    !secondFunction ||
+    secondFunction.length !== 2
+  )
     return undefined;
   firstFunction[1].toLocaleLowerCase() === secondFunction[1].toLocaleLowerCase();
 };
@@ -249,4 +254,14 @@ export const getSocialTypeShort = (person: Partial<OPSTypedPerson>): number | un
   if (Number.isNaN(socialType)) return;
 
   return socialType;
+};
+
+export const getMBTITypeShort = (person: Partial<OPSTypedPerson>): string | undefined => {
+  if (!person.MBTIType) return;
+  return person.MBTIType.slice(0, 4);
+};
+
+export const getTypeClean = (person: Partial<OPSTypedPerson>): string | undefined => {
+  if (!person.Type) return;
+  return person.Type.replace(/[\/()-]/g, '');
 };

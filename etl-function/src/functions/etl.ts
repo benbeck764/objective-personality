@@ -17,6 +17,8 @@ import {
   getModalityData,
   getTemperamentLong,
   getSocialTypeShort,
+  getMBTITypeShort,
+  getTypeClean,
 } from '../models/OPSTypedPerson';
 
 export const airTableToSqlETL = async (): Promise<void> => {
@@ -251,6 +253,8 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
     person.TemperamentLong = getTemperamentLong(person);
     person.SocialTypeShort = getSocialTypeShort(person);
+    person.MBTITypeShort = getMBTITypeShort(person);
+    person.TypeClean = getTypeClean(person);
 
     // Relational fields
     const links: Partial<OPSTypedPersonLink>[] = [];
