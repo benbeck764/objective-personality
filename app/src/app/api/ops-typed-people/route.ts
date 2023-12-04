@@ -1,6 +1,5 @@
 import { NextResponseBuilder } from '@/_api/_services/common/response-builder';
 import TypedPersonService from '@/_api/_services/typed-person.service';
-import { OpsTypedPersonSearchRequestDto } from '@/_models/ops-typed-people.models';
 
 export const GET = async (request: Request) => {
   try {

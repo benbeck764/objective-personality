@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import TypedPersonResult from './components/TypedPersonResult';
 import { Metadata } from 'next';
 import { ApiResponse } from '@/app/api-interface/common/api-shared.models';
-import OpsTypedPeopleService from '@/app/api-interface/services/ops-typed-people.service';
+import { getTypedPerson } from '@/app/api-interface/interfaces/ops-typed-people.interface';
 
 export const generateMetadata = ({ params }: { params: { name: string } }): Metadata => {
   return {
@@ -14,8 +14,7 @@ export const generateMetadata = ({ params }: { params: { name: string } }): Meta
 };
 
 const SearchedPerson = async ({ params }: { params: { name: string } }) => {
-  const service = OpsTypedPeopleService.getInstance();
-  const promise = service.getTypedPerson(decodeURIComponent(params.name));
+  const promise = getTypedPerson(decodeURIComponent(params.name));
 
   return (
     <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>

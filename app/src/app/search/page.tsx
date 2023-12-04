@@ -9,20 +9,18 @@ import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
 import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
 import { isString } from '@/utilities/string';
 import { ApiResponse } from '../api-interface/common/api-shared.models';
-import OpsTypedPeopleService from '../api-interface/services/ops-typed-people.service';
+import { searchOPSTypedPeople } from '../api-interface/interfaces/ops-typed-people.interface';
 
 const SearchPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const service = OpsTypedPeopleService.getInstance();
-
   const pageNumber = isString(searchParams.page) ? Number(searchParams.page) : 0;
   const pageSize = isString(searchParams.size) ? Number(searchParams.size) : 25;
   const filterText = isString(searchParams.filter) ? searchParams.filter?.toString() : '';
 
-  const promise = service.searchOPSTypedPeople({
+  const promise = searchOPSTypedPeople({
     filterText,
     pageSize,
     pageNumber,
