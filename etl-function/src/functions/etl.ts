@@ -1,4 +1,4 @@
-import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink } from '@prisma/client';
+import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink, Prisma } from '@prisma/client';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import * as cheerio from 'cheerio';
@@ -291,11 +291,13 @@ export const airTableToSqlETL = async (): Promise<void> => {
       person.PictureUrl = fileUploadResponse.url;
     }
 
-    const linksUpsert = links.map((l: Partial<OPSTypedPersonLink>) => ({
-      where: { Id: l.Id },
-      create: { ...(l as OPSTypedPersonLink) },
-      update: { ...(l as OPSTypedPersonLink) },
-    }));
+    const linksUpsert: Prisma.OPSTypedPersonLinkUpsertArgs[] = links.map(
+      (l: Partial<OPSTypedPersonLink>) => ({
+        where: { Id: l.Id },
+        create: { ...(l as OPSTypedPersonLink) },
+        update: { ...(l as OPSTypedPersonLink) },
+      })
+    );
 
     await prisma.oPSTypedPerson.upsert({
       where: {

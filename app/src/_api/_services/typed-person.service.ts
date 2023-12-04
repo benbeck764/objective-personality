@@ -8,6 +8,7 @@ import { HttpStatus } from './common/http-status';
 import ServiceBase from './common/service-base';
 import { ServiceResponse } from './common/service-response';
 import { FunctionType, TemperamentType } from '@/_models/typed-person-helper';
+import { Prisma } from '@prisma/client';
 
 class TypedPersonService extends ServiceBase {
   private static classInstance: TypedPersonService;
@@ -43,15 +44,17 @@ class TypedPersonService extends ServiceBase {
       const pageSize = dto.pageSize;
       const queryText = dto.filterText;
 
+      const whereClause = this.filterTypedPerson(queryText);
+      console.log(whereClause);
       const entities = await this.prismaClient.oPSTypedPerson.findMany({
+        where: whereClause,
         include: { Links: true },
       });
 
-      const filteredDtos = entities
-        .map(mapOpsTypedPersonToOpsTypedPersonExtended)
-        .filter((val: OPSTypedPersonExtended) => {
-          return this.filterTypedPerson(val, queryText);
-        });
+      const filteredDtos = entities.map(mapOpsTypedPersonToOpsTypedPersonExtended);
+      // .filter((val: OPSTypedPersonExtended) => {
+      //   return this.filterTypedPerson(val, queryText);
+      // });
 
       let dtos = filteredDtos;
       if (typeof currentPage !== 'undefined' && pageSize) {
@@ -79,8 +82,10 @@ class TypedPersonService extends ServiceBase {
     }
   }
 
-  public filterTypedPerson(person: OPSTypedPersonExtended, filter?: string): boolean {
-    if (!filter) return true;
+  public filterTypedPerson(filter?: string): Prisma.OPSTypedPersonWhereInput | undefined {
+    if (!filter) return;
+
+    const searchTermWhereClause: Prisma.OPSTypedPersonWhereInput = { AND: [] };
 
     const filterText = filter.toLocaleLowerCase();
     const searchTerms = filterText
@@ -88,8 +93,10 @@ class TypedPersonService extends ServiceBase {
       .split(' ')
       .map((filterText: string) => filterText.toLocaleLowerCase());
 
-    const searchTermsFound = Array.from(searchTerms).map(() => false);
-
+    const DI_FUNCTIONS = [FunctionType.IntrovertedThinking, FunctionType.IntrovertedFeeling];
+    const DE_FUNCTIONS = [FunctionType.ExtrovertedThinking, FunctionType.ExtovertedFeeling];
+    const OE_FUNCTIONS = [FunctionType.ExtrovertedSensing, FunctionType.ExtrovertedIntuition];
+    const OI_FUNCTIONS = [FunctionType.ExtrovertedSensing, FunctionType.ExtrovertedIntuition];
     const THINKING_FUNCTIONS = [FunctionType.ExtrovertedThinking, FunctionType.IntrovertedThinking];
     const FEELING_FUNCTIONS = [FunctionType.ExtovertedFeeling, FunctionType.IntrovertedFeeling];
     const INTUITION_FUNCTIONS = [
@@ -105,116 +112,165 @@ class TypedPersonService extends ServiceBase {
     ];
 
     searchTerms.forEach((searchTerm: string, index: number) => {
+      let term: Prisma.OPSTypedPersonWhereInput = {};
       // Deciders & Observers
       if (searchTerm === 'decider') {
-        searchTermsFound[index] =
-          person.Temperament === TemperamentType.IxxP ||
-          person.Temperament === TemperamentType.ExxJ;
+        term = { Temperament: { in: [TemperamentType.IxxP, TemperamentType.ExxJ] } };
       } else if (searchTerm === 'observer') {
-        searchTermsFound[index] =
-          person.Temperament === TemperamentType.IxxJ ||
-          person.Temperament === TemperamentType.ExxP;
+        term = { Temperament: { in: [TemperamentType.IxxJ, TemperamentType.ExxP] } };
       } else if (searchTerm === 'ixxp' || searchTerm === 'ip') {
-        searchTermsFound[index] = person.Temperament === TemperamentType.IxxP;
+        term = { Temperament: { equals: TemperamentType.IxxP } };
       } else if (searchTerm === 'exxj' || searchTerm === 'ej') {
-        searchTermsFound[index] = person.Temperament === TemperamentType.ExxJ;
+        term = { Temperament: { equals: TemperamentType.ExxJ } };
       } else if (searchTerm === 'ixxj' || searchTerm === 'ij') {
-        searchTermsFound[index] = person.Temperament === TemperamentType.IxxJ;
+        term = { Temperament: { equals: TemperamentType.IxxJ } };
       } else if (searchTerm === 'exxp' || searchTerm === 'ep') {
-        searchTermsFound[index] = person.Temperament === TemperamentType.ExxP;
+        term = { Temperament: { equals: TemperamentType.ExxP } };
       } else if (['di', 'self'].includes(searchTerm)) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) =>
-            [FunctionType.IntrovertedThinking, FunctionType.IntrovertedFeeling].includes(func)
-        );
+        term = {
+          OR: [{ FirstFunction: { in: DI_FUNCTIONS } }, { SecondFunction: { in: DI_FUNCTIONS } }],
+        };
       } else if (['de', 'tribe'].includes(searchTerm)) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) =>
-            [FunctionType.ExtrovertedThinking, FunctionType.ExtovertedFeeling].includes(func)
-        );
+        term = {
+          OR: [{ FirstFunction: { in: DE_FUNCTIONS } }, { SecondFunction: { in: DE_FUNCTIONS } }],
+        };
       } else if (['oe', 'gather', 'gathering', 'gatherer'].includes(searchTerm)) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) =>
-            [FunctionType.ExtrovertedSensing, FunctionType.ExtrovertedIntuition].includes(func)
-        );
+        term = {
+          OR: [{ FirstFunction: { in: OE_FUNCTIONS } }, { SecondFunction: { in: OE_FUNCTIONS } }],
+        };
       } else if (['oi', 'organize', 'organizing', 'organizer'].includes(searchTerm)) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) =>
-            [FunctionType.ExtrovertedSensing, FunctionType.ExtrovertedIntuition].includes(func)
-        );
-      } else if (searchTerm.includes('think') || searchTerm.includes('thinker')) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) => THINKING_FUNCTIONS.includes(func)
-        );
-      } else if (searchTerm.includes('feel') || searchTerm.includes('feeler')) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) => FEELING_FUNCTIONS.includes(func)
-        );
-      } else if (searchTerm.includes('intuitive') || searchTerm.includes('intuition')) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) => INTUITION_FUNCTIONS.includes(func)
-        );
-      } else if (searchTerm.includes('sensing') || searchTerm.includes('sensor')) {
-        searchTermsFound[index] = [person.FirstFunction, person.SecondFunction].some(
-          (func: FunctionType) => SENSING_FUNCTIONS.includes(func)
-        );
+        term = {
+          OR: [{ FirstFunction: { in: OI_FUNCTIONS } }, { SecondFunction: { in: OI_FUNCTIONS } }],
+        };
+      } else if (['think', 'thinking', 'thinker'].includes(searchTerm)) {
+        term = {
+          OR: [
+            { FirstFunction: { in: THINKING_FUNCTIONS } },
+            { SecondFunction: { in: THINKING_FUNCTIONS } },
+          ],
+        };
+      } else if (['feel', 'feeling', 'feeler'].includes(searchTerm)) {
+        term = {
+          OR: [
+            { FirstFunction: { in: FEELING_FUNCTIONS } },
+            { SecondFunction: { in: FEELING_FUNCTIONS } },
+          ],
+        };
+      } else if (['intuitive', 'intuition'].includes(searchTerm)) {
+        term = {
+          OR: [
+            { FirstFunction: { in: INTUITION_FUNCTIONS } },
+            { SecondFunction: { in: INTUITION_FUNCTIONS } },
+          ],
+        };
+      } else if (['sensing', 'sensor'].includes(searchTerm)) {
+        term = {
+          OR: [
+            { FirstFunction: { in: SENSING_FUNCTIONS } },
+            { SecondFunction: { in: SENSING_FUNCTIONS } },
+          ],
+        };
         // Letters
       } else if (searchTerm === 'sf') {
-        searchTermsFound[index] =
-          (SENSING_FUNCTIONS.includes(person.FirstFunction) &&
-            FEELING_FUNCTIONS.includes(person.SecondFunction)) ||
-          (FEELING_FUNCTIONS.includes(person.FirstFunction) &&
-            SENSING_FUNCTIONS.includes(person.SecondFunction));
+        term = {
+          OR: [
+            {
+              AND: [
+                { FirstFunction: { in: SENSING_FUNCTIONS } },
+                { SecondFunction: { in: FEELING_FUNCTIONS } },
+              ],
+            },
+            {
+              AND: [
+                { FirstFunction: { in: FEELING_FUNCTIONS } },
+                { SecondFunction: { in: SENSING_FUNCTIONS } },
+              ],
+            },
+          ],
+        };
       } else if (searchTerm === 'st') {
-        searchTermsFound[index] =
-          (SENSING_FUNCTIONS.includes(person.FirstFunction) &&
-            THINKING_FUNCTIONS.includes(person.SecondFunction)) ||
-          (THINKING_FUNCTIONS.includes(person.FirstFunction) &&
-            SENSING_FUNCTIONS.includes(person.SecondFunction));
+        term = {
+          OR: [
+            {
+              AND: [
+                { FirstFunction: { in: SENSING_FUNCTIONS } },
+                { SecondFunction: { in: THINKING_FUNCTIONS } },
+              ],
+            },
+            {
+              AND: [
+                { FirstFunction: { in: THINKING_FUNCTIONS } },
+                { SecondFunction: { in: SENSING_FUNCTIONS } },
+              ],
+            },
+          ],
+        };
       } else if (searchTerm === 'nf') {
-        searchTermsFound[index] =
-          (INTUITION_FUNCTIONS.includes(person.FirstFunction) &&
-            FEELING_FUNCTIONS.includes(person.SecondFunction)) ||
-          (FEELING_FUNCTIONS.includes(person.FirstFunction) &&
-            INTUITION_FUNCTIONS.includes(person.SecondFunction));
+        term = {
+          OR: [
+            {
+              AND: [
+                { FirstFunction: { in: INTUITION_FUNCTIONS } },
+                { SecondFunction: { in: FEELING_FUNCTIONS } },
+              ],
+            },
+            {
+              AND: [
+                { FirstFunction: { in: FEELING_FUNCTIONS } },
+                { SecondFunction: { in: INTUITION_FUNCTIONS } },
+              ],
+            },
+          ],
+        };
       } else if (searchTerm === 'nt') {
-        searchTermsFound[index] =
-          (INTUITION_FUNCTIONS.includes(person.FirstFunction) &&
-            THINKING_FUNCTIONS.includes(person.SecondFunction)) ||
-          (THINKING_FUNCTIONS.includes(person.FirstFunction) &&
-            INTUITION_FUNCTIONS.includes(person.SecondFunction));
+        term = {
+          OR: [
+            {
+              AND: [
+                { FirstFunction: { in: INTUITION_FUNCTIONS } },
+                { SecondFunction: { in: THINKING_FUNCTIONS } },
+              ],
+            },
+            {
+              AND: [
+                { FirstFunction: { in: THINKING_FUNCTIONS } },
+                { SecondFunction: { in: INTUITION_FUNCTIONS } },
+              ],
+            },
+          ],
+        };
       } else if (
         FUNCTIONS.map((func: FunctionType) => func.toLocaleLowerCase()).includes(searchTerm)
       ) {
-        searchTermsFound[index] =
-          person.Type !== null && person.Type.toLocaleLowerCase().includes(searchTerm);
+        term = { Type: { not: null, contains: searchTerm } };
       } else if (searchTerm === 'jumper') {
-        searchTermsFound[index] = person.Jumper !== null && person.Jumper;
-      } else if (searchTerm === 'glasslizard' || searchTerm === 'glasssnake') {
-        searchTermsFound[index] = person.GlassLizard !== null && person.GlassLizard;
+        term = { Jumper: { not: null, equals: true } };
+      } else if (['glasslizard', 'glasssnake'].includes(searchTerm)) {
+        term = { GlassLizard: { not: null, equals: true } };
+      } else {
+        // Name (should be last)
+        term = { Name: { contains: searchTerm } };
       }
-      //Catch all for OPS Type
-      else if (
-        person.Type !== null &&
-        (person.Type.toLocaleLowerCase().includes(searchTerm) ||
-          person.Type.replace(/[\/()]/g, '').includes(searchTerm))
-      ) {
-        searchTermsFound[index] = true;
-      }
-      // Catch all for MBTI Type
-      else if (
-        person.MBTIType !== null &&
-        person.MBTIType.slice(0, 4).toLocaleLowerCase().includes(searchTerm)
-      ) {
-        searchTermsFound[index] = true;
-      }
-      // Name (should be last)
-      else if (person.Name !== null && person.Name.toLocaleLowerCase().includes(searchTerm)) {
-        searchTermsFound[index] = true;
-      }
+
+      //   else if (
+      //     person.Type !== null &&
+      //     (person.Type.toLocaleLowerCase().includes(searchTerm) ||
+      //       person.Type.replace(/[\/()]/g, '').includes(searchTerm))
+      //   ) {
+      //     searchTermsFound[index] = true;
+      //   }
+      //   // Catch all for MBTI Type
+      //   else if (
+      //     person.MBTIType !== null &&
+      //     person.MBTIType.slice(0, 4).toLocaleLowerCase().includes(searchTerm)
+      //   ) {
+      //     searchTermsFound[index] = true;
+      //   }
+
+      (searchTermWhereClause.AND as Prisma.OPSTypedPersonWhereInput[]).push(term);
     });
 
-    return searchTermsFound.every((val) => val === true);
+    return searchTermWhereClause;
   }
 
   static async getInstance(): Promise<TypedPersonService> {
