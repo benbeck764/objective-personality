@@ -9,7 +9,7 @@ import { OPSTypedPerson, OPSTypedPersonLink } from '@prisma/client';
 
 export type OPSTypedPersonExtended = {
   Id: string | null;
-  Name: string | null;
+  Name: string;
   Type: string | null;
   SocialType: string | null;
   MBTIType: string | null;
