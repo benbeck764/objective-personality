@@ -16,12 +16,13 @@ import { createCardViewDefinitions } from './TypedPeopleGrid.card';
 type TypedPeopleGridProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
   loading: boolean;
-  onDataRequested: (dataRequest: AppGridDataRequest) => void;
+  //onDataRequested: (dataRequest: AppGridDataRequest) => void;
   onPersonSelected: (person: OPSTypedPersonExtended) => void;
 };
 
 const TypedPeopleGrid: FC<TypedPeopleGridProps> = (props: TypedPeopleGridProps) => {
-  const { data, loading, onDataRequested, onPersonSelected } = props;
+  //const { data, loading, onDataRequested, onPersonSelected } = props;
+  const { data, loading, onPersonSelected } = props;
 
   const gridData: AppGridData<OPSTypedPersonExtended> = {
     pages:
@@ -52,7 +53,7 @@ const TypedPeopleGrid: FC<TypedPeopleGridProps> = (props: TypedPeopleGridProps) 
     cardView: createCardViewDefinitions(),
     displayMode: 'card',
     cursorStyle: 'pointer',
-    onDataRequested: onDataRequested,
+    //onDataRequested: onDataRequested,
     onItemClicked: onPersonSelected,
     noItemsMessage: (
       <Box py={4}>

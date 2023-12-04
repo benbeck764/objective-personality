@@ -10,31 +10,29 @@ type TypedPeopleSearchProps = {
   filterText?: string;
 };
 
-const TypedPeopleSearch: FC<TypedPeopleSearchProps> = (
-  props: TypedPeopleSearchProps
-) => {
+const TypedPeopleSearch: FC<TypedPeopleSearchProps> = (props: TypedPeopleSearchProps) => {
   const { filterText } = props;
   const router = useRouter();
 
   const [text, setText] = useState<string | undefined>(filterText);
   const debouncedFilterText = useDebounce(text, 300);
 
-  useEffect(() => {
-    const url = getSearchUrl({
-      filter: debouncedFilterText,
-      pageNumber: 0,
-      pageSize: 25,
-    });
-    router.push(url);
-  }, [debouncedFilterText]);
+  // useEffect(() => {
+  //   const url = getSearchUrl({
+  //     filter: debouncedFilterText,
+  //     pageNumber: 0,
+  //     pageSize: 25,
+  //   });
+  //   router.push(url);
+  // }, [debouncedFilterText]);
 
   return (
     <AppTextField
       value={text}
       placeholder="Search..."
-      onChange={(
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined
-      ) => setText(e?.target?.value)}
+      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) =>
+        setText(e?.target?.value)
+      }
       inputSize="medium"
       startIcon={<SearchIcon color="primary" sx={{ ml: 1 }} />}
       showClearButton
