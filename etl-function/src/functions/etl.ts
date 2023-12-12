@@ -147,7 +147,6 @@ export const airTableToSqlETL = async (): Promise<void> => {
       const label = pair.find('.fieldLabel')?.text();
 
       const checkboxDiv = pair.find('.cellContainer').find('div[role=checkbox]');
-      const image = pair.find('.cellContainer').find('img');
       const date = pair.find('.cellContainer').find('.date');
       const time = pair.find('.cellContainer').find('.time');
 
@@ -161,6 +160,10 @@ export const airTableToSqlETL = async (): Promise<void> => {
           if (tag) tagsArray.push(tag);
         });
         value = tagsArray.join(',');
+      } else if (label === nameof<AirTableOPSPerson>('Picture')) {
+        // Parse image
+        const image = pair.find('.cellContainer').find('img');
+        value = image.length ? image.attr('src') : null;
       } else if (label === nameof<AirTableOPSPerson>('Links')) {
         // Parse Textbox Links as separate entities
         let personLinks: AirTableOPSPersonLink[] = [];
@@ -178,9 +181,6 @@ export const airTableToSqlETL = async (): Promise<void> => {
       } else if (checkboxDiv.length) {
         // Parse Checkboxes
         value = checkboxDiv.attr('aria-checked') === 'true';
-      } else if (image.length) {
-        // Parse Image
-        value = image.attr('src');
       } else if (date.length && time.length) {
         // Parse Date/Time
         const dateValue = date.text();
@@ -276,7 +276,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
   const uploadOPSTypedPerson = async (person: OPSTypedPerson, links: OPSTypedPersonLink[]) => {
     // Upload Image
     const imageUrl = person.AirTablePictureUrl;
-    if (imageUrl && imageUrl !== 'No attachments') {
+    if (imageUrl) {
       const response = await axios.get<ArrayBuffer>(imageUrl, {
         responseType: 'arraybuffer',
       });
@@ -344,11 +344,13 @@ export const airTableToSqlETL = async (): Promise<void> => {
     await page.evaluate(observeMutation);
 
     // Production function should only scroll new data to avoid long-running tasks
-    if (environment === 'local') {
-      await scrollToBottom(page);
-    } else {
-      await scrollNewData(page);
-    }
+    // if (environment === 'local') {
+    //   await scrollToBottom(page);
+    // } else {
+    //   await scrollNewData(page);
+    // }
+
+    cardIds = ['rec8LSFHAWsKc0hX1'];
 
     // Find the difference between existing records and records scraped
     const existingRecordIds = (await prisma.oPSTypedPerson.findMany({ select: { Id: true } })).map(
