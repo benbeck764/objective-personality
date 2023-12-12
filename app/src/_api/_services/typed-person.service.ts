@@ -242,6 +242,14 @@ class TypedPersonService extends ServiceBase {
         term = { Jumper: { not: null, equals: true } };
       } else if (['glasslizard', 'glasssnake'].includes(searchTerm)) {
         term = { GlassLizard: { not: null, equals: true } };
+        // Social Types
+      } else if (searchTerm === 'socialtype') {
+        term = { SocialType: { not: null } };
+      } else if (
+        ['socialtype1', 'socialtype2', 'socialtype3', 'socialtype4'].includes(searchTerm)
+      ) {
+        const socialTypeNumber = +searchTerm.replace('socialtype', '');
+        term = { SocialTypeShort: { not: null, equals: socialTypeNumber } };
       } else {
         term = {
           OR: [
