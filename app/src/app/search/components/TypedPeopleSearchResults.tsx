@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import TypedPeopleGrid from './TypedPeopleGrid/TypedPeopleGrid';
 import { getSearchUrl } from '@/routing/common/url';
 import { AppRoutes, RouteName } from '@/routing';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 type TypedPeopleSearchResultsProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
@@ -36,12 +38,19 @@ const TypedPeopleSearchResults: FC<TypedPeopleSearchResultsProps> = (
   };
 
   return (
-    <TypedPeopleGrid
-      data={data}
-      loading={loading}
-      onDataRequested={handleDataRequest}
-      onPersonSelected={handlePersonSelected}
-    />
+    <Stack gap={1} my={1}>
+      {!loading && (
+        <Typography>
+          Found {data?.totalItems} {data?.totalItems === 1 ? 'result' : 'results'}.
+        </Typography>
+      )}
+      <TypedPeopleGrid
+        data={data}
+        loading={loading}
+        onDataRequested={handleDataRequest}
+        onPersonSelected={handlePersonSelected}
+      />
+    </Stack>
   );
 };
 

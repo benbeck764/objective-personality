@@ -7,7 +7,7 @@ import Await from '../Await';
 import TypedPeopleSearch from './components/TypedPeopleSearch';
 import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
 import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
-import { isString } from '@/utilities/string';
+import { isEmpty, isString } from '@/utilities/string';
 import { ApiResponse } from '../api-interface/common/api-shared.models';
 import { searchOPSTypedPeople } from '../api-interface/interfaces/ops-typed-people.interface';
 
@@ -33,14 +33,14 @@ const SearchPage = async ({
       </Typography>
       <Divider />
       <Box mt={2} pb={4} mb={4} width="100%">
-        <TypedPeopleSearch filterText={filterText} />
+        <TypedPeopleSearch pageNumber={pageNumber} pageSize={pageSize} filterText={filterText} />
         <Suspense
           key={filterText}
           fallback={
             <TypedPeopleSearchResults data={undefined} loading={true} filterText={filterText} />
           }
         >
-          <Await promise={promise}>
+          <Await promise={promise} enabled={!isEmpty(filterText)}>
             {(res: ApiResponse<OpsTypedPersonSearchResponseDto>) => (
               <TypedPeopleSearchResults
                 data={res.resultObject}
