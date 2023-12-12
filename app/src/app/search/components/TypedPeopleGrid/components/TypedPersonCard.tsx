@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { OPSTypedPersonLink } from '@prisma/client';
 import Avatar from '@mui/material/Avatar';
 import { placeholderImageDataUri } from '@/utilities/image';
+import { parseFullType } from '@/_models/typed-person-helper';
 
 type TypedPersonCardProps =
   | {
@@ -49,7 +50,12 @@ export const TypedPersonCard: FC<TypedPersonCardProps> = (props: TypedPersonCard
           <TypographySkeleton variant="h6" charCount={20} charCountVariance={10} lines={2} />
         </StyledEllipsingTextContainer>
         <Divider sx={{ width: '60%' }} />
-        <TypographySkeleton sx={{ textAlign: 'center' }} variant="paragraph" charCount={16} />
+        <TypographySkeleton
+          sx={{ textAlign: 'center' }}
+          variant="paragraph"
+          charCount={16}
+          lines={2}
+        />
       </Stack>
     </StyledCard>
   );
@@ -137,9 +143,12 @@ export const TypedPersonCard: FC<TypedPersonCardProps> = (props: TypedPersonCard
               </Typography>
             </StyledEllipsingTextContainer>
             <Divider sx={{ width: '60%' }} />
-            <Typography textAlign="center" variant="paragraph">
-              {person.Type}
-            </Typography>
+            <StyledEllipsingTextContainer lines={1} reserveHeight={22}>
+              <Typography textAlign="center" variant="paragraph">
+                {parseFullType(person.Type)}
+                {person.SocialTypeShort ? ` [${person.SocialTypeShort}]` : ''}
+              </Typography>
+            </StyledEllipsingTextContainer>
           </Stack>
         </StyledCard>
       )}

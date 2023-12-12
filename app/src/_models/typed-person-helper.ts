@@ -122,3 +122,16 @@ export const isDoubleActivated = (
 
   return false;
 };
+
+export const parseFullType = (fullType: string | null): string => {
+  if (!fullType) return '';
+  // Simple Regex for ??-??/??-??/?(?) or ????
+  const regexPattern =
+    /^([A-Z?]{2}-[A-Za-z?]+\/[A-Za-z?]+-[A-Z?]{2}\/[A-Za-z?]+\([A-Za-z?]+\))$|^[A-Za-z?]{4}$/;
+  const type = fullType.split(';')[0];
+  return regexPattern.test(type)
+    ? type
+    : fullType.length < 20
+    ? fullType
+    : `${fullType.slice(0, 20)}...`;
+};

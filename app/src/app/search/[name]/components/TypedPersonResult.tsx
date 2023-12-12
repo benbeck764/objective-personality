@@ -42,6 +42,7 @@ const TypedPersonResult: FC<TypedPersonResultProps> = (props: TypedPersonResultP
           )}
           <Typography textAlign="center" variant="h6">
             {person.Type}
+            {person.SocialTypeShort ? ` [${person.SocialTypeShort}]` : ''}
           </Typography>
         </Stack>
         <Box>

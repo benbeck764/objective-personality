@@ -12,6 +12,7 @@ export type OPSTypedPersonExtended = {
   Name: string;
   Type: string | null;
   SocialType: string | null;
+  SocialTypeShort: number | null;
   MBTIType: string | null;
   Temperament: TemperamentType;
   ModalityLetters: ModalityLetters;
@@ -55,7 +56,6 @@ export type OpsTypedPersonSearchResponseDto = {
   pageSize: number;
   totalItems: number;
   items: OPSTypedPersonExtended[];
-  databaseTotal: number;
 };
 
 //#region Mappers
@@ -84,6 +84,7 @@ export const mapOpsTypedPersonToOpsTypedPersonExtended = (
     ThirdAnimal: person.ThirdAnimal as AnimalType,
     FourthAnimal: person.FourthAnimal as AnimalType,
     SocialType: person.SocialType,
+    SocialTypeShort: person.SocialTypeShort,
     Jumper: person.Jumper,
     GlassLizard: person.GlassLizard,
     SingleDecider: person.SingleDecider,

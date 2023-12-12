@@ -49,23 +49,22 @@ class TypedPersonService extends ServiceBase {
         include: { Links: true },
       });
 
-      const filteredDtos = entities.map(mapOpsTypedPersonToOpsTypedPersonExtended);
+      const mappedDtos = entities.map(mapOpsTypedPersonToOpsTypedPersonExtended);
 
-      let dtos = filteredDtos;
+      let dtos = mappedDtos;
       if (typeof currentPage !== 'undefined' && pageSize) {
-        dtos = filteredDtos.slice(
+        dtos = mappedDtos.slice(
           currentPage * pageSize,
-          Math.min(currentPage * pageSize + pageSize, filteredDtos.length)
+          Math.min(currentPage * pageSize + pageSize, mappedDtos.length)
         );
       }
 
       const result: OpsTypedPersonSearchResponseDto = {
         currentPageNumber: currentPage ?? 0,
-        numberOfPages: Math.ceil(filteredDtos.length / (pageSize ?? filteredDtos.length)),
-        pageSize: pageSize ?? filteredDtos.length,
-        totalItems: filteredDtos.length,
+        numberOfPages: Math.ceil(mappedDtos.length / (pageSize ?? mappedDtos.length)),
+        pageSize: pageSize ?? mappedDtos.length,
+        totalItems: mappedDtos.length,
         items: dtos,
-        databaseTotal: entities.length,
       };
 
       return { status: HttpStatus.OK, data: result };
@@ -246,9 +245,18 @@ class TypedPersonService extends ServiceBase {
       } else if (searchTerm === 'socialtype') {
         term = { SocialType: { not: null } };
       } else if (
-        ['socialtype1', 'socialtype2', 'socialtype3', 'socialtype4'].includes(searchTerm)
+        [
+          'socialtype1',
+          'socialtype2',
+          'socialtype3',
+          'socialtype4',
+          'social1',
+          'social2',
+          'social3',
+          'social4',
+        ].includes(searchTerm)
       ) {
-        const socialTypeNumber = +searchTerm.replace('socialtype', '');
+        const socialTypeNumber = +searchTerm.replace('social', '').replace('type', '');
         term = { SocialTypeShort: { not: null, equals: socialTypeNumber } };
       } else {
         term = {
