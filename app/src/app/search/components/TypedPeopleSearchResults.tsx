@@ -11,6 +11,8 @@ import { getSearchUrl } from '@/routing/common/url';
 import { AppRoutes, RouteName } from '@/routing';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { TypographySkeleton } from '@benbeck764/react-components/common';
+import Grid from '@mui/material/Grid';
 
 type TypedPeopleSearchResultsProps = {
   data: OpsTypedPersonSearchResponseDto | undefined;
@@ -37,21 +39,66 @@ const TypedPeopleSearchResults: FC<TypedPeopleSearchResultsProps> = (
     router.push(`${AppRoutes[RouteName.Search].path}/${encodeURIComponent(person.Name)}`);
   };
 
-  return (
-    <Stack gap={1} my={1}>
-      {!loading && (
-        <Typography>
-          Found {data?.totalItems} {data?.totalItems === 1 ? 'result' : 'results'}.
-        </Typography>
-      )}
-      <TypedPeopleGrid
-        data={data}
-        loading={loading}
-        onDataRequested={handleDataRequest}
-        onPersonSelected={handlePersonSelected}
-      />
-    </Stack>
-  );
+  if (loading) {
+    return (
+      <Stack gap={1} my={1}>
+        <TypographySkeleton variant="paragraph" charCount={15} />
+        <Stack mt={4}>
+          <Grid container px={2}>
+            <Grid item xs={4}>
+              <Stack direction="row" alignItems="center" justifyContent="flex-start">
+                <TypographySkeleton variant="paragraph" charCount={16} />
+              </Stack>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row" alignItems="center" justifyContent="center">
+                <TypographySkeleton variant="paragraph" charCount={28} />
+              </Stack>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row" alignItems="center" justifyContent="flex-end">
+                <TypographySkeleton variant="paragraph" charCount={20} />
+              </Stack>
+            </Grid>
+          </Grid>
+          <TypedPeopleGrid data={undefined} loading={true} />
+          <Grid container px={2}>
+            <Grid item xs={4}>
+              <Stack direction="row" alignItems="center" justifyContent="flex-start">
+                <TypographySkeleton variant="paragraph" charCount={16} />
+              </Stack>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row" alignItems="center" justifyContent="center">
+                <TypographySkeleton variant="paragraph" charCount={28} />
+              </Stack>
+            </Grid>
+            <Grid item xs={4}>
+              <Stack direction="row" alignItems="center" justifyContent="flex-end">
+                <TypographySkeleton variant="paragraph" charCount={20} />
+              </Stack>
+            </Grid>
+          </Grid>
+        </Stack>
+      </Stack>
+    );
+  } else {
+    return (
+      <Stack gap={1} my={1}>
+        {!loading && (
+          <Typography variant="paragraph">
+            Found {data?.totalItems} {data?.totalItems === 1 ? 'result' : 'results'}.
+          </Typography>
+        )}
+        <TypedPeopleGrid
+          data={data}
+          loading={loading}
+          onDataRequested={handleDataRequest}
+          onPersonSelected={handlePersonSelected}
+        />
+      </Stack>
+    );
+  }
 };
 
 export default TypedPeopleSearchResults;

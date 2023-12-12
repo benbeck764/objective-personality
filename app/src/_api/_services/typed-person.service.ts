@@ -246,17 +246,15 @@ class TypedPersonService extends ServiceBase {
         term = { SocialType: { not: null } };
       } else if (
         [
-          'socialtype1',
-          'socialtype2',
-          'socialtype3',
-          'socialtype4',
-          'social1',
-          'social2',
-          'social3',
-          'social4',
+          ...['socialtype1', 'socialtype2', 'socialtype3', 'socialtype4'],
+          ...['social1', 'social2', 'social3', 'social4'],
+          ...['s1', 's2', 's3', 's4'],
         ].includes(searchTerm)
       ) {
-        const socialTypeNumber = +searchTerm.replace('social', '').replace('type', '');
+        const socialTypeNumber = +searchTerm
+          .replace('social', '')
+          .replace('type', '')
+          .replace('s', '');
         term = { SocialTypeShort: { not: null, equals: socialTypeNumber } };
       } else {
         term = {
