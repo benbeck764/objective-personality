@@ -97,7 +97,7 @@ export const mapOpsTypedPersonToOpsTypedPersonExtended = (
     TypeNumber: person.TypeNumber,
     ExtroversionScale: person.ExtroversionScale,
     ExtroversionPercentage: person.ExtroversionPercentage,
-    Links: person.Links,
+    Links: person.Links ?? [],
   };
 };
 
