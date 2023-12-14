@@ -8,7 +8,7 @@ import { FC, useEffect } from 'react';
 
 type HomeVisualDataPoint = {
   name: string;
-  children: HomeVisualDataPoint[];
+  children?: HomeVisualDataPoint[];
   value?: number;
 };
 
@@ -22,45 +22,120 @@ const HomeVisual: FC<HomeVisualProps> = (props: HomeVisualProps) => {
   const { people } = props;
 
   const getData = (people: OPSTypedPersonExtended[]): HomeVisualDataPoint => {
-    const oiPeople = people.filter((p: OPSTypedPersonExtended) =>
-      [FunctionType.IntrovertedSensing, FunctionType.IntrovertedIntuition].includes(p.FirstFunction)
+    const siPeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.IntrovertedSensing].includes(p.FirstFunction)
     );
-    const oePeople = people.filter((p: OPSTypedPersonExtended) =>
-      [FunctionType.ExtrovertedSensing, FunctionType.ExtrovertedIntuition].includes(p.FirstFunction)
+    const niPeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.IntrovertedIntuition].includes(p.FirstFunction)
     );
-    const diPeople = people.filter((p: OPSTypedPersonExtended) =>
-      [FunctionType.IntrovertedThinking, FunctionType.IntrovertedFeeling].includes(p.FirstFunction)
+    const oiPeople = siPeople.concat(niPeople);
+
+    const sePeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.ExtrovertedSensing].includes(p.FirstFunction)
     );
-    const dePeople = people.filter((p: OPSTypedPersonExtended) =>
-      [FunctionType.ExtrovertedThinking, FunctionType.ExtovertedFeeling].includes(p.FirstFunction)
+    const nePeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.ExtrovertedIntuition].includes(p.FirstFunction)
     );
+    const oePeople = sePeople.concat(nePeople);
+
+    const tiPeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.IntrovertedThinking].includes(p.FirstFunction)
+    );
+    const fiPeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.IntrovertedFeeling].includes(p.FirstFunction)
+    );
+    const diPeople = tiPeople.concat(fiPeople);
+
+    const tePeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.ExtrovertedThinking].includes(p.FirstFunction)
+    );
+    const fePeople = people.filter((p: OPSTypedPersonExtended) =>
+      [FunctionType.ExtovertedFeeling].includes(p.FirstFunction)
+    );
+    const dePeople = tePeople.concat(fePeople);
 
     return {
       name: 'people',
       children: [
         {
           name: 'Oi',
-          children: oiPeople.map((p: OPSTypedPersonExtended) => {
-            return { name: p.Name, children: [], value: oiPeople.length };
-          }),
+          children: [
+            {
+              name: FunctionType.IntrovertedSensing,
+              children: siPeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: siPeople.length };
+              }),
+              value: siPeople.length,
+            },
+            {
+              name: FunctionType.IntrovertedIntuition,
+              children: niPeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: niPeople.length };
+              }),
+              value: niPeople.length,
+            },
+          ],
+          value: oiPeople.length,
         },
         {
           name: 'Oe',
-          children: oePeople.map((p: OPSTypedPersonExtended) => {
-            return { name: p.Name, children: [], value: oePeople.length };
-          }),
+          children: [
+            {
+              name: FunctionType.ExtrovertedSensing,
+              children: sePeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: sePeople.length };
+              }),
+              value: sePeople.length,
+            },
+            {
+              name: FunctionType.ExtrovertedIntuition,
+              children: nePeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: nePeople.length };
+              }),
+              value: nePeople.length,
+            },
+          ],
+          value: oePeople.length,
         },
         {
           name: 'Di',
-          children: diPeople.map((p: OPSTypedPersonExtended) => {
-            return { name: p.Name, children: [], value: diPeople.length };
-          }),
+          children: [
+            {
+              name: FunctionType.IntrovertedThinking,
+              children: tiPeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: tiPeople.length };
+              }),
+              value: tiPeople.length,
+            },
+            {
+              name: FunctionType.IntrovertedFeeling,
+              children: fiPeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: fiPeople.length };
+              }),
+              value: fiPeople.length,
+            },
+          ],
+          value: diPeople.length,
         },
         {
           name: 'De',
-          children: dePeople.map((p: OPSTypedPersonExtended) => {
-            return { name: p.Name, children: [], value: dePeople.length };
-          }),
+          children: [
+            {
+              name: FunctionType.ExtrovertedThinking,
+              children: tePeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: tePeople.length };
+              }),
+              value: tePeople.length,
+            },
+            {
+              name: FunctionType.ExtovertedFeeling,
+              children: fePeople.map((p: OPSTypedPersonExtended) => {
+                return { name: p.Name, children: [], value: fePeople.length };
+              }),
+              value: fePeople.length,
+            },
+          ],
+          value: dePeople.length,
         },
       ],
     };
@@ -93,7 +168,9 @@ const HomeVisual: FC<HomeVisualProps> = (props: HomeVisualProps) => {
 
   const initializeChart = (): void => {
     // Create the color scale.
-    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+    const color = d3.scaleOrdinal(
+      d3.quantize(d3.interpolateRainbow, data.children ? data.children?.length + 1 : 0)
+    );
 
     // Compute the layout.
     const hierarchy = d3
