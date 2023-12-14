@@ -2,7 +2,7 @@
 import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
 import { FunctionType } from '@/_models/typed-person-helper';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import * as d3 from 'd3';
 import { FC, useEffect } from 'react';
 
@@ -82,7 +82,7 @@ const HomeVisual: FC<HomeVisualProps> = (props: HomeVisualProps) => {
 
   const data = getData(people);
 
-  const width = 928;
+  const width = 528;
   const height = width;
   const radius = width / 6;
 
@@ -211,10 +211,9 @@ const HomeVisual: FC<HomeVisualProps> = (props: HomeVisualProps) => {
   };
 
   return (
-    <>
-      <Typography variant="paragraph">Visual</Typography>
-      <Box id="chart-view-div" sx={{ my: 2 }}></Box>
-    </>
+    <Stack alignItems="center" justifyContent="center" my={2}>
+      <Box width={900} height={900} id="chart-view-div" />
+    </Stack>
   );
 };
 
