@@ -13,9 +13,7 @@ const HomePage = async () => {
     <Stack>
       <Suspense fallback={'Loading...'}>
         <Await promise={promise}>
-          {(res: ApiResponse<HomeVisualResponseDto>) => (
-            <HomeVisual people={res.resultObject.people} />
-          )}
+          {(res: ApiResponse<HomeVisualResponseDto>) => <HomeVisual data={res.resultObject.data} />}
         </Await>
       </Suspense>
     </Stack>

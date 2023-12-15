@@ -1,5 +1,9 @@
-import { OPSTypedPersonExtended } from './ops-typed-people.models';
+export type HomeVisualDataPoint = {
+  name: string;
+  children?: HomeVisualDataPoint[];
+  value?: number;
+};
 
 export type HomeVisualResponseDto = {
-  people: OPSTypedPersonExtended[];
+  data: HomeVisualDataPoint;
 };
