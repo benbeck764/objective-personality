@@ -78,7 +78,7 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
     }
 
     return {
-      exists: typeof animalType !== 'undefined' && animals.includes(animalType),
+      exists: animalType !== undefined && animals.includes(animalType),
       name: animalType,
       borderSize: `${borderWidth}px`,
       borderStyle: borderWidth === 1 ? 'dashed' : 'solid',
@@ -87,10 +87,10 @@ const TypeStack: FC<TypeStackProps> = (props: TypeStackProps) => {
         borderWidth === 1
           ? 'paragraphSmall'
           : borderWidth === 2
-          ? 'paragraphBold'
-          : borderWidth === 3
-          ? 'paragraphLargeBold'
-          : 'h6',
+            ? 'paragraphBold'
+            : borderWidth === 3
+              ? 'paragraphLargeBold'
+              : 'h6',
     };
   };
 

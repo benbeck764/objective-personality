@@ -4,81 +4,58 @@ import {
   OpsTypedPersonSearchRequestDto,
   OpsTypedPersonSearchResponseDto,
 } from '@/models/ops-typed-people.models';
-import { HttpStatus } from '@/api/constants';
-import { ServiceResponse } from '@/api/types';
 import { FunctionType, TemperamentType } from '@/models/typed-person-helper';
 import { OPSTypedPerson } from 'objective-personality-data';
 import { getPrismaClient } from '@/api/lib/prisma';
 import { unstable_cache } from 'next/cache';
 
 export const getTypedPerson = unstable_cache(
-  async (name: string): Promise<ServiceResponse<OPSTypedPersonExtended>> => {
-    try {
-      const prisma = getPrismaClient();
-      const person = await prisma.oPSTypedPerson.findFirst({
-        where: { Name: name },
-        include: { Links: true },
-      });
-      if (!person) return { status: HttpStatus.NOT_FOUND };
+  async (name: string): Promise<OPSTypedPersonExtended | null> => {
+    const prisma = getPrismaClient();
+    const person = await prisma.oPSTypedPerson.findFirst({
+      where: { Name: name },
+      include: { Links: true },
+    });
 
-      const dto = mapOpsTypedPersonToOpsTypedPersonExtended(person);
-      return { status: HttpStatus.OK, data: dto };
-    } catch (err: any) {
-      console.log(err);
-      return {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        errorMessage: err.message,
-      };
-    }
+    return person ? mapOpsTypedPersonToOpsTypedPersonExtended(person) : null;
   },
   ['get-typed-person'],
   { revalidate: 3600, tags: ['typed-people'] }
 );
 
 export const searchTypedPeople = unstable_cache(
-  async (
-    dto: OpsTypedPersonSearchRequestDto
-  ): Promise<ServiceResponse<OpsTypedPersonSearchResponseDto>> => {
-    try {
-      const prisma = getPrismaClient();
-      const currentPage = dto.pageNumber;
-      const pageSize = dto.pageSize;
-      const queryText = dto.filterText;
+  async (dto: OpsTypedPersonSearchRequestDto): Promise<OpsTypedPersonSearchResponseDto> => {
+    const prisma = getPrismaClient();
+    const currentPage = dto.pageNumber;
+    const pageSize = dto.pageSize;
+    const queryText = dto.filterText;
 
-      const entities = await prisma.oPSTypedPerson.findMany({
-        include: { Links: true },
+    const entities = await prisma.oPSTypedPerson.findMany({
+      include: { Links: true },
+    });
+
+    const filteredDtos = entities
+      .map((entity: OPSTypedPerson) => mapOpsTypedPersonToOpsTypedPersonExtended(entity))
+      .filter((val: OPSTypedPersonExtended) => {
+        return filterTypedPerson(val, queryText);
       });
 
-      const filteredDtos = entities
-        .map((entity: OPSTypedPerson) => mapOpsTypedPersonToOpsTypedPersonExtended(entity))
-        .filter((val: OPSTypedPersonExtended) => {
-          return filterTypedPerson(val, queryText);
-        });
-
-      let dtos = filteredDtos;
-      if (typeof currentPage !== 'undefined' && pageSize) {
-        dtos = filteredDtos.slice(
-          currentPage * pageSize,
-          Math.min(currentPage * pageSize + pageSize, filteredDtos.length)
-        );
-      }
-
-      const result: OpsTypedPersonSearchResponseDto = {
-        currentPageNumber: currentPage ?? 0,
-        numberOfPages: Math.ceil(filteredDtos.length / (pageSize ?? filteredDtos.length)),
-        pageSize: pageSize ?? filteredDtos.length,
-        totalItems: filteredDtos.length,
-        items: dtos,
-        databaseTotal: entities.length,
-      };
-
-      return { status: HttpStatus.OK, data: result };
-    } catch (err: any) {
-      return {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        errorMessage: err.message,
-      };
+    let dtos = filteredDtos;
+    if (currentPage !== undefined && pageSize) {
+      dtos = filteredDtos.slice(
+        currentPage * pageSize,
+        Math.min(currentPage * pageSize + pageSize, filteredDtos.length)
+      );
     }
+
+    return {
+      currentPageNumber: currentPage ?? 0,
+      numberOfPages: Math.ceil(filteredDtos.length / (pageSize ?? filteredDtos.length)),
+      pageSize: pageSize ?? filteredDtos.length,
+      totalItems: filteredDtos.length,
+      items: dtos,
+      databaseTotal: entities.length,
+    };
   },
   ['search-typed-people'],
   { revalidate: 3600, tags: ['typed-people'] }
@@ -113,12 +90,10 @@ const filterTypedPerson = (person: OPSTypedPersonExtended, filter?: string): boo
     // Deciders & Observers
     if (searchTerm === 'decider') {
       searchTermsFound[index] =
-        person.Temperament === TemperamentType.IxxP ||
-        person.Temperament === TemperamentType.ExxJ;
+        person.Temperament === TemperamentType.IxxP || person.Temperament === TemperamentType.ExxJ;
     } else if (searchTerm === 'observer') {
       searchTermsFound[index] =
-        person.Temperament === TemperamentType.IxxJ ||
-        person.Temperament === TemperamentType.ExxP;
+        person.Temperament === TemperamentType.IxxJ || person.Temperament === TemperamentType.ExxP;
     } else if (searchTerm === 'ixxp' || searchTerm === 'ip') {
       searchTermsFound[index] = person.Temperament === TemperamentType.IxxP;
     } else if (searchTerm === 'exxj' || searchTerm === 'ej') {
@@ -219,4 +194,4 @@ const filterTypedPerson = (person: OPSTypedPersonExtended, filter?: string): boo
   });
 
   return searchTermsFound.every((val) => val === true);
-}
+};
