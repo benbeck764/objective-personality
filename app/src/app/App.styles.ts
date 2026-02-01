@@ -1,9 +1,11 @@
 'use client';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import Grid, { GridProps } from '@mui/material/Grid';
+import { BoxProps } from '@mui/material/Box';
 import { Theme, styled } from '@mui/material/styles';
+import { StyledComponent } from '@emotion/styled';
 
-export const StyledPageContainer = styled(Grid)(
+export const StyledPageContainer: StyledComponent<GridProps> = styled(Grid)(
   ({ theme }: { theme: Theme }) => ({
     backgroundColor: theme.palette.background.default,
     width: '100vw',
@@ -13,7 +15,7 @@ export const StyledPageContainer = styled(Grid)(
   })
 );
 
-export const StyledPageContent = styled(Box)(({ theme }: { theme: Theme }) => ({
+export const StyledPageContent: StyledComponent<BoxProps> = styled(Box)(({ theme }: { theme: Theme }) => ({
   [theme.breakpoints.up('xs')]: {
     width: 'calc(100% - 24px)',
   },
@@ -25,7 +27,7 @@ export const StyledPageContent = styled(Box)(({ theme }: { theme: Theme }) => ({
   marginBottom: theme.pageContentMargin,
 }));
 
-export const StyledStickyHeaderContainer = styled(Box)(
+export const StyledStickyHeaderContainer: StyledComponent<BoxProps> = styled(Box)(
   ({ theme }: { theme: Theme }) => ({
     top: 0,
     position: 'sticky',

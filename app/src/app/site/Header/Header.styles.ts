@@ -1,7 +1,8 @@
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import { Theme, styled } from '@mui/material/styles';
+import { StyledComponent } from '@emotion/styled';
 
-export const StyledHeaderContainer = styled(Box)(
+export const StyledHeaderContainer: StyledComponent<BoxProps> = styled(Box)(
   ({ theme }: { theme: Theme }) => ({
     justifyContent: 'center',
 

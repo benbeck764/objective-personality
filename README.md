@@ -8,7 +8,7 @@ This project is organized as a PNPM workspace with three packages:
 
 ```
 objective-personality/
-├── app/                    # Next.js 14 web application
+├── app/                    # Next.js 16 web application
 ├── etl-function/          # Azure Functions ETL pipeline
 ├── data/                  # Shared Prisma data layer
 └── pnpm-workspace.yaml    # Workspace configuration
@@ -16,8 +16,8 @@ objective-personality/
 
 ### Packages
 
-- **`app`** - Next.js 14 application with App Router for browsing OPS typed people
-  - Framework: Next.js 14, React 18
+- **`app`** - Next.js 16 application with App Router for browsing OPS typed people
+  - Framework: Next.js 16, React 19
   - UI: Material-UI (MUI), Emotion styling
   - Data: Prisma client via workspace dependency
   - Deployment: Azure Static Web Apps
@@ -179,7 +179,7 @@ The project uses GitHub Actions for CI/CD:
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 14, React 18, Material-UI, Emotion
+- **Frontend**: Next.js 16, React 19, Material-UI, Emotion
 - **Backend**: Azure Functions v4, Node.js
 - **Database**: Azure SQL Database, Prisma ORM
 - **Package Manager**: PNPM (workspace)

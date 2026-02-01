@@ -1,8 +1,9 @@
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import { Theme, styled } from '@mui/material/styles';
-import Image from 'next/image';
+import Image, { ImageProps } from 'next/image';
+import { StyledComponent } from '@emotion/styled';
 
-export const StyledCardImage = styled(Image, {
+export const StyledCardImage: StyledComponent<ImageProps & { hovered: boolean }> = styled(Image, {
   shouldForwardProp: (prop) => prop !== 'hovered',
 })<{ hovered: boolean }>(({ theme, hovered }) => ({
   borderColor: theme.palette.coolGrey[300],
@@ -15,7 +16,7 @@ export const StyledCardImage = styled(Image, {
   }),
 }));
 
-export const StyledCard = styled(Box)(({ theme }: { theme: Theme }) => ({
+export const StyledCard: StyledComponent<BoxProps> = styled(Box)(({ theme }: { theme: Theme }) => ({
   borderColor: theme.palette.coolGrey[300],
   borderStyle: 'solid',
   borderWidth: 1,

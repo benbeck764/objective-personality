@@ -24,19 +24,19 @@
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "^5.14.12",
     "objective-personality-data": "workspace:*",
-    "@types/react-dom": "^18.2.7",
-    "next": "^14.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "next": "^16.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-ga4": "^2.1.0"
   },
   "devDependencies": {
     "@mui/types": "^7.2.10",
     "@types/node": "^20.6.3",
-    "@types/react": "^18.2.22",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "encoding": "^0.1.13",
     "eslint": "8.49.0",
-    "eslint-config-next": "13.5.2",
+    "eslint-config-next": "16.1.0",
     "eslint-config-prettier": "^9.0.0",
     "typescript": "^5.2.2"
   }

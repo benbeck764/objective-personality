@@ -1,8 +1,9 @@
 'use client';
 import { Theme, styled } from '@mui/material/styles';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
+import { StyledComponent } from '@emotion/styled';
 
-export const StyledTypeTableCell = styled(TableCell, {
+export const StyledTypeTableCell: StyledComponent<TableCellProps & { highlight?: boolean }> = styled(TableCell, {
   shouldForwardProp: (prop) => prop !== 'highlight',
 })<{ highlight?: boolean }>(
   ({ theme, highlight }: { theme: Theme; highlight?: boolean }) => ({
@@ -15,7 +16,7 @@ export const StyledTypeTableCell = styled(TableCell, {
   })
 );
 
-export const StyledTypeTableHeaderCell = styled(TableCell, {
+export const StyledTypeTableHeaderCell: StyledComponent<TableCellProps & { highlight?: boolean }> = styled(TableCell, {
   shouldForwardProp: (prop) => prop !== 'highlight',
 })<{
   highlight?: boolean;

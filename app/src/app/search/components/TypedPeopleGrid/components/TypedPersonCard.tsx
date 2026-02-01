@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 import Tooltip from '@mui/material/Tooltip';
-import { OPSTypedPersonLink } from '@prisma/client';
+import { OPSTypedPersonLink } from 'objective-personality-data';
 
 type TypedPersonCardProps =
   | {
@@ -25,7 +25,7 @@ type TypedPersonCardProps =
 
 export const TypedPersonCard: FC<TypedPersonCardProps> = (props: TypedPersonCardProps) => {
   const { person, loadingPlaceholder } = props;
-  const cardFocusRef = useRef<HTMLDivElement>();
+  const cardFocusRef = useRef<HTMLDivElement>(null);
   const hovered = useHovered(cardFocusRef);
 
   const TypedPersonCardSkeleton = (

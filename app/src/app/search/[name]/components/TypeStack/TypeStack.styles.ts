@@ -1,8 +1,9 @@
 'use client';
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { FunctionType } from '@/_models/typed-person-helper';
 import { AnimalConnectorProps } from './TypeStack';
+import { StyledComponent } from '@emotion/styled';
 
 const greyBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #CDCCCC 10%, #C2C2C2 40%, #888888 80%, #595959 90%, #000000 100%)`;
 const thinkingBackground = `radial-gradient(circle at 50% 10%, #FFFFFF, #86F3F9 10%, #4FD3F9 40%, #21648F 80%, #103147 90%, #000000 100%)`;
@@ -36,7 +37,11 @@ const getBackground = (func: FunctionType | undefined): string | undefined => {
   }
 };
 
-const StyledFunction = styled(Box, {
+const StyledFunction: StyledComponent<BoxProps & {
+  func?: FunctionType;
+  savior: boolean;
+  hovered: boolean;
+}> = styled(Box, {
   shouldForwardProp: (prop) =>
     prop !== 'func' && prop !== 'savior' && prop !== 'hovered',
 })<{
@@ -78,7 +83,11 @@ const StyledFunction = styled(Box, {
   },
 }));
 
-export const StyledFirstFunction = styled(StyledFunction)(() => ({
+export const StyledFirstFunction: StyledComponent<BoxProps & {
+  func?: FunctionType;
+  savior: boolean;
+  hovered: boolean;
+}> = styled(StyledFunction)(() => ({
   width: 110,
   height: 110,
 
@@ -88,7 +97,11 @@ export const StyledFirstFunction = styled(StyledFunction)(() => ({
   },
 }));
 
-export const StyledSecondFunction = styled(StyledFunction)(() => ({
+export const StyledSecondFunction: StyledComponent<BoxProps & {
+  func?: FunctionType;
+  savior: boolean;
+  hovered: boolean;
+}> = styled(StyledFunction)(() => ({
   width: 75,
   height: 75,
   display: 'flex',
@@ -103,7 +116,11 @@ export const StyledSecondFunction = styled(StyledFunction)(() => ({
   },
 }));
 
-export const StyledThirdFunction = styled(StyledFunction)(() => ({
+export const StyledThirdFunction: StyledComponent<BoxProps & {
+  func?: FunctionType;
+  savior: boolean;
+  hovered: boolean;
+}> = styled(StyledFunction)(() => ({
   width: 55,
   height: 55,
   display: 'flex',
@@ -118,7 +135,11 @@ export const StyledThirdFunction = styled(StyledFunction)(() => ({
   },
 }));
 
-export const StyledFourthFunction = styled(StyledFunction)(() => ({
+export const StyledFourthFunction: StyledComponent<BoxProps & {
+  func?: FunctionType;
+  savior: boolean;
+  hovered: boolean;
+}> = styled(StyledFunction)(() => ({
   width: 37.5,
   height: 37.5,
   display: 'flex',
@@ -133,7 +154,7 @@ export const StyledFourthFunction = styled(StyledFunction)(() => ({
   },
 }));
 
-export const StyledPrimaryConnector = styled(Box)(() => ({
+export const StyledPrimaryConnector: StyledComponent<BoxProps> = styled(Box)(() => ({
   backgroundColor: 'black',
   width: '2px',
   height: '105px',
@@ -143,7 +164,7 @@ export const StyledPrimaryConnector = styled(Box)(() => ({
   transform: 'rotate(-45deg)',
 }));
 
-export const StyledAuxiliaryConnector = styled(Box)(() => ({
+export const StyledAuxiliaryConnector: StyledComponent<BoxProps> = styled(Box)(() => ({
   backgroundColor: 'black',
   width: '2px',
   height: '105px',
@@ -153,7 +174,9 @@ export const StyledAuxiliaryConnector = styled(Box)(() => ({
   transform: 'rotate(45deg)',
 }));
 
-export const StyledTopAnimalConnectorOne = styled(Box)<{
+export const StyledTopAnimalConnectorOne: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 61.5,
@@ -167,7 +190,9 @@ export const StyledTopAnimalConnectorOne = styled(Box)<{
   borderColor: props.borderColor,
 }));
 
-export const StyledTopAnimalTopConnectorTwo = styled(Box)<{
+export const StyledTopAnimalTopConnectorTwo: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 61.5,
@@ -181,7 +206,9 @@ export const StyledTopAnimalTopConnectorTwo = styled(Box)<{
   borderColor: props.borderColor,
 }));
 
-export const StyledRightAnimalConnectorOne = styled(Box)<{
+export const StyledRightAnimalConnectorOne: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 149.35,
@@ -195,7 +222,9 @@ export const StyledRightAnimalConnectorOne = styled(Box)<{
   borderColor: props.borderColor,
 }));
 
-export const StyledRightAnimalConnectorTwo = styled(Box)<{
+export const StyledRightAnimalConnectorTwo: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 155.5,
@@ -209,7 +238,9 @@ export const StyledRightAnimalConnectorTwo = styled(Box)<{
   borderColor: props.borderColor,
 }));
 
-export const StyledBottomAnimalConnectorOne = styled(Box)<{
+export const StyledBottomAnimalConnectorOne: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 210,
@@ -224,7 +255,9 @@ export const StyledBottomAnimalConnectorOne = styled(Box)<{
   transform: 'rotate(31deg)',
 }));
 
-export const StyledBottomAnimalConnectorTwo = styled(Box)<{
+export const StyledBottomAnimalConnectorTwo: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 218.5,
@@ -239,7 +272,9 @@ export const StyledBottomAnimalConnectorTwo = styled(Box)<{
   transform: 'rotate(30.5deg)',
 }));
 
-export const StyledLeftAnimalConnectorOne = styled(Box)<{
+export const StyledLeftAnimalConnectorOne: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 187.5,
@@ -254,7 +289,9 @@ export const StyledLeftAnimalConnectorOne = styled(Box)<{
   transform: 'rotate(15deg)',
 }));
 
-export const StyledLeftAnimalConnectorTwo = styled(Box)<{
+export const StyledLeftAnimalConnectorTwo: StyledComponent<BoxProps & {
+  props: AnimalConnectorProps;
+}> = styled(Box)<{
   props: AnimalConnectorProps;
 }>(({ props }) => ({
   top: 145,
