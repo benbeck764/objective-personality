@@ -3,6 +3,9 @@
 /node_modules
 /.vscode
 
+# Claude Code local settings
+.claude/settings.local.json
+
 # Auth token (local only, use NPM_TOKEN env in CI)
 .npmrc
 
