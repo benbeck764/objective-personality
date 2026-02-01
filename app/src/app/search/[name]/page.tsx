@@ -5,14 +5,24 @@ import Typography from '@mui/material/Typography';
 import TypedPersonResult from './components/TypedPersonResult';
 import { Metadata } from 'next';
 
-export const generateMetadata = ({ params }: { params: { name: string } }): Metadata => {
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ name: string }>;
+}): Promise<Metadata> => {
+  const resolvedParams = await params;
   return {
-    title: `Objective Personality - ${decodeURIComponent(params.name)}`,
+    title: `Objective Personality - ${decodeURIComponent(resolvedParams.name)}`,
   };
 };
 
-const SearchedPerson = async ({ params }: { params: { name: string } }) => {
-  const result = await getTypedPerson(decodeURIComponent(params.name));
+const SearchedPerson = async ({
+  params,
+}: {
+  params: Promise<{ name: string }>;
+}) => {
+  const resolvedParams = await params;
+  const result = await getTypedPerson(decodeURIComponent(resolvedParams.name));
 
   return (
     <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>

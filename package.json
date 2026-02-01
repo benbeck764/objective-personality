@@ -13,7 +13,7 @@
   "author": "Ben Beck",
   "license": "ISC",
   "engines": {
-    "node": ">=18.17.0 < 20",
+    "node": ">=18.18.0",
     "pnpm": ">=8.0.0"
   },
   "scripts": {

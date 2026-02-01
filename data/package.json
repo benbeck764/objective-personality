@@ -12,6 +12,9 @@
   },
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "main": "dist/node/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
