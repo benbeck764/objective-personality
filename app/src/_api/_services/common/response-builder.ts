@@ -78,7 +78,7 @@ export class NextResponseBuilder {
   ): NextResponse {
     return NextResponse.json(
       {
-        success: true,
+        success: false,
         resultObject: data,
         errorMessage: message || '<No error message supplied>',
       },

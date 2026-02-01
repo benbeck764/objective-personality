@@ -12,9 +12,11 @@ class BlobStorageClient {
   protected readonly blobClient: BlobServiceClient;
 
   constructor() {
-    this.blobClient = BlobServiceClient.fromConnectionString(
-      process.env.STORAGE_CONNECTION_STRING ?? ''
-    );
+    const connectionString = process.env.STORAGE_CONNECTION_STRING;
+    if (!connectionString) {
+      throw new Error('STORAGE_CONNECTION_STRING environment variable is required');
+    }
+    this.blobClient = BlobServiceClient.fromConnectionString(connectionString);
   }
 
   public async uploadFile(options: {

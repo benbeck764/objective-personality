@@ -1,36 +1,25 @@
-import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
 import { Suspense } from 'react';
 import { AppCard } from '@benbeck764/react-components';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import Await from '../Await';
 import TypedPeopleSearch from './components/TypedPeopleSearch';
 import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
-import { ApiResponse } from '@/_api-interface/common/api-shared.models';
-import { OpsTypedPersonSearchResponseDto } from '@/_models/ops-typed-people.models';
+import SearchResults from './components/SearchResults';
 import { isString } from '@/utilities/string';
 
 const Search = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
-  const service = OpsTypedPeopleService.getInstance();
+  const params = await searchParams;
 
-  const pageNumber = isString(searchParams.page)
-    ? Number(searchParams.page)
-    : 0;
-  const pageSize = isString(searchParams.size) ? Number(searchParams.size) : 25;
-  const filterText = isString(searchParams.filter)
-    ? searchParams.filter?.toString()
+  const pageNumber = isString(params.page) ? Number(params.page) : 0;
+  const pageSize = isString(params.size) ? Number(params.size) : 25;
+  const filterText = isString(params.filter)
+    ? params.filter?.toString()
     : '';
-
-  const promise = service.searchOPSTypedPeople({
-    filterText,
-    pageSize,
-    pageNumber,
-  });
 
   return (
     <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
@@ -50,15 +39,11 @@ const Search = async ({
             />
           }
         >
-          <Await promise={promise}>
-            {(res: ApiResponse<OpsTypedPersonSearchResponseDto>) => (
-              <TypedPeopleSearchResults
-                data={res.resultObject}
-                loading={false}
-                filterText={filterText}
-              />
-            )}
-          </Await>
+          <SearchResults
+            filterText={filterText}
+            pageSize={pageSize}
+            pageNumber={pageNumber}
+          />
         </Suspense>
       </Box>
     </AppCard>
