@@ -75,9 +75,9 @@ export async function searchTypedPeople(
       errorMessage: err.message,
     };
   }
-}
+};
 
-function filterTypedPerson(person: OPSTypedPersonExtended, filter?: string): boolean {
+const filterTypedPerson = (person: OPSTypedPersonExtended, filter?: string): boolean => {
   if (!filter) return true;
 
   const filterText = filter.toLocaleLowerCase();

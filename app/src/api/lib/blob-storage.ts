@@ -10,7 +10,7 @@ export type BlobUploadResponse = {
 
 let blobClient: BlobServiceClient | null = null;
 
-export function getBlobClient(): BlobServiceClient | null {
+const getBlobClient = (): BlobServiceClient | null => {
   if (blobClient) return blobClient;
 
   const connectionString = process.env.STORAGE_CONNECTION_STRING;
@@ -18,14 +18,14 @@ export function getBlobClient(): BlobServiceClient | null {
 
   blobClient = BlobServiceClient.fromConnectionString(connectionString);
   return blobClient;
-}
+};
 
-export async function uploadFile(options: {
+export const uploadFile = async (options: {
   file: Blob | Buffer | ArrayBuffer | ArrayBufferView;
   container: string;
   filename: string;
   blobOptions?: BlockBlobUploadOptions;
-}): Promise<BlobUploadResponse> {
+}): Promise<BlobUploadResponse> => {
   const client = getBlobClient();
   if (!client) {
     throw new Error('STORAGE_CONNECTION_STRING not configured');
@@ -45,12 +45,12 @@ export async function uploadFile(options: {
     fileName: blockBlobClient.name,
     url: uploadResponse?._response?.request?.url,
   };
-}
+};
 
-export async function deleteBlobsByFilename(
+export const deleteBlobsByFilename = async (
   container: string,
   filenames: string[]
-): Promise<void> {
+): Promise<void> => {
   const client = getBlobClient();
   if (!client) {
     throw new Error('STORAGE_CONNECTION_STRING not configured');
@@ -66,12 +66,12 @@ export async function deleteBlobsByFilename(
       continue;
     }
   }
-}
+};
 
-export async function deleteBlobsByUrl(
+export const deleteBlobsByUrl = async (
   container: string,
   fileUrls: string[]
-): Promise<void> {
+): Promise<void> => {
   const client = getBlobClient();
   if (!client) {
     throw new Error('STORAGE_CONNECTION_STRING not configured');
@@ -84,4 +84,4 @@ export async function deleteBlobsByUrl(
       deleteSnapshots: 'include',
     });
   }
-}
+};

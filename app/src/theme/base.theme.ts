@@ -47,7 +47,7 @@ const contentWidths: { [key in Breakpoint]: number } = {
   xl: pageWidths['xl'] - 48,
 };
 
-export function getThemeBase(palette: PaletteOptions): ThemeOptions {
+export const getThemeBase = (palette: PaletteOptions): ThemeOptions => {
   return {
     headerHeights: {
       ...headerHeights,
