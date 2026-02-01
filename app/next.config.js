@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
+  transpilePackages: ['objective-personality-data'],
   images: {
     remotePatterns: [
       {
