@@ -17,8 +17,8 @@
     "pnpm": ">=8.0.0"
   },
   "scripts": {
-    "dev:app": "pnpm --filter objective-personality-app dev",
-    "dev:function": "pnpm --filter objective-personality-etl-function start",
+    "dev:app": "pnpm build:data && pnpm --filter objective-personality-app dev",
+    "dev:function": "pnpm build:data && pnpm --filter objective-personality-etl-function start",
     "build": "pnpm --filter objective-personality-data build && pnpm --filter objective-personality-app build && pnpm --filter objective-personality-etl-function build",
     "build:app": "pnpm --filter objective-personality-data build && pnpm --filter objective-personality-app build",
     "build:function": "pnpm --filter objective-personality-data build && pnpm --filter objective-personality-etl-function build",
