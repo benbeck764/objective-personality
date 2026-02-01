@@ -1,46 +1,49 @@
 'use client';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { AppTextField } from '@benbeck764/react-components';
 import SearchIcon from '@mui/icons-material/Search';
-import { useRouter } from 'next/navigation';
 import { useDebounce } from '@/utilities/hooks/useDebounce';
-import { getSearchUrl } from '@/routing/common/url';
+import { useSearchFilter, useSearchPage } from '../hooks/useSearchParams';
 
-type TypedPeopleSearchProps = {
-  filterText?: string;
-};
+const TypedPeopleSearch: FC = () => {
+  const [filter, setFilter] = useSearchFilter();
+  const [, setPage] = useSearchPage();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-const TypedPeopleSearch: FC<TypedPeopleSearchProps> = (
-  props: TypedPeopleSearchProps
-) => {
-  const { filterText } = props;
-  const router = useRouter();
-
-  const [text, setText] = useState<string | undefined>(filterText);
+  const [text, setText] = useState<string>(filter ?? '');
   const debouncedFilterText = useDebounce(text, 300);
 
   useEffect(() => {
-    const url = getSearchUrl({
-      filter: debouncedFilterText,
-      pageNumber: 0,
-      pageSize: 25,
-    });
-    router.push(url);
-  }, [debouncedFilterText]);
+    if (debouncedFilterText !== filter) {
+      setFilter(debouncedFilterText ?? '');
+      setPage(0);
+    }
+  }, [debouncedFilterText, filter, setFilter, setPage]);
+
+  useEffect(() => {
+    // Focus input and move cursor to end of text on mount
+    if (inputRef.current) {
+      inputRef.current.focus();
+      if (text) {
+        const length = text.length;
+        inputRef.current.setSelectionRange(length, length);
+      }
+    }
+  }, []);
 
   return (
     <AppTextField
+      inputRef={inputRef}
       value={text}
       placeholder="Search..."
-      onChange={(
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined
-      ) => setText(e?.target?.value)}
+      onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | undefined) =>
+        setText(e?.target?.value ?? '')
+      }
       inputSize="medium"
       startIcon={<SearchIcon color="primary" sx={{ ml: 1 }} />}
       showClearButton
       onClear={() => setText('')}
       fullWidth
-      autoFocus
     />
   );
 };

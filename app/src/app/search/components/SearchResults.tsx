@@ -10,7 +10,7 @@ type SearchResultsProps = {
 const SearchResults = async ({ filterText, pageSize, pageNumber }: SearchResultsProps) => {
   const data = await api.typedPeople.search({ filterText, pageSize, pageNumber });
 
-  return <TypedPeopleSearchResults data={data} loading={false} filterText={filterText} />;
+  return <TypedPeopleSearchResults data={data} loading={false} />;
 };
 
 export default SearchResults;

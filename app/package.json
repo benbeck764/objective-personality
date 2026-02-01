@@ -23,8 +23,9 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "^5.14.12",
-    "objective-personality-data": "workspace:*",
     "next": "^16.1.0",
+    "nuqs": "^2.8.7",
+    "objective-personality-data": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-ga4": "^2.1.0"

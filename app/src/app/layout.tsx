@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import AppContent from './AppContent';
 import ThemeRegistry from '@/theme/ThemeRegistry';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 // Handle SEO & <head> here
 export const metadata: Metadata = {
@@ -13,7 +14,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <body>
         <ThemeRegistry>
-          <AppContent>{children}</AppContent>
+          <NuqsAdapter>
+            <AppContent>{children}</AppContent>
+          </NuqsAdapter>
         </ThemeRegistry>
       </body>
     </html>

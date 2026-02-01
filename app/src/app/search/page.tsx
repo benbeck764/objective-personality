@@ -6,20 +6,20 @@ import Box from '@mui/material/Box';
 import TypedPeopleSearch from './components/TypedPeopleSearch';
 import TypedPeopleSearchResults from './components/TypedPeopleSearchResults';
 import SearchResults from './components/SearchResults';
-import { isString } from '@/utilities/string';
+import { createSearchParamsCache, parseAsInteger, parseAsString } from 'nuqs/server';
+
+const searchParamsCache = createSearchParamsCache({
+  filter: parseAsString.withDefault(''),
+  page: parseAsInteger.withDefault(0),
+  size: parseAsInteger.withDefault(25),
+});
 
 const Search = async ({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
-  const params = await searchParams;
-
-  const pageNumber = isString(params.page) ? Number(params.page) : 0;
-  const pageSize = isString(params.size) ? Number(params.size) : 25;
-  const filterText = isString(params.filter)
-    ? params.filter?.toString()
-    : '';
+  const { filter, page, size } = searchParamsCache.parse(await searchParams);
 
   return (
     <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
@@ -28,22 +28,12 @@ const Search = async ({
       </Typography>
       <Divider />
       <Box mt={2} pb={4} mb={4} width="100%">
-        <TypedPeopleSearch filterText={filterText} />
+        <TypedPeopleSearch />
         <Suspense
-          key={filterText}
-          fallback={
-            <TypedPeopleSearchResults
-              data={undefined}
-              loading={true}
-              filterText={filterText}
-            />
-          }
+          key={`${filter}-${page}-${size}`}
+          fallback={<TypedPeopleSearchResults data={undefined} loading={true} />}
         >
-          <SearchResults
-            filterText={filterText}
-            pageSize={pageSize}
-            pageNumber={pageNumber}
-          />
+          <SearchResults filterText={filter} pageSize={size} pageNumber={page} />
         </Suspense>
       </Box>
     </AppCard>
