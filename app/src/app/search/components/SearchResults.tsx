@@ -1,4 +1,4 @@
-import { searchTypedPeople } from '@/api/services/typed-person';
+import { api } from '@/api/client';
 import { HttpStatus } from '@/api/constants';
 import TypedPeopleSearchResults from './TypedPeopleSearchResults';
 
@@ -8,16 +8,8 @@ type SearchResultsProps = {
   pageNumber: number;
 };
 
-const SearchResults = async ({
-  filterText,
-  pageSize,
-  pageNumber,
-}: SearchResultsProps) => {
-  const result = await searchTypedPeople({
-    filterText,
-    pageSize,
-    pageNumber,
-  });
+const SearchResults = async ({ filterText, pageSize, pageNumber }: SearchResultsProps) => {
+  const result = await api.typedPeople.search({ filterText, pageSize, pageNumber });
 
   return (
     <TypedPeopleSearchResults
