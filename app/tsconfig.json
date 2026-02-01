@@ -24,6 +24,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "@/api/*": ["./src/api/*"],
+      "@/models/*": ["./src/models/*"],
       "@/routes/*": ["./src/routing/*"],
       "@/theme/*": ["./src/theme/*"],
       "@/utilities/*": ["./src/utilities/*"],

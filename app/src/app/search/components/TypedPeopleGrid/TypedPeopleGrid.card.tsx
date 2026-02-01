@@ -1,4 +1,4 @@
-import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/models/ops-typed-people.models';
 import { AppGridCardViewDefinitions } from '@benbeck764/react-components-grid';
 import { TypedPersonCard } from './components/TypedPersonCard';
 

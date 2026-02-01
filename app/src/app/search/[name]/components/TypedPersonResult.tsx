@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
-import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/models/ops-typed-people.models';
 import { StyledPersonImage } from './TypedPersonResult.styles';
 import TypeStack from './TypeStack/TypeStack';
 import TypeTable from './TypeTable/TypeTable';

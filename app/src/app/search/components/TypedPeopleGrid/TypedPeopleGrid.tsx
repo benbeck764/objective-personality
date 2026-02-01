@@ -10,7 +10,7 @@ import {
 import {
   OPSTypedPersonExtended,
   OpsTypedPersonSearchResponseDto,
-} from '@/_models/ops-typed-people.models';
+} from '@/models/ops-typed-people.models';
 import { createCardViewDefinitions } from './TypedPeopleGrid.card';
 
 type TypedPeopleGridProps = {

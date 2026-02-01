@@ -3,7 +3,7 @@ import { FC } from 'react';
 import {
   OPSTypedPersonExtended,
   OpsTypedPersonSearchResponseDto,
-} from '@/_models/ops-typed-people.models';
+} from '@/models/ops-typed-people.models';
 import { AppGridDataRequest } from '@benbeck764/react-components-grid';
 import { useRouter } from 'next/navigation';
 import TypedPeopleGrid from './TypedPeopleGrid/TypedPeopleGrid';

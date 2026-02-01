@@ -1,9 +1,7 @@
-import { ApiResponse } from '@/_api-interface/common/api-shared.models';
-import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
-import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
-import Await from '@/app/Await';
+import { getTypedPerson } from '@/api/services/typed-person';
+import { HttpStatus } from '@/api/constants';
 import { AppCard } from '@benbeck764/react-components';
-import { Suspense } from 'react';
+import Typography from '@mui/material/Typography';
 import TypedPersonResult from './components/TypedPersonResult';
 import { Metadata } from 'next';
 
@@ -14,18 +12,17 @@ export const generateMetadata = ({ params }: { params: { name: string } }): Meta
 };
 
 const SearchedPerson = async ({ params }: { params: { name: string } }) => {
-  const service = OpsTypedPeopleService.getInstance();
-  const promise = service.getTypedPerson(decodeURIComponent(params.name));
+  const result = await getTypedPerson(decodeURIComponent(params.name));
 
   return (
     <AppCard paperSx={{ width: '100%', px: 2, pt: 2, pb: 4 }}>
-      <Suspense>
-        <Await promise={promise}>
-          {(res: ApiResponse<OPSTypedPersonExtended>) => (
-            <TypedPersonResult person={res.resultObject} />
-          )}
-        </Await>
-      </Suspense>
+      {result.status === HttpStatus.OK && result.data ? (
+        <TypedPersonResult person={result.data} />
+      ) : result.status === HttpStatus.NOT_FOUND ? (
+        <Typography>Person not found</Typography>
+      ) : (
+        <Typography>Error: {result.errorMessage || 'Unknown error'}</Typography>
+      )}
     </AppCard>
   );
 };

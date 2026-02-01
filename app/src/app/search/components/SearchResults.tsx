@@ -1,4 +1,5 @@
-import OpsTypedPeopleService from '@/_api-interface/services/ops-typed-people.service';
+import { searchTypedPeople } from '@/api/services/typed-person';
+import { HttpStatus } from '@/api/constants';
 import TypedPeopleSearchResults from './TypedPeopleSearchResults';
 
 type SearchResultsProps = {
@@ -12,8 +13,7 @@ const SearchResults = async ({
   pageSize,
   pageNumber,
 }: SearchResultsProps) => {
-  const service = OpsTypedPeopleService.getInstance();
-  const res = await service.searchOPSTypedPeople({
+  const result = await searchTypedPeople({
     filterText,
     pageSize,
     pageNumber,
@@ -21,7 +21,7 @@ const SearchResults = async ({
 
   return (
     <TypedPeopleSearchResults
-      data={res.resultObject}
+      data={result.status === HttpStatus.OK ? result.data : undefined}
       loading={false}
       filterText={filterText}
     />

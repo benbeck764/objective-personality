@@ -13,8 +13,8 @@ import {
   TemperamentType,
   getFunctionModality,
   isDoubleActivated,
-} from '@/_models/typed-person-helper';
-import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
+} from '@/models/typed-person-helper';
+import { OPSTypedPersonExtended } from '@/models/ops-typed-people.models';
 import { isEmpty } from '@/utilities/string';
 
 type TypeTableRow = {

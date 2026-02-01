@@ -1,7 +1,7 @@
 'use client';
 import Box, { BoxProps } from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { FunctionType } from '@/_models/typed-person-helper';
+import { FunctionType } from '@/models/typed-person-helper';
 import { AnimalConnectorProps } from './TypeStack';
 import { StyledComponent } from '@emotion/styled';
 

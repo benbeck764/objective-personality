@@ -1,7 +1,7 @@
 import { FC, useRef, Fragment } from 'react';
 import { StyledEllipsingTextContainer, TypographySkeleton } from '@benbeck764/react-components';
 import Image from 'next/image';
-import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/models/ops-typed-people.models';
 import { StyledCard, StyledCardImage } from './TypedPersonCard.styles';
 import { useHovered } from '@/utilities';
 import Stack from '@mui/material/Stack';

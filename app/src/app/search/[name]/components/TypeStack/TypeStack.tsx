@@ -20,9 +20,9 @@ import {
   StyledRightAnimalConnectorOne,
   StyledRightAnimalConnectorTwo,
 } from './TypeStack.styles';
-import { AnimalType, TemperamentType } from '@/_models/typed-person-helper';
+import { AnimalType, TemperamentType } from '@/models/typed-person-helper';
 import { useHovered } from '@/utilities/hooks/useHovered';
-import { OPSTypedPersonExtended } from '@/_models/ops-typed-people.models';
+import { OPSTypedPersonExtended } from '@/models/ops-typed-people.models';
 
 export type AnimalConnectorProps = {
   exists: boolean;

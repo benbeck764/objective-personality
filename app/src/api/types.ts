@@ -1,4 +1,4 @@
-import { HttpStatus } from './http-status';
+import { HttpStatus } from './constants';
 
 export type ServiceResponse<T> = {
   status: HttpStatus;
