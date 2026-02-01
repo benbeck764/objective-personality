@@ -2,4 +2,21 @@
 .DS_Store
 /node_modules
 /.vscode
+
+# Auth token (local only, use NPM_TOKEN env in CI)
 .npmrc
+
+# Package lock files (using pnpm)
+**/package-lock.json
+**/yarn.lock
+
+# PNPM store
+.pnpm-store/
+
+# Build outputs
+**/dist
+**/.next
+**/out
+
+# Prisma
+**/.prisma

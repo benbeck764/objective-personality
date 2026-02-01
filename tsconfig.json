@@ -1,9 +1,24 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "target": "ES2019",
+    "lib": ["ES2019"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "baseUrl": ".",
     "paths": {
-      "objective-personality-data": ["./data/dist"],
+      "objective-personality-data": ["./data/dist/index.d.ts"],
       "objective-personality-data/*": ["./data/dist/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/.next"]
 }

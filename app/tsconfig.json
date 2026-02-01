@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -24,7 +25,8 @@
       "@/*": ["./src/*"],
       "@/routes/*": ["./src/routing/*"],
       "@/theme/*": ["./src/theme/*"],
-      "@/utilities/*": ["./src/utilities/*"]
+      "@/utilities/*": ["./src/utilities/*"],
+      "objective-personality-data": ["../data/dist/index.d.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

@@ -19,29 +19,42 @@ jobs:
         with:
           submodules: true
 
-      # [TODO]: Ignore this for now, doesn't seem to work with Prisma Generate
-      # - name: Cache Node.js Dependencies
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       etl-function/node_modules
-      #     key: ${{ runner.os }}-node-${{ hashFiles('./etl-function/package-lock.json') }}
-
       - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # Install NPM Dependencies
-      - name: Install Dependencies
-        run: npm run install:function
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
 
-      # Create @prisma/client (if non-existent) and generate the models to be exported
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Generate Prisma Client in data package
       - name: Generate Prisma Models
-        run: npm run generate:function
+        run: pnpm --filter objective-personality-data generate
+
+      # Build data package first
+      - name: Build Data Package
+        run: pnpm --filter objective-personality-data build
 
       # Build Azure Function
       - name: Build Azure Function
-        run: npm run build:function
+        run: pnpm --filter objective-personality-etl-function build
 
       # Deploy Azure Function
       - name: Deploy Azure Function

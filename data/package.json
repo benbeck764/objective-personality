@@ -14,20 +14,31 @@
   "license": "ISC",
   "main": "dist/node/index.js",
   "module": "dist/index.js",
-  "types:": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/node/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./client": {
+      "import": "./src/generated/client/index.js",
+      "require": "./src/generated/client/index.js",
+      "types": "./src/generated/client/index.d.ts"
+    }
+  },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
   "scripts": {
-    "build": "npm run build:esm && npm run build:common",
-    "build:prod": "node ../../scripts/build.mjs esm && node ../../scripts/build.mjs common",
+    "build": "pnpm generate && pnpm build:esm && pnpm build:common",
     "build:esm": "tsc --project tsconfig.esm.json",
     "build:common": "tsc --project tsconfig.common.json",
     "clean": "rimraf node_modules",
-    "clean:build": "rimraf dist",
-    "migrate": "npx prisma migrate dev",
-    "migrate-deploy": "npx prisma migrate dev",
-    "generate": "npx prisma generate"
+    "clean:build": "rimraf dist src/generated",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "5.6.0"
@@ -36,6 +47,6 @@
     "@types/node": "^18.x",
     "prisma": "^5.6.0",
     "rimraf": "^5.0.0",
-    "typescript": "^4.0.0"
+    "typescript": "^5.2.2"
   }
 }

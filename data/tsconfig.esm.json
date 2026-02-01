@@ -16,6 +16,6 @@
     "declaration": true,
     "emitDeclarationOnly": false
   },
-  "include": ["src/**/*.ts*"],
-  "exclude": ["node_modules", "dist", "src/prisma/**/*"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/prisma/**/*", "src/generated/**/*"]
 }

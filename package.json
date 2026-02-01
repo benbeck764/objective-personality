@@ -12,15 +12,32 @@
   "homepage": "https://github.com/benbeck764/objective-personality#readme",
   "author": "Ben Beck",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.17.0 < 20",
+    "pnpm": ">=8.0.0"
+  },
   "scripts": {
-    "start:app": "cd app && npm run dev",
-    "start:function": "cd etl-function && npm run start",
-    "build:app": "cd app && npm run build",
-    "build:function": "cd etl-function && npm run build",
-    "clean:app": "cd app && npm run clean",
-    "clean:function": "cd etl-function && npm run clean",
-    "install:function": "cd etl-function && npm install",
-    "generate:app": "cd app && npm run generate",
-    "generate:function": "cd etl-function && npm run generate"
+    "dev:app": "pnpm --filter objective-personality-app dev",
+    "dev:function": "pnpm --filter objective-personality-etl-function start",
+    "build": "pnpm --filter objective-personality-data build && pnpm --filter objective-personality-app build && pnpm --filter objective-personality-etl-function build",
+    "build:app": "pnpm --filter objective-personality-data build && pnpm --filter objective-personality-app build",
+    "build:function": "pnpm --filter objective-personality-data build && pnpm --filter objective-personality-etl-function build",
+    "build:data": "pnpm --filter objective-personality-data build",
+    "clean": "pnpm -r clean",
+    "clean:app": "pnpm --filter objective-personality-app clean",
+    "clean:function": "pnpm --filter objective-personality-etl-function clean",
+    "generate": "pnpm --filter objective-personality-data generate",
+    "generate:app": "pnpm --filter objective-personality-app generate",
+    "generate:function": "pnpm --filter objective-personality-etl-function generate",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "@types/node": "^18.x",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.2.2"
   }
 }

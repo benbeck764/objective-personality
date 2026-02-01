@@ -18,22 +18,45 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # Creates an .npmrc using an NPM token stored as a Github secret
-      - name: NPM Auth Token
-        run: |
-          cd app
-          echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN 
-          @benbeck764:registry=https://npm.pkg.github.com" > .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
 
-      # Create @prisma/client (if non-existent) and generate the models to be exported
-      - name: Generate Prisma Models (Next.js web app)
-        run: npm run generate:app
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      # Create .npmrc with GitHub token for private packages
+      - name: Setup .npmrc for GitHub Packages
+        run: |
+          echo "@benbeck764:registry=https://npm.pkg.github.com/" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Generate Prisma Client in data package
+      - name: Generate Prisma Models
+        run: pnpm --filter objective-personality-data generate
+
+      # Build data package
+      - name: Build Data Package
+        run: pnpm --filter objective-personality-data build
 
       # Build and deploy the Azure SWA (Next.js app)
       - name: Build & Deploy Azure Static Web App

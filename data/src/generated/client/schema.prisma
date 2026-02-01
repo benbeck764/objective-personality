@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model OPSTypedPerson {
+  Id                       String               @id
+  Name                     String               @default("")
+  Type                     String?
+  SocialType               String?
+  SocialTypeShort          Int?
+  MBTIType                 String?
+  Tags                     String?
+  FullTypeNumber           String?
+  Temperament              String?
+  TemperamentLong          String?
+  Quadra                   String?
+  Modality                 String?
+  ModalityLetters          String?
+  ModalityName             String?
+  SensorySexual            String?
+  DeSexual                 String?
+  MasculineSensory         Boolean?
+  MasculineDe              Boolean?
+  SaviorObserver           String?
+  SaviorDecider            String?
+  SingleObserverOrDecider  String?
+  SingleObserver           Boolean?
+  SingleDecider            Boolean?
+  DoubleObserver           Boolean?
+  DoubleDecider            Boolean?
+  ObserverHumanNeed        String?
+  DeciderHumanNeed         String?
+  FirstSaviorFunction      String?
+  SecondSaviorFunction     String?
+  FirstFunction            String?
+  SecondFunction           String?
+  ThirdFunction            String?
+  FourthFunction           String?
+  Jumper                   Boolean?
+  EnergyVsInfoDom          String?
+  EnergyDominant           Boolean?
+  InfoDominant             Boolean?
+  ExtrovertedVsIntroverted String?
+  ExtroversionScale        Int?
+  ExtroversionPercentage   Float?
+  GlassLizard              Boolean?
+  AnimalStack              String?
+  FirstAnimal              String?
+  SecondAnimal             String?
+  ThirdAnimal              String?
+  FourthAnimal             String?
+  BlastSexuals             String?
+  ConsumeSexuals           String?
+  PlaySexuals              String?
+  SleepSexuals             String?
+  SexualOrientation        String?
+  BiologicalSex            String?
+  Transgender              Boolean?
+  TypeNumber               String?
+  TypeLetter               String?
+  ObserverAxis             String?
+  DeciderAxis              String?
+  BlastOrConsume           String?
+  PlayOrSleep              String?
+  AirTablePictureUrl       String?
+  PictureUrl               String?
+  UniqueId                 String?
+  AirTableCreatedDate      DateTime
+  AirTableLastUpdatedDate  DateTime
+  CreatedDate              DateTime             @default(now())
+  LastUpdatedDate          DateTime             @updatedAt
+  Links                    OPSTypedPersonLink[]
+}
+
+model OPSTypedPersonLink {
+  Id               String          @id
+  Href             String
+  Value            String
+  OPSTypedPersonId String?
+  OPSTypedPerson   OPSTypedPerson? @relation(fields: [OPSTypedPersonId], references: [Id])
+}

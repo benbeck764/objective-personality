@@ -10,8 +10,10 @@
     "forceConsistentCasingInFileNames": true,
     "module": "CommonJS",
     "outDir": "dist/node",
-    "declaration": false
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false
   },
-  "include": ["src/**/*.ts*"],
-  "exclude": ["node_modules", "dist", "src/prisma/**/*"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/prisma/**/*", "src/generated/**/*"]
 }

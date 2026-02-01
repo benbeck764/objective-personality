@@ -10,7 +10,7 @@ import { HttpStatus } from './common/http-status';
 import ServiceBase from './common/service-base';
 import { ServiceResponse } from './common/service-response';
 import { FunctionType, TemperamentType } from '@/_models/typed-person-helper';
-import { OPSTypedPerson } from '@prisma/client';
+import { OPSTypedPerson } from 'objective-personality-data';
 
 class TypedPersonService extends ServiceBase {
   private static classInstance: TypedPersonService;

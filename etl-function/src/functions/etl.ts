@@ -1,4 +1,4 @@
-import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink } from '@prisma/client';
+import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink } from 'objective-personality-data';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import * as cheerio from 'cheerio';
