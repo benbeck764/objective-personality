@@ -1,4 +1,5 @@
-import { PrismaClient, OPSTypedPerson, OPSTypedPersonLink } from 'objective-personality-data';
+import { OPSTypedPerson, OPSTypedPersonLink } from 'objective-personality-data';
+import { initializePrismaClient, closePrismaClient } from '../lib/prisma';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import * as cheerio from 'cheerio';
@@ -24,7 +25,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
   const replaceData = process.env.REPLACE_DATA;
   const airtableUrl =
     'https://airtable.com/appudq0aG1uwqIFX5/shrQ6IoDtlXpzmC1l/tblyUDDV5zVyuX5VL/viwwzc3yLw0s2PAEi';
-  const prisma = new PrismaClient();
+  const prisma = initializePrismaClient();
   let browser: Browser;
   let page: Page;
   let cardIds: string[] = [];
@@ -139,7 +140,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
 
     let person: Partial<AirTableOPSPerson> = { 'Unique ID': contentId };
 
-    cellPairs.each((_, cellPair: cheerio.Element) => {
+    cellPairs.each((_, cellPair) => {
       let value: any;
       const pair = $(cellPair);
       const label = pair.find('.fieldLabel')?.text();
@@ -153,7 +154,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
         // Parse Tags as comma-separated string
         const tagsArray: string[] = [];
         const tagWrappers = pair.find('.cellContainer').find('li');
-        tagWrappers.each((_, tagElement: cheerio.Element) => {
+        tagWrappers.each((_, tagElement) => {
           const tagWrapper = $(tagElement);
           const tag = tagWrapper.find(':last')?.text();
           if (tag) tagsArray.push(tag);
@@ -163,7 +164,7 @@ export const airTableToSqlETL = async (): Promise<void> => {
         // Parse Textbox Links as separate entities
         let personLinks: AirTableOPSPersonLink[] = [];
         const links = pair.find('.cellContainer').find('a');
-        links.each((_, linkElement: cheerio.Element) => {
+        links.each((_, linkElement) => {
           const link = $(linkElement);
           const href = link.attr('href');
           const linkValue = link.text();
@@ -367,6 +368,6 @@ export const airTableToSqlETL = async (): Promise<void> => {
   } catch (ex) {
     console.error(ex);
   } finally {
-    prisma.$disconnect;
+    await closePrismaClient();
   }
 };

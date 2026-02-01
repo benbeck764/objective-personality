@@ -18,13 +18,17 @@
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "@azure/storage-blob": "^12.17.0",
-    "objective-personality-data": "workspace:*",
+    "@prisma/adapter-mssql": "^7.3.0",
+    "@prisma/client": "7.2.0",
     "axios": "^1.5.0",
     "axios-retry": "^4.0.0",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "^1.2.0",
+    "mssql": "^12.2.0",
+    "objective-personality-data": "workspace:*",
     "puppeteer": "^21.2.1"
   },
   "devDependencies": {
+    "@types/mssql": "^9.1.9",
     "@types/node": "^18.x",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.1",

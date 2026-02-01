@@ -150,6 +150,12 @@ importers:
       '@azure/storage-blob':
         specifier: ^12.17.0
         version: 12.30.0
+      '@prisma/adapter-mssql':
+        specifier: ^7.3.0
+        version: 7.3.0
+      '@prisma/client':
+        specifier: 7.2.0
+        version: 7.2.0(prisma@7.2.0(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
       axios:
         specifier: ^1.5.0
         version: 1.13.4
@@ -157,8 +163,11 @@ importers:
         specifier: ^4.0.0
         version: 4.5.0(axios@1.13.4)
       cheerio:
-        specifier: ^1.0.0-rc.12
+        specifier: ^1.2.0
         version: 1.2.0
+      mssql:
+        specifier: ^12.2.0
+        version: 12.2.0
       objective-personality-data:
         specifier: workspace:*
         version: link:../data
@@ -166,6 +175,9 @@ importers:
         specifier: ^21.2.1
         version: 21.11.0(encoding@0.1.13)(typescript@5.9.3)
     devDependencies:
+      '@types/mssql':
+        specifier: ^9.1.9
+        version: 9.1.9
       '@types/node':
         specifier: ^18.x
         version: 18.19.130
